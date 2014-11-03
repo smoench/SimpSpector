@@ -1,16 +1,13 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <services>
-        <service id="simple_things_app.example" class="SimpleThings\AppBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="simple_things_app.git.checkout_service" class="SimpleThings\AppBundle\Git\CheckoutService">
+            <argument type="service" id="gitlab_api"/>
+            <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
     </services>
-    -->
 </container>

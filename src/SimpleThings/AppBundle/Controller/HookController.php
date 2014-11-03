@@ -2,9 +2,11 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
+use SimpleThings\AppBundle\Entity\MergeRequest;
+use SimpleThings\AppBundle\Entity\Project;
+use SimpleThings\AppBundle\Entity\Push;
+use SimpleThings\AppBundle\Git\CheckoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,9 +36,25 @@ class HookController extends Controller
                 $request->getContent()
             );
         } else {
-
         }
 
+        $push = new Push();
+        $mergeRequest = new MergeRequest();
+        $project = new Project();
+        $project->setRemoteId(79);
+        $mergeRequest->setProject($project);
+        $push->setMergeRequest($mergeRequest);
+        $push->setRevision('d3defef153b63ce2d10b9d1177ab089a45fe7c65');
+        $this->getCheckoutService()->create($push);
+
         return new Response('hello!');
+    }
+
+    /**
+     * @return CheckoutService
+     */
+    public function getCheckoutService()
+    {
+        return $this->get('simple_things_app.git.checkout_factory');
     }
 }
