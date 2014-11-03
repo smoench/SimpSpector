@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Entity\Push;
@@ -17,7 +18,6 @@ class HookController extends Controller
 {
     /**
      * @Route("/gitlab")
-     * @Template()
      */
     public function gitlabAction(Request $request)
     {
@@ -25,7 +25,7 @@ class HookController extends Controller
 
         syslog(LOG_INFO, 'hello!');
 
-        if (\igorw\get_in($event, ['object_kind']) === 'merge_request') {
+        if ($event && \igorw\get_in($event, ['object_kind']) === 'merge_request') {
 
             syslog(LOG_INFO, 'hello!2');
 
@@ -55,6 +55,6 @@ class HookController extends Controller
      */
     public function getCheckoutService()
     {
-        return $this->get('simple_things_app.git.checkout_factory');
+        return $this->get('simple_things_app.git.checkout_service');
     }
 }

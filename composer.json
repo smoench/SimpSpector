@@ -25,16 +25,6 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/simplethings/scrutinizer-utils.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/simplethings/scrutinizer.git"
-        }
-    ],
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

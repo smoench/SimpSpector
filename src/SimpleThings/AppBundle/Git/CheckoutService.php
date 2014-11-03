@@ -18,7 +18,7 @@ class CheckoutService
     public function __construct(Client $gitlabClient, $baseDir = '/tmp')
     {
         $this->gitlabClient = $gitlabClient;
-        $this->baseDir = $baseDir;
+        $this->baseDir      = $baseDir;
     }
 
     /**
@@ -28,10 +28,10 @@ class CheckoutService
      */
     public function create(Push $push)
     {
-        $project = $this->gitlabClient->api('projects')->show($push->getMergeRequest()->getProject()->getRemoteId());
-        $url = $project['http_url_to_repo'];
+        $project  = $this->gitlabClient->api('projects')->show($push->getMergeRequest()->getProject()->getRemoteId());
+        $url      = $project['http_url_to_repo'];
         $revision = $push->getRevision();
-        $path = $this->getUniquePath();
+        $path     = $this->getUniquePath();
 
         $this->cloneRepository($url, $path);
         $this->checkout($revision, $path);
@@ -56,8 +56,9 @@ class CheckoutService
     private function cloneRepository($url, $path)
     {
         $builder = new ProcessBuilder(['git', 'clone', $url, $path]);
-        if ($builder->getProcess()->run() !== 0) {
-            throw new \Exception('cannot clone git repository');
+        $process = $builder->getProcess();
+        if ($process->run() !== 0) {
+            throw new \Exception("cannot clone git repository: \n" . $process->getErrorOutput());
         }
     }
 
