@@ -1,0 +1,5 @@
+simple_things_app:
+    resource: "@SimpleThingsAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+

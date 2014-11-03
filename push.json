@@ -1,0 +1,24 @@
+{
+    "before": "123371459321e30b074fd3ae9c5c00af5495ae93",
+    "after": "d3defef153b63ce2d10b9d1177ab089a45fe7c65",
+    "ref": "refs/heads/test",
+    "user_id": 4,
+    "user_name": "Tobias Olry",
+    "project_id": 79,
+    "repository": {
+        "name": "TestProject",
+        "url": "git@git.simplethings.de:simplethings/testproject.git",
+        "description": "",
+        "homepage": "https://git.simplethings.de/simplethings/testproject"
+    },
+    "commits": [
+        {
+            "id": "d3defef153b63ce2d10b9d1177ab089a45fe7c65",
+            "message": "still counting",
+            "timestamp": "2014-11-03T20:27:03+01:00",
+            "url": "https://git.simplethings.de/simplethings/testproject/commit/d3defef153b63ce2d10b9d1177ab089a45fe7c65",
+            "author": {"name": "Tobias Olry", "email": "olry@simplethings.de"}
+        }
+    ],
+    "total_commits_count": 1
+}

@@ -1,0 +1,21 @@
+{
+    "object_kind": "merge_request",
+    "object_attributes": {
+        "id": 578,
+        "target_branch": "master",
+        "source_branch": "test",
+        "source_project_id": 79,
+        "author_id": 4,
+        "assignee_id": null,
+        "title": "Test",
+        "created_at": "2014-11-03 19: 24:39 UTC",
+        "updated_at": "2014-11-03 19:24:39 UTC",
+        "milestone_id": null,
+        "state": "opened",
+        "merge_status": "unchecked",
+        "target_project_id": 79,
+        "iid": 1,
+        "description": "",
+        "position": 0
+    }
+}
