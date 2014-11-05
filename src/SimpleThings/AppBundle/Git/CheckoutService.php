@@ -14,14 +14,18 @@ use Symfony\Component\Process\ProcessBuilder;
 class CheckoutService
 {
     private $gitlabClient;
+    private $username;
+    private $password;
     private $baseDir;
 
     /**
      * @param Client $gitlabClient
      */
-    public function __construct(Client $gitlabClient, $baseDir = '/tmp')
+    public function __construct(Client $gitlabClient, $username, $password, $baseDir = '/tmp')
     {
         $this->gitlabClient = $gitlabClient;
+        $this->username     = $username;
+        $this->password     = $password;
         $this->baseDir      = $baseDir;
     }
 
@@ -32,13 +36,16 @@ class CheckoutService
      */
     public function create(Commit $push)
     {
-        $project  = $this->gitlabClient->api('projects')->show($push->getMergeRequest()->getProject()->getRemoteId());
-        $url      = $project['http_url_to_repo'];
+        $project = $this->gitlabClient->api('projects')->show($push->getMergeRequest()->getProject()->getRemoteId());
+        $url     = $this->modifyGitUrl($project['http_url_to_repo']);
+
         $revision = $push->getRevision();
         $path     = $this->getUniquePath();
 
-        $this->cloneRepository($url, $path);
-        $this->checkout($revision, $path);
+        $git = $this->createGitWrapper();
+
+        $workingspace = $git->cloneRepository($url, $path);
+        $workingspace->checkout($revision);
 
         return new Checkout($url, $revision, $path);
     }
@@ -53,38 +60,41 @@ class CheckoutService
     }
 
     /**
-     * @param string $url
-     * @param string $path
-     * @throws \Exception
-     */
-    private function cloneRepository($url, $path)
-    {
-        $builder = new ProcessBuilder(['git', 'clone', $url, $path]);
-        $process = $builder->getProcess();
-        if ($process->run() !== 0) {
-            throw new \Exception("cannot clone git repository: \n" . $process->getErrorOutput());
-        }
-    }
-
-    /**
-     * @param string $revision
-     * @param string $path
-     * @throws \Exception
-     */
-    private function checkout($revision, $path)
-    {
-        $builder = new ProcessBuilder(['git', 'checkout', ' --force', '--quiet', $revision]);
-        $builder->setWorkingDirectory($path);
-        if ($builder->getProcess()->run() !== 0) {
-            throw new \Exception('cannot checkout revision');
-        }
-    }
-
-    /**
      * @return string
      */
     private function getUniquePath()
     {
-        return $this->baseDir . '/' . uniqid('simpspector_');
+        return $this->baseDir . '/' . uniqid();
+    }
+
+    /**
+     * @return GitWrapper
+     */
+    private function createGitWrapper()
+    {
+        $root = realpath(__DIR__ . '/../../../..');
+
+        $wrapper = new GitWrapper();
+
+        $log = new Logger('git');
+        $log->pushHandler(new StreamHandler($root . '/var/logs/git.log', Logger::DEBUG));
+
+        $listener = new GitLoggerListener($log);
+        $wrapper->addLoggerListener($listener);
+
+        return $wrapper;
+    }
+
+    /**
+     * @param $url
+     * @return string
+     */
+    private function modifyGitUrl($url)
+    {
+        return str_replace(
+            'https://',
+            sprintf('https://%s:%s@', $this->username, $this->password),
+            $url
+        );
     }
 } 

@@ -4,9 +4,15 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
+    </parameters>
+
     <services>
         <service id="simple_things_app.git.checkout_service" class="SimpleThings\AppBundle\Git\CheckoutService">
             <argument type="service" id="gitlab_api"/>
+            <argument type="string">%git_username%</argument>
+            <argument type="string">%git_password%</argument>
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
