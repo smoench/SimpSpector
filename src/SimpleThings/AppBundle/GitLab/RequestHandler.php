@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleThings\AppBundle\GitLab\Handler;
-use SimpleThings\AppBundle\GitLab\CommitFactory;
-use SimpleThings\AppBundle\GitLab\Notifier;
+namespace SimpleThings\AppBundle\GitLab;
+
+use SimpleThings\AppBundle\CommitHandler;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,13 +22,19 @@ class RequestHandler
     private $commitFactory;
 
     /**
+     * @var CommitHandler
+     */
+    private $commitHandler;
+
+    /**
      * @param CommitFactory $commitFactory
      * @param Notifier $notifier
      */
-    function __construct(CommitFactory $commitFactory, Notifier $notifier)
+    function __construct(CommitFactory $commitFactory, Notifier $notifier, CommitHandler $commitHandler)
     {
         $this->commitFactory = $commitFactory;
         $this->notifier = $notifier;
+        $this->commitHandler = $commitHandler;
     }
 
     /**
@@ -54,7 +60,6 @@ class RequestHandler
             }
         }
 
-        // todo...
+        $this->commitHandler->handle($commit);
     }
 }
-
