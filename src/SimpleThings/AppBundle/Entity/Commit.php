@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Push
+class Commit
 {
     /**
      * @var integer
@@ -37,7 +37,7 @@ class Push
     /**
      * @var MergeRequest
      *
-     * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="pushes")
+     * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="commits")
      */
     private $mergeRequest;
 
@@ -55,13 +55,10 @@ class Push
      * Set revision
      *
      * @param string $revision
-     * @return Push
      */
     public function setRevision($revision)
     {
         $this->revision = $revision;
-
-        return $this;
     }
 
     /**
@@ -78,13 +75,10 @@ class Push
      * Set result
      *
      * @param array $result
-     * @return Push
      */
-    public function setResult($result)
+    public function setResult(array $result)
     {
         $this->result = $result;
-
-        return $this;
     }
 
     /**

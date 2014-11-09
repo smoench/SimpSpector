@@ -5,7 +5,7 @@ namespace SimpleThings\AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Entity\Project;
-use SimpleThings\AppBundle\Entity\Push;
+use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Git\CheckoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,6 @@ class HookController extends Controller
      */
     public function gitlabAction(Request $request)
     {
-        $event = json_decode($request->getContent(), true);
 
         syslog(LOG_INFO, 'hello!');
 
@@ -38,14 +37,14 @@ class HookController extends Controller
         } else {
         }
 
-        $push = new Push();
+        $commit = new Commit();
         $mergeRequest = new MergeRequest();
         $project = new Project();
         $project->setRemoteId(79);
         $mergeRequest->setProject($project);
-        $push->setMergeRequest($mergeRequest);
-        $push->setRevision('d3defef153b63ce2d10b9d1177ab089a45fe7c65');
-        $this->getCheckoutService()->create($push);
+        $commit->setMergeRequest($mergeRequest);
+        $commit->setRevision('d3defef153b63ce2d10b9d1177ab089a45fe7c65');
+        $this->getCheckoutService()->create($commit);
 
         return new Response('hello!');
     }
