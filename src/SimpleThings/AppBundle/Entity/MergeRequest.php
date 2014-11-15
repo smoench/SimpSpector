@@ -38,7 +38,7 @@ class MergeRequest
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests", cascade={"all"})
      */
     private $project;
 

@@ -14,6 +14,7 @@
         </service>
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
         </service>
 
     </services>

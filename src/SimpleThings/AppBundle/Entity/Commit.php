@@ -30,14 +30,14 @@ class Commit
     /**
      * @var array
      *
-     * @ORM\Column(name="result", type="json_array")
+     * @ORM\Column(name="result", type="json_array", nullable=true)
      */
     private $result;
 
     /**
      * @var MergeRequest
      *
-     * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="commits")
+     * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="commits", cascade={"all"})
      */
     private $mergeRequest;
 
