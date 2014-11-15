@@ -2,6 +2,8 @@
 
 namespace SimpleThings\AppBundle\GitLab;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use SimpleThings\AppBundle\CommitHandler;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,14 +29,26 @@ class RequestHandler
     private $commitHandler;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param CommitFactory $commitFactory
      * @param Notifier $notifier
+     * @param CommitHandler $commitHandler
+     * @param LoggerInterface $logger
      */
-    function __construct(CommitFactory $commitFactory, Notifier $notifier, CommitHandler $commitHandler)
-    {
+    function __construct(
+        CommitFactory $commitFactory,
+        Notifier $notifier,
+        CommitHandler $commitHandler,
+        LoggerInterface $logger = null
+    ) {
         $this->commitFactory = $commitFactory;
         $this->notifier = $notifier;
         $this->commitHandler = $commitHandler;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -43,6 +57,8 @@ class RequestHandler
      */
     public function handle(Request $request)
     {
+        $this->logger->info('new request', ['data' => $request->getContent()]);
+
         $event = json_decode($request->getContent(), true);
 
         if (!is_array($event)) {
