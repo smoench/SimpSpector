@@ -9,5 +9,13 @@
             <argument type="service" id="gitlab_api"/>
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
+
+        <service id="simple_things_app.button_generator" class="SimpleThings\AppBundle\ButtonGenerator">
+        </service>
+
+        <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+        </service>
+
     </services>
 </container>

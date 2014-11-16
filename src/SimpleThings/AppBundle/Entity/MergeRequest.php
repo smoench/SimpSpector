@@ -38,23 +38,23 @@ class MergeRequest
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests", cascade={"all"})
      */
     private $project;
 
     /**
-     * @var Push[]
+     * @var Commit[]
      *
-     * @ORM\OneToMany(targetEntity="Push", mappedBy="mergeRequest")
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="mergeRequest")
      */
-    private $pushes;
+    private $commits;
 
     /**
      *
      */
     public function __construct()
     {
-        $this->mergeRequests = new ArrayCollection();
+        $this->commits = new ArrayCollection();
     }
 
     /**
@@ -71,13 +71,10 @@ class MergeRequest
      * Set remoteId
      *
      * @param string $remoteId
-     * @return MergeRequest
      */
     public function setRemoteId($remoteId)
     {
         $this->remoteId = $remoteId;
-
-        return $this;
     }
 
     /**
@@ -94,13 +91,10 @@ class MergeRequest
      * Set sourceBranch
      *
      * @param string $sourceBranch
-     * @return MergeRequest
      */
     public function setSourceBranch($sourceBranch)
     {
         $this->sourceBranch = $sourceBranch;
-
-        return $this;
     }
 
     /**
@@ -130,18 +124,10 @@ class MergeRequest
     }
 
     /**
-     * @return Push[]
+     * @return Commit[]
      */
-    public function getPushes()
+    public function getCommits()
     {
-        return $this->pushes;
-    }
-
-    /**
-     * @param Push[] $pushes
-     */
-    public function setPushes($pushes)
-    {
-        $this->pushes = $pushes;
+        return $this->commits;
     }
 }

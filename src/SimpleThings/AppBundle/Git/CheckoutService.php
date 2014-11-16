@@ -3,7 +3,11 @@
 namespace SimpleThings\AppBundle\Git;
 
 use Gitlab\Client;
-use SimpleThings\AppBundle\Entity\Push;
+use GitWrapper\Event\GitLoggerListener;
+use GitWrapper\GitWrapper;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use SimpleThings\AppBundle\Entity\Commit;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -22,11 +26,11 @@ class CheckoutService
     }
 
     /**
-     * @param Push $push
+     * @param Commit $push
      * @return Checkout
-     * @throws \Exception<
+     * @throws \Exception
      */
-    public function create(Push $push)
+    public function create(Commit $push)
     {
         $project  = $this->gitlabClient->api('projects')->show($push->getMergeRequest()->getProject()->getRemoteId());
         $url      = $project['http_url_to_repo'];

@@ -83,12 +83,4 @@ class Project
     {
         return $this->mergeRequests;
     }
-
-    /**
-     * @param MergeRequest[] $mergeRequests
-     */
-    public function setMergeRequests($mergeRequests)
-    {
-        $this->mergeRequests = $mergeRequests;
-    }
 }
