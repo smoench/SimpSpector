@@ -9,10 +9,9 @@
     </parameters>
 
     <services>
-        <service id="simple_things_app.git.checkout_service" class="SimpleThings\AppBundle\Git\CheckoutService">
+        <service id="simple_things_app.git_checkout" class="SimpleThings\AppBundle\GitCheckout">
             <argument type="service" id="gitlab_api"/>
-            <argument type="string">%git_username%</argument>
-            <argument type="string">%git_password%</argument>
+            <argument type="service" id="simple_things_app.git_wrapper"/>
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
@@ -21,6 +20,17 @@
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument type="service" id="simple_things_app.git_checkout"/>
+        </service>
+
+        <service id="simple_things_app.git_wrapper" class="GitWrapper\GitWrapper">
+            <call method="addLoggerListener">
+                <argument type="service">
+                    <service class="GitWrapper\Event\GitLoggerListener">
+                        <argument type="service" id="logger" />
+                    </service>
+                </argument>
+            </call>
         </service>
 
     </services>

@@ -20,9 +20,6 @@ parameters:
     debug_redirects:        false
     use_assetic_controller: true
 
-    git_username: ~
-    git_password: ~
-
     gitlab_token: ~
     gitlab_url: ~
 
