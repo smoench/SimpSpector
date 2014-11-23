@@ -3,7 +3,6 @@
 namespace SimpleThings\AppBundle;
 
 use Gitlab\Client;
-use GitWrapper\GitWorkingCopy;
 use GitWrapper\GitWrapper;
 use SimpleThings\AppBundle\Entity\Commit;
 use Symfony\Component\Filesystem\Filesystem;
@@ -42,29 +41,31 @@ class GitCheckout
 
     /**
      * @param Commit $commit
-     * @return GitWorkingCopy
+     * @return Workspace
      * @throws \Exception
      */
     public function create(Commit $commit)
     {
+        $workspace = new Workspace();
+
         $project = $this->gitlabClient->api('projects')->show($commit->getMergeRequest()->getProject()->getRemoteId());
         $url = $project['ssh_url_to_repo'];
         $revision = $commit->getRevision();
-        $path = $this->getUniquePath();
+        $workspace->path = $this->getUniquePath();
 
-        $workingCopy = $this->gitWrapper->cloneRepository($url, $path);
+        $workingCopy = $this->gitWrapper->cloneRepository($url, $workspace->path);
         $workingCopy->checkout($revision);
 
-        return $workingCopy;
+        return $workspace;
     }
 
     /**
-     * @param GitWorkingCopy $workingCopy
+     * @param Workspace $workspace
      */
-    public function remove(GitWorkingCopy $workingCopy)
+    public function remove(Workspace $workspace)
     {
         $fs = new Filesystem();
-        $fs->remove($workingCopy->getDirectory());
+        $fs->remove($workspace->path);
     }
 
     /**
