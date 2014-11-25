@@ -21,13 +21,20 @@ class CommitHandler
     private $gitCheckout;
 
     /**
+     * @var GadgetExecutor
+     */
+    private $gadgetExecutor;
+
+    /**
      * @param EntityManager $em
      * @param GitCheckout $gitCheckout
+     * @param GadgetExecutor $gadgetExecutor
      */
-    public function __construct(EntityManager $em, GitCheckout $gitCheckout)
+    public function __construct(EntityManager $em, GitCheckout $gitCheckout, GadgetExecutor $gadgetExecutor)
     {
         $this->em = $em;
         $this->gitCheckout = $gitCheckout;
+        $this->gadgetExecutor = $gadgetExecutor;
     }
 
     /**
@@ -35,8 +42,12 @@ class CommitHandler
      */
     public function handle(Commit $commit)
     {
-        $workingCopy = $this->gitCheckout->create($commit);
+        $workspace = $this->gitCheckout->create($commit);
 
-        $this->gitCheckout->remove($workingCopy);
-    }
+        $commit->setResult(
+            $this->gadgetExecutor->run($workspace)
+        );
+
+        //$this->gitCheckout->remove($workspace);
+    }    
 } 
