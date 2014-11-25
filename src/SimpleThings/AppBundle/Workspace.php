@@ -14,4 +14,9 @@ class Workspace
      * @var string
      */
     public $path;
+
+    /**
+     * @var string
+     */
+    public $revision;
 } 

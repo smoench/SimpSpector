@@ -46,15 +46,16 @@ class GitCheckout
      */
     public function create(Commit $commit)
     {
-        $workspace = new Workspace();
+        $project = $this->gitlabClient->api('projects')->show(
+            $commit->getMergeRequest()->getProject()->getRemoteId()
+        );
 
-        $project = $this->gitlabClient->api('projects')->show($commit->getMergeRequest()->getProject()->getRemoteId());
-        $url = $project['ssh_url_to_repo'];
-        $revision = $commit->getRevision();
+        $workspace = new Workspace();
+        $workspace->revision = $commit->getRevision();
         $workspace->path = $this->getUniquePath();
 
-        $workingCopy = $this->gitWrapper->cloneRepository($url, $workspace->path);
-        $workingCopy->checkout($revision);
+        $workingCopy = $this->gitWrapper->cloneRepository($project['ssh_url_to_repo'], $workspace->path);
+        $workingCopy->checkout($workspace->revision);
 
         return $workspace;
     }
