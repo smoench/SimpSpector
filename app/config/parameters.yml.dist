@@ -23,6 +23,4 @@ parameters:
     gitlab_token: ~
     gitlab_url: ~
 
-    git_repository_tmp_dir: /tmp
-
     scrutinizer_bin: bin/scrutinizer.phar

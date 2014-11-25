@@ -1,0 +1,22 @@
+<?php
+/**
+ *
+ */
+
+namespace SimpleThings\AppBundle;
+
+/**
+ * @author David Badura <d.a.badura@gmail.com>
+ */
+class Workspace
+{
+    /**
+     * @var string
+     */
+    public $path;
+
+    /**
+     * @var string
+     */
+    public $revision;
+} 

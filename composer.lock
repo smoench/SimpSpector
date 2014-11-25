@@ -4,8 +4,64 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "563f5f1a3fc2b129f9b16aad0bd85109",
+    "hash": "552ad87b1da48fa214d91a071e7268be",
     "packages": [
+        {
+            "name": "cpliakas/git-wrapper",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cpliakas/git-wrapper.git",
+                "reference": "b948fb7018ead3b2820233333b208cf03b7ee092"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/b948fb7018ead3b2820233333b208cf03b7ee092",
+                "reference": "b948fb7018ead3b2820233333b208cf03b7ee092",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/event-dispatcher": ">=2.3",
+                "symfony/process": ">=2.3"
+            },
+            "require-dev": {
+                "pdepend/pdepend": "~1.0",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "~3.0",
+                "psr/log": "~1.0",
+                "satooshi/php-coveralls": "*",
+                "sebastian/phpcpd": "~2.0",
+                "symfony/filesystem": "~2.0"
+            },
+            "suggest": {
+                "monolog/monolog": "Enables logging of executed git commands"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GitWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Pliakas",
+                    "email": "opensource@chrispliakas.com",
+                    "role": "Project lead"
+                }
+            ],
+            "description": "A PHP wrapper around the Git command line utility.",
+            "homepage": "https://github.com/cpliakas/git-wrapper",
+            "keywords": [
+                "git"
+            ],
+            "time": "2014-07-10 21:15:02"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.1",

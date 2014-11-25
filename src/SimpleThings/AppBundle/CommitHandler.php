@@ -16,11 +16,18 @@ class CommitHandler
     protected $em;
 
     /**
-     * @param EntityManager $em
+     * @var GitCheckout
      */
-    public function __construct(EntityManager $em)
+    private $gitCheckout;
+
+    /**
+     * @param EntityManager $em
+     * @param GitCheckout $gitCheckout
+     */
+    public function __construct(EntityManager $em, GitCheckout $gitCheckout)
     {
         $this->em = $em;
+        $this->gitCheckout = $gitCheckout;
     }
 
     /**
@@ -28,6 +35,13 @@ class CommitHandler
      */
     public function handle(Commit $commit)
     {
+        $workingCopy = $this->gitCheckout->create($commit);
+
+        // composer install
+        // scrutinizer
+
+        $this->gitCheckout->remove($workingCopy);
+
         $this->save($commit);
     }
 

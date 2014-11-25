@@ -4,8 +4,10 @@
 /var/SymfonyRequirements.php
 /var/cache/*
 /var/logs/*
+/var/checkouts/*
 !var/cache/.gitkeep
 !var/logs/.gitkeep
+!var/checkouts/.gitkeep
 /build/
 /vendor/
 /bin/*
