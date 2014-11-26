@@ -33,5 +33,9 @@
             </call>
         </service>
 
+        <service id="simple_things_app.job_manager" class="SimpleThings\AppBundle\JobManager">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+        </service>
+
     </services>
 </container>

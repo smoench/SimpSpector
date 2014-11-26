@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Commit
 {
+    const STATUS_NEW = 'new';
+    const STATUS_RUN = 'run';
+    const STATUS_SUCCESS = 'success';
+    const STATUS_ERROR = 'error';
+
     /**
      * @var integer
      *
@@ -40,6 +45,21 @@ class Commit
      * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="commits", cascade={"all"})
      */
     private $mergeRequest;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $status;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->status = self::STATUS_NEW;
+    }
 
     /**
      * Get id
@@ -105,5 +125,21 @@ class Commit
     public function setMergeRequest(MergeRequest $mergeRequest)
     {
         $this->mergeRequest = $mergeRequest;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }

@@ -37,20 +37,6 @@ class CommitHandler
     {
         $workingCopy = $this->gitCheckout->create($commit);
 
-        // composer install
-        // scrutinizer
-
         $this->gitCheckout->remove($workingCopy);
-
-        $this->save($commit);
-    }
-
-    /**
-     * @param Commit $commit
-     */
-    private function save(Commit $commit)
-    {
-        $this->em->persist($commit);
-        $this->em->flush();
     }
 } 
