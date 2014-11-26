@@ -36,11 +36,18 @@ class JobRunCommand extends ContainerAwareCommand
 
         foreach ($jobManager->getNewCommits() as $commit) {
             $output->writeln('job id ' . $commit->getId());
-            $commitHandler->handle($commit);
 
-            $commit->setStatus(Commit::STATUS_SUCCESS);
+            $commit->setStatus(Commit::STATUS_RUN);
+            $entityManager->flush($commit);
+
+            try {
+                $commitHandler->handle($commit);
+                $commit->setStatus(Commit::STATUS_SUCCESS);
+            } catch (\Exception $e) {
+                $commit->setStatus(Commit::STATUS_ERROR);
+            }
+
+            $entityManager->flush($commit);
         }
-
-        $entityManager->flush();
     }
 }
