@@ -2,9 +2,13 @@
 
 namespace SimpleThings\AppBundle\GitLab;
 
+use Doctrine\ORM\EntityManager;
+use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\CommitHandler;
+use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Entity\MergeRequest;
+use SimpleThings\AppBundle\Entity\Project;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -19,35 +23,35 @@ class RequestHandler
     private $notifier;
 
     /**
-     * @var CommitFactory
-     */
-    private $commitFactory;
-
-    /**
-     * @var CommitHandler
-     */
-    private $commitHandler;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param CommitFactory $commitFactory
+     * @var EntityManager
+     */
+    private $em;
+
+    /**
+     * @var Client
+     */
+    private $client;
+
+    /**
+     * @param EntityManager $em
+     * @param Client $client
      * @param Notifier $notifier
-     * @param CommitHandler $commitHandler
      * @param LoggerInterface $logger
      */
     function __construct(
-        CommitFactory $commitFactory,
+        EntityManager $em,
+        Client $client,
         Notifier $notifier,
-        CommitHandler $commitHandler,
         LoggerInterface $logger = null
     ) {
-        $this->commitFactory = $commitFactory;
         $this->notifier = $notifier;
-        $this->commitHandler = $commitHandler;
+        $this->em = $em;
+        $this->client = $client;
         $this->logger = $logger ?: new NullLogger();
     }
 
@@ -66,16 +70,118 @@ class RequestHandler
         }
 
         if (\igorw\get_in($event, ['object_kind']) === 'merge_request') {
-            $commit = $this->commitFactory->createByMergeRequest($event);
-            $this->notifier->notify($commit->getMergeRequest());
+            $this->handleMergeEvent($event);
         } else {
-            $commit = $this->commitFactory->createByPush($event);
+            $this->handlePushEvent($event);
+        }
+    }
 
-            if (!$commit) {
-                return;
-            }
+    /**
+     * @param array $event
+     */
+    private function handleMergeEvent(array $event)
+    {
+        $projectId = $event['object_attributes']['source_project_id'];
+        $mergeId = $event['object_attributes']['id'];
+        $branch = $event['object_attributes']['source_branch'];
+
+        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
+
+        if ($repository->hasMergeRequest($projectId, $mergeId)) {
+            $this->logger->info("merge request exist already");
+            return;
         }
 
-        $this->commitHandler->handle($commit);
+        $mr = $this->createMergeRequest($projectId, $mergeId, $branch);
+        $revision = $this->getLastRevisionFromBranch($projectId, $branch);
+
+        $commit = new Commit();
+        $commit->setMergeRequest($mr);
+        $commit->setRevision($revision);
+
+        $this->em->persist($commit);
+        $this->em->flush();
+
+        $this->notifier->notify($commit->getMergeRequest());
+    }
+
+    /**
+     * @param array $event
+     */
+    private function handlePushEvent(array $event)
+    {
+        $branch = str_replace('refs/heads/', '', $event['ref']);
+        $projectId = $event['project_id'];
+        $revision = $event['after'];
+
+        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
+
+        if (!$mergeRequest = $repository->findLastMergeRequestByBranch($projectId, $branch)) {
+            return;
+        }
+
+        $commit = new Commit();
+        $commit->setMergeRequest($mergeRequest);
+        $commit->setRevision($revision);
+
+        $this->em->persist($commit);
+        $this->em->flush();
+    }
+
+
+    /**
+     * @param string $projectId
+     * @param string $branch
+     * @return string
+     */
+    private function getLastRevisionFromBranch($projectId, $branch)
+    {
+        $result = $this->client->api('repositories')->branch($projectId, $branch);
+
+        return $result['commit']['id'];
+    }
+
+    /**
+     * @param $projectId
+     * @param $mergeRequestId
+     * @param $branch
+     * @return MergeRequest
+     */
+    private function createMergeRequest($projectId, $mergeRequestId, $branch)
+    {
+        $mr = new MergeRequest();
+        $mr->setRemoteId($mergeRequestId);
+        $mr->setSourceBranch($branch);
+
+        if (!$project = $this->findProject($projectId)) {
+            $project = $this->createProject($projectId);
+        }
+
+        $mr->setProject($project);
+
+        return $mr;
+    }
+
+    /**
+     * @param string $projectId
+     * @return null|object
+     */
+    private function findProject($projectId)
+    {
+        return $this->em->getRepository('SimpleThings\AppBundle\Entity\Project')->findOneBy(array(
+            'remoteId' => $projectId
+        ));
+    }
+
+    /**
+     * @param string $projectId
+     * @return Project
+     */
+    private function createProject($projectId)
+    {
+        $project = new Project();
+        $project->setRemoteId($projectId);
+
+        return $project;
     }
 }
