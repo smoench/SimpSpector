@@ -19,4 +19,9 @@ class Workspace
      * @var string
      */
     public $revision;
+
+    /**
+     * @var array
+     */
+    public $config;
 } 

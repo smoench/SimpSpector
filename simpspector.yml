@@ -1,0 +1,3 @@
+composer: ~
+phpcs:
+  standard: [PSR1, PSR2]

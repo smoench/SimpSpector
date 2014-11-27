@@ -2,7 +2,6 @@
 
 namespace SimpleThings\AppBundle;
 
-use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
 
 /**
@@ -11,23 +10,23 @@ use SimpleThings\AppBundle\Entity\Commit;
 class CommitHandler
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var GitCheckout
      */
     private $gitCheckout;
 
     /**
-     * @param EntityManager $em
-     * @param GitCheckout $gitCheckout
+     * @var ConfigLoader
      */
-    public function __construct(EntityManager $em, GitCheckout $gitCheckout)
+    private $configLoader;
+
+    /**
+     * @param GitCheckout $gitCheckout
+     * @param ConfigLoader $loader
+     */
+    public function __construct(GitCheckout $gitCheckout, ConfigLoader $loader)
     {
-        $this->em = $em;
         $this->gitCheckout = $gitCheckout;
+        $this->configLoader = $loader;
     }
 
     /**
@@ -36,6 +35,7 @@ class CommitHandler
     public function handle(Commit $commit)
     {
         $workingCopy = $this->gitCheckout->create($commit);
+        $workingCopy->config = $this->configLoader->load($workingCopy);
 
         $this->gitCheckout->remove($workingCopy);
     }
