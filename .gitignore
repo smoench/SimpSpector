@@ -15,3 +15,4 @@
 !bin/symfony_requirements
 !bin/dev-update
 /composer.phar
+/assets/bower_components
