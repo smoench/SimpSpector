@@ -85,7 +85,9 @@ class RequestHandler
         $mergeId = $event['object_attributes']['id'];
         $branch = $event['object_attributes']['source_branch'];
 
-        if ($this->existMergeRequest($projectId, $mergeId)) {
+        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
+
+        if ($repository->hasMergeRequest($projectId, $mergeId)) {
             $this->logger->info("merge request exist already");
             return;
         }
@@ -108,19 +110,22 @@ class RequestHandler
      */
     private function handlePushEvent(array $event)
     {
-        // todo...
-
         $branch = str_replace('refs/heads/', '', $event['ref']);
         $projectId = $event['project_id'];
         $revision = $event['after'];
 
-        if (!$mr = $this->findMergeRequestByBranch($projectId, $branch)) {
+        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
+
+        if (!$mergeRequest = $repository->findLastMergeRequestByBranch($projectId, $branch)) {
             return;
         }
 
         $commit = new Commit();
-        $commit->setMergeRequest($mr);
+        $commit->setMergeRequest($mergeRequest);
         $commit->setRevision($revision);
+
+        $this->em->persist($commit);
+        $this->em->flush();
     }
 
 
@@ -134,27 +139,6 @@ class RequestHandler
         $result = $this->client->api('repositories')->branch($projectId, $branch);
 
         return $result['commit']['id'];
-    }
-
-    /**
-     * @param string $projectId
-     * @param string $branch
-     * @return int
-     */
-    private function findMergeRequestByBranch($projectId, $branch)
-    {
-        $query = $this->em->createQuery('
-            SELECT m, p
-            FROM SimpleThings\AppBundle\Entity\MergeRequest m
-            JOIN m.project p
-            WHERE p.remoteId = :project
-                AND m.sourceBranch = :branch
-            ORDER BY m.id DESC
-        ');
-
-        $query->setMaxResults(1);
-
-        return $query->getFirstResult();
     }
 
     /**
@@ -199,26 +183,5 @@ class RequestHandler
         $project->setRemoteId($projectId);
 
         return $project;
-    }
-
-    /**
-     * @param int $projectId
-     * @param int $mergeId
-     * @return bool
-     */
-    private function existMergeRequest($projectId, $mergeId)
-    {
-        return (bool) $this->em->createQuery('
-            SELECT COUNT(m)
-            FROM SimpleThings\AppBundle\Entity\MergeRequest m
-            JOIN m.project p
-            WHERE p.remoteId = :projectId
-                AND m.remoteId = :mergeId
-        ')->setParameters(
-            [
-                'projectId' => $projectId,
-                'mergeId'   => $mergeId
-            ]
-        )->getSingleScalarResult();
     }
 }
