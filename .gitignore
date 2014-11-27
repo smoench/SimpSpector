@@ -16,3 +16,7 @@
 !bin/dev-update
 /composer.phar
 /assets/bower_components
+/assets/node_modules
+.cache
+/web/css
+
