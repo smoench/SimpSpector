@@ -30,11 +30,11 @@ class JobRunCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $jobManager = $this->getContainer()->get('simple_things_app.job_manager');
         $commitHandler = $this->getContainer()->get('simple_things_app.commit_handler');
         $entityManager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $commitRepository = $entityManager->getRepository('SimpleThingsAppBundle:Commit');
 
-        foreach ($jobManager->getNewCommits() as $commit) {
+        foreach ($commitRepository->findNewCommits() as $commit) {
             $output->writeln('job id ' . $commit->getId());
 
             $commit->setStatus(Commit::STATUS_RUN);
