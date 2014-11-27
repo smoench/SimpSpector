@@ -80,7 +80,13 @@ class Repository
 
         $this->sortedGadgets = array_values($this->gadgets);
 
-        // todo sort
+        usort($this->sortedGadgets, function (GadgetInterface $a, GadgetInterface $b) {
+            if ($a->getPriority() == $b->getPriority()) {
+                return 0;
+            }
+
+            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
+        });
 
         return $this->sortedGadgets;
     }
