@@ -32,6 +32,10 @@ class Composer extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
+        if (!isset($workspace->config['composer'])) {
+            return;
+        }
+
         $processBuilder = new ProcessBuilder(['composer', 'install', '--no-interaction']);
         $processBuilder->setWorkingDirectory($workspace->path);
 
