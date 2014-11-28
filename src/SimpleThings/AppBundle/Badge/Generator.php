@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle;
+namespace SimpleThings\AppBundle\Badge;
 
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
  * @author David Badura <d.a.badura@gmail.com>
  * @author Lars Wallenborn <lars@wallenborn.net>
  */
-class ButtonGenerator
+class Generator
 {
     /**
      * @var Router
@@ -31,7 +31,7 @@ class ButtonGenerator
     public function generate(MergeRequest $mergeRequest)
     {
         return vsprintf('[![Build Status](%(imageUrl)s)](%(linkUrl)s)', [
-            'imageUrl' => $this->router->generate('image', ['merge_request_id' => $mergeRequest->getId()]),
+            'imageUrl' => $this->router->generate('image_badge', ['merge_request_id' => $mergeRequest->getId()]),
             'linkUrl'  => $this->router->generate('mergerequest_last_commit', ['id' => $mergeRequest->getId()]),
         ]);
     }

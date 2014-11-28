@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 class ImageController extends Controller
 {
     /**
-     * @Route("/{id}", name="image")
+     * @Route("/{merge_request_id}", name="image_badge")
      */
-    public function showAction(MergeRequest $mergeRequest)
+    public function badgeAction(MergeRequest $mergeRequest)
     {
         /* @todo: use $mergeRequest to calculate score */
 

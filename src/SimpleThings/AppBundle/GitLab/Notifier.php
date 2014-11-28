@@ -6,7 +6,7 @@ use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\ButtonGenerator;
+use SimpleThings\AppBundle\Badge\Generator;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 
 /**
@@ -20,7 +20,7 @@ class Notifier
     private $client;
 
     /**
-     * @var ButtonGenerator
+     * @var Generator
      */
     private $generator;
 
@@ -31,10 +31,10 @@ class Notifier
 
     /**
      * @param Client $client
-     * @param ButtonGenerator $generator
+     * @param Generator $generator
      * @param LoggerInterface $logger
      */
-    function __construct(Client $client, ButtonGenerator $generator, LoggerInterface $logger = null)
+    function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
     {
         $this->client = $client;
         $this->generator = $generator;
