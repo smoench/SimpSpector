@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
+use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,12 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DashboardController extends Controller
 {
-
     /**
      * @Route("/", name="homepage")
      */
     public function indexAction()
     {
+        /** @var EntityRepository $repository */
         $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Project');
         $projects   = $repository->findBy([], ['id' => 'DESC']);
 

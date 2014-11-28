@@ -5,12 +5,10 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -23,6 +21,7 @@ class MergeRequestController extends Controller
      */
     public function showAction(MergeRequest $mergeRequest)
     {
+        /** @var EntityRepository $repository */
         $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
         $commits    = $repository->findBy(['mergeRequest' => $mergeRequest], ['id' => 'DESC']);
 
@@ -30,7 +29,7 @@ class MergeRequestController extends Controller
             "SimpleThingsAppBundle:MergeRequest:show.html.twig",
             [
                 'merge_request' => $mergeRequest,
-                'commits'      => $commits,
+                'commits'       => $commits,
             ]
         );
     }
