@@ -31,8 +31,8 @@ class Generator
     public function getMarkdown(MergeRequest $mergeRequest)
     {
         return vsprintf('[![Build Status](%(imageUrl)s)](%(linkUrl)s)', [
-            'imageUrl' => $this->router->generate('image_badge', ['merge_request_id' => $mergeRequest->getId()]),
-            'linkUrl'  => $this->router->generate('mergerequest_last_commit', ['id' => $mergeRequest->getId()]),
+            'imageUrl' => $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()]),
+            'linkUrl'  => $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()]),
         ]);
     }
 }
