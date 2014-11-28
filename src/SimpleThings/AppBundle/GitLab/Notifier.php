@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\GitLab;
 
+use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -45,7 +46,10 @@ class Notifier
      */
     public function notify(MergeRequest $mergeRequest)
     {
-        $response = $this->client->api('merge_requests')->addComment(
+        /** @var MergeRequests $mergeRequestApi */
+        $mergeRequestApi = $this->client->api('merge_requests');
+
+        $response = $mergeRequestApi->addComment(
             $mergeRequest->getProject()->getRemoteId(),
             $mergeRequest->getRemoteId(),
             $this->generator->generate($mergeRequest)
