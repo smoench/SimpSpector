@@ -1,6 +1,8 @@
 SimpSpector
 ===========
 
+**ALPHA** SimpSpector integrates with gitlab and inspects your code, using SimpSpector Gadgets (get it?)
+
 Install Development Environment
 -------------------------------
 
@@ -20,3 +22,12 @@ My Windows experience:
 ** create a test project and check it out
 ** under Settings -> WebHooks check "Push events" and "Merge Request events"
 ** enter `http://192.168.13.37/SimpSpector/web/app_dev.php/hooks/gitlab`
+
+```bash
+# installing assets
+cd assets
+bower install
+npm install --dev
+gulp styles
+
+```
