@@ -13,35 +13,34 @@ use Doctrine\ORM\Mapping as ORM;
  */
 trait Timestampable
 {
+    /**
+     * @var \DateTime();
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
 
     /**
      * @var \DateTime();
      *
      * @ORM\Column(type="datetime")
      */
-    protected $createAt;
-
-    /**
-     * @var \DateTime();
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $updateAt;
+    protected $updatedAt;
 
     /**
      * @return \DateTime
      */
-    public function getCreateAt()
+    public function getCreatedAt()
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
     /**
      * @return \DateTime
      */
-    public function getUpdateAt()
+    public function getUpdatedAt()
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
     /**
@@ -49,12 +48,12 @@ trait Timestampable
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function update()
+    public function updateTimestamps()
     {
-        if (!$this->createAt) {
-            $this->createAt = new \DateTime();
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime();
         }
 
-        $this->updateAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 } 
