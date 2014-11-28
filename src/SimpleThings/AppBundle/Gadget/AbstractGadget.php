@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Workspace;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>

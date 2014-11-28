@@ -1,3 +1,4 @@
 composer: ~
 phpcs:
-  standard: [PSR1, PSR2]
+  files: src/
+  standards: [PSR1, PSR2]
