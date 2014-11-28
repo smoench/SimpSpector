@@ -22,6 +22,9 @@ class CommitController extends Controller
      */
     public function showAction(Commit $commit)
     {
-        return $this->render("SimpleThingsAppBundle:Commit:show.html.twig");
+        return $this->render(
+            "SimpleThingsAppBundle:Commit:show.html.twig",
+            ['commit' => $commit]
+        );
     }
 }

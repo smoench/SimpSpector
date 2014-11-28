@@ -1,0 +1,53 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui steps">
+            <a class="step active">
+                <div class="content">
+                    <div class="title"> <i class="icon home"></i> Home</div>
+                    <div class="description">... where the <i class="icon heart"></i> is</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="icon cubes inverted circular"></i> Projects
+            </h3>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>id</th>
+                        <th>rempte-id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>
+                            <a class="ui animated button" href="{{ path('project_show', {id: project.id}) }}">
+                                <div class="hidden content">show</div>
+                                <div class="visible content">
+                                    <i class="search icon"></i>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            {{ project.id }}
+                        </td>
+                        <td>{{ project.remoteId }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

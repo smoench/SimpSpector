@@ -1,0 +1,59 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui steps">
+            <a class="step" href="{{ path('homepage') }}">
+                <div class="content">
+                    <div class="title"> <i class="icon home"></i> Home</div>
+                    <div class="description">... where the <i class="icon heart"></i> is</div>
+                </div>
+            </a>
+            <a class="step active">
+                <div class="content">
+                    <div class="title"> <i class="icon cubes"></i> Project</div>
+                    <div class="description">id <strong>{{ project.remoteId }}</strong></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="icon alternate share inverted circular"></i> MergeRequests
+            </h3>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>id</th>
+                        <th>rempte-id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for merge_request in merge_requests %}
+                    <tr>
+                        <td>
+                            <a class="ui animated button" href="{{ path('mergerequest_show', {id: merge_request.id}) }}">
+                                <div class="hidden content">show</div>
+                                <div class="visible content">
+                                    <i class="search icon"></i>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            {{ merge_request.id }}
+                        </td>
+                        <td>{{ merge_request.remoteId }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
