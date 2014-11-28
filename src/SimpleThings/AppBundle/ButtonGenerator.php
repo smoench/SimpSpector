@@ -31,8 +31,8 @@ class ButtonGenerator
     public function generate(MergeRequest $mergeRequest)
     {
         return vsprintf('[![Build Status](%(imageUrl)s)](%(linkUrl)s)', [
-            'imageUrl' => '',
-            'linkUrl' => '',
+            'imageUrl' => $this->router->generate('image', ['merge_request_id' => $mergeRequest->getId()]),
+            'linkUrl' => $this->router->generate('mergerequest_showlast', ['id' => $mergeRequest->getId()]),
         ]);
     }
 }
