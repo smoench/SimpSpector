@@ -28,7 +28,7 @@ class Generator
      * @param MergeRequest $mergeRequest
      * @return string
      */
-    public function generate(MergeRequest $mergeRequest)
+    public function getMarkdown(MergeRequest $mergeRequest)
     {
         return vsprintf('[![Build Status](%(imageUrl)s)](%(linkUrl)s)', [
             'imageUrl' => $this->router->generate('image_badge', ['merge_request_id' => $mergeRequest->getId()]),

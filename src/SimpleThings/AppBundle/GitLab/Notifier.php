@@ -52,7 +52,7 @@ class Notifier
         $response = $mergeRequestApi->addComment(
             $mergeRequest->getProject()->getRemoteId(),
             $mergeRequest->getRemoteId(),
-            $this->generator->generate($mergeRequest)
+            $this->generator->getMarkdown($mergeRequest)
         );
 
         $this->logger->info('notify gitlab', $response);
