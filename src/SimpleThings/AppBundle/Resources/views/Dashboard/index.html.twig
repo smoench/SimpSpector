@@ -4,22 +4,10 @@
 <div class="row">
     <div class="column wide sixteen">
         <div class="ui steps">
-            <a class="step" href="{{ path('homepage') }}">
+            <a class="step active">
                 <div class="content">
                     <div class="title"> <i class="icon home"></i> Home</div>
                     <div class="description">... where the <i class="icon heart"></i> is</div>
-                </div>
-            </a>
-            <a class="step" href="{{ path('project_show', {id: merge_request.project.id }) }}">
-                <div class="content">
-                    <div class="title"> <i class="icon cubes"></i> Project</div>
-                    <div class="description">id <strong>{{ merge_request.project.remoteId }}</strong></div>
-                </div>
-            </a>
-            <a class="step active">
-                <div class="content">
-                    <div class="title"> <i class="share alternate icon"></i> MergeRequest</div>
-                    <div class="description">id <strong>{{ merge_request.remoteId }}</strong></div>
                 </div>
             </a>
         </div>
@@ -30,21 +18,21 @@
     <div class="column wide sixteen">
         <div class="ui segment">
             <h3 class="ui header">
-                <i class="icon text file inverted circular"></i> Commits
+                <i class="icon cubes inverted circular"></i> Projects
             </h3>
             <table class="ui table">
                 <thead>
                     <tr>
                         <th>&nbsp;</th>
                         <th>id</th>
-                        <th>revision</th>
+                        <th>rempte-id</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for commit in commits %}
+                    {% for project in projects %}
                     <tr>
                         <td>
-                            <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
+                            <a class="ui animated button" href="{{ path('project_show', {id: project.id}) }}">
                                 <div class="hidden content">show</div>
                                 <div class="visible content">
                                     <i class="search icon"></i>
@@ -52,9 +40,9 @@
                             </a>
                         </td>
                         <td>
-                            {{ commit.id }}
+                            {{ project.id }}
                         </td>
-                        <td>{{ commit.revision }}</td>
+                        <td>{{ project.remoteId }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

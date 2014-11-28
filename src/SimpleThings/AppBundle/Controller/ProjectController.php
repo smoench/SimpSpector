@@ -22,9 +22,15 @@ class ProjectController extends Controller
      */
     public function showAction(Project $project)
     {
+        $repository    = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\MergeRequest');
+        $mergeRequests = $repository->findBy(['project' => $project], ['id' => 'DESC']);
+
         return $this->render(
             "SimpleThingsAppBundle:Project:show.html.twig",
-            ['project' => $project]
+            [
+                'project'        => $project,
+                'merge_requests' => $mergeRequests,
+            ]
         );
     }
 }

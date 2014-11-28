@@ -17,7 +17,16 @@ class DashboardController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function showAction()
+    public function indexAction()
     {
+        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Project');
+        $projects   = $repository->findBy([], ['id' => 'DESC']);
+
+        return $this->render(
+            "SimpleThingsAppBundle:Dashboard:index.html.twig",
+            [
+                'projects' => $projects,
+            ]
+        );
     }
 }
