@@ -30,8 +30,8 @@ class JobRunCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $commitHandler = $this->getContainer()->get('simple_things_app.commit_handler');
-        $entityManager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $commitHandler    = $this->getContainer()->get('simple_things_app.commit_handler');
+        $entityManager    = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $commitRepository = $entityManager->getRepository('SimpleThingsAppBundle:Commit');
 
         foreach ($commitRepository->findNewCommits() as $commit) {
@@ -45,6 +45,7 @@ class JobRunCommand extends ContainerAwareCommand
                 $commit->setStatus(Commit::STATUS_SUCCESS);
             } catch (\Exception $e) {
                 $commit->setStatus(Commit::STATUS_ERROR);
+                $commit->setOutput($e->getMessage());
             }
 
             $entityManager->flush($commit);
