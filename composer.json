@@ -22,7 +22,8 @@
         "zeichen32/gitlabapibundle": "~2.0",
         "igorw/get-in": "~1.0",
         "cpliakas/git-wrapper": "~1.0",
-        "composer/composer": "~1.0@alpha"
+        "composer/composer": "~1.0@alpha",
+        "badges/poser": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
