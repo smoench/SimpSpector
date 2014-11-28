@@ -17,7 +17,7 @@ class DashboardController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function showAction(Project $project)
+    public function showAction()
     {
     }
 }

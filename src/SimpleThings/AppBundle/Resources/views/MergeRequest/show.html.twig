@@ -36,21 +36,23 @@
                 <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>two</th>
+                        <th>revision</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for commit in commits %}
                     <tr>
                         <td>
-                            <a class="ui animated button">
+                            <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
                                 <div class="hidden content">show</div>
                                 <div class="visible content">
-                                    <i class="shop icon"></i>
+                                    <i class="search icon"></i>
                                 </div>
                             </a>
                         </td>
-                        <td>four</td>
+                        <td>{{ commit.revision }}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

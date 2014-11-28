@@ -22,9 +22,15 @@ class MergeRequestController extends Controller
      */
     public function showAction(MergeRequest $mergeRequest)
     {
+        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commits    = $repository->findBy(['mergeRequest' => $mergeRequest], ['id' => 'DESC']);
+
         return $this->render(
             "SimpleThingsAppBundle:MergeRequest:show.html.twig",
-            ['merge_request' => $mergeRequest]
+            [
+                'merge_request' => $mergeRequest,
+                'commits'      => $commits,
+            ]
         );
     }
 }
