@@ -52,7 +52,11 @@ class GitCheckout
 
         $workspace = new Workspace();
         $workspace->revision = $commit->getRevision();
-        $workspace->path = $this->getUniquePath();
+        $workspace->path = $this->baseDir . '/' . $this->createFolderName($commit);
+
+        if (file_exists($workspace->path)) {
+            $this->remove($workspace);
+        }
 
         $workingCopy = $this->gitWrapper->cloneRepository($project['ssh_url_to_repo'], $workspace->path);
         $workingCopy->checkout($workspace->revision);
@@ -72,8 +76,13 @@ class GitCheckout
     /**
      * @return string
      */
-    private function getUniquePath()
+    private function createFolderName(Commit $commit)
     {
-        return $this->baseDir . '/' . uniqid();
+        return sprintf(
+            "%s_%s_%s",
+            $commit->getMergeRequest()->getProject()->getId(),
+            $commit->getMergeRequest()->getId(),
+            $commit->getRevision()
+        );
     }
 } 
