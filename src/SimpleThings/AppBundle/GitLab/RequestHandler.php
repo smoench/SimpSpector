@@ -3,12 +3,14 @@
 namespace SimpleThings\AppBundle\GitLab;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Entity\Project;
+use SimpleThings\AppBundle\Repository\MergeRequestRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -48,7 +50,8 @@ class RequestHandler
         Client $client,
         Notifier $notifier,
         LoggerInterface $logger = null
-    ) {
+    )
+    {
         $this->notifier = $notifier;
         $this->em = $em;
         $this->client = $client;
@@ -65,7 +68,7 @@ class RequestHandler
 
         $event = json_decode($request->getContent(), true);
 
-        if (!is_array($event)) {
+        if ( ! is_array($event)) {
             throw new \Exception('missing data');
         }
 
@@ -85,10 +88,12 @@ class RequestHandler
         $mergeId = $event['object_attributes']['id'];
         $branch = $event['object_attributes']['source_branch'];
 
+        /** @var MergeRequestRepository $repository */
         $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
 
         if ($repository->hasMergeRequest($projectId, $mergeId)) {
             $this->logger->info("merge request exist already");
+
             return;
         }
 
@@ -110,13 +115,14 @@ class RequestHandler
      */
     private function handlePushEvent(array $event)
     {
-        $branch = str_replace('refs/heads/', '', $event['ref']);
+        $branch = $this->normalizeBranchName($event['ref']);
         $projectId = $event['project_id'];
         $revision = $event['after'];
 
+        /** @var MergeRequestRepository $repository */
         $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
 
-        if (!$mergeRequest = $repository->findLastMergeRequestByBranch($projectId, $branch)) {
+        if ( ! $mergeRequest = $repository->findLastMergeRequestByBranch($projectId, $branch)) {
             return;
         }
 
@@ -153,7 +159,7 @@ class RequestHandler
         $mr->setRemoteId($mergeRequestId);
         $mr->setSourceBranch($branch);
 
-        if (!$project = $this->findProject($projectId)) {
+        if ( ! $project = $this->findProject($projectId)) {
             $project = $this->createProject($projectId);
         }
 
@@ -168,9 +174,11 @@ class RequestHandler
      */
     private function findProject($projectId)
     {
-        return $this->em->getRepository('SimpleThings\AppBundle\Entity\Project')->findOneBy(array(
-            'remoteId' => $projectId
-        ));
+        /** @var EntityRepository $projectRepository */
+        $projectRepository = $this->em->getRepository('SimpleThings\AppBundle\Entity\Project');
+        $results = $projectRepository->findAll(['remoteId' => $projectId]);
+
+        return count($results) === 1 ? $results[0] : null;
     }
 
     /**
@@ -183,5 +191,15 @@ class RequestHandler
         $project->setRemoteId($projectId);
 
         return $project;
+    }
+
+    /**
+     * @param string $ref
+     * @return string
+     */
+    private function normalizeBranchName($ref)
+    {
+        /* @todo: only remove it from start of string? */
+        return str_replace('refs/heads/', '', $ref);
     }
 }
