@@ -8,13 +8,13 @@ namespace SimpleThings\AppBundle\Controller;
 use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
  * @Route("/project")
  */
 class ProjectController extends Controller
 {
-
     /**
      * @Route("/{id}/show", name="project_show")
      */

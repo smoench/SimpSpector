@@ -10,6 +10,7 @@ use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
  * @Route("/merge-request")

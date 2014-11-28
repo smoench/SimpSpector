@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\Commit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
