@@ -42,6 +42,8 @@
 
         <service id="simple_things_app.gadget.repository" class="SimpleThings\AppBundle\Gadget\Repository"/>
 
+        <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
+
         <service id="simple_things_app.gadget.composer" class="SimpleThings\AppBundle\Gadget\Composer">
             <tag name="simpspector.gadget"/>
         </service>
