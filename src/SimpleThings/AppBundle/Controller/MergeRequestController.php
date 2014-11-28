@@ -7,16 +7,17 @@ namespace SimpleThings\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\MergeRequest;
+use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/merge-request")
  */
 class MergeRequestController extends Controller
 {
-
     /**
      * @Route("/{id}/show", name="mergerequest_show")
      */
@@ -32,5 +33,21 @@ class MergeRequestController extends Controller
                 'commits'      => $commits,
             ]
         );
+    }
+
+    /**
+     * @Route("/{id}/last-commit", name="mergerequest_lastcommit")
+     */
+    public function lastCommitAction(MergeRequest $mergeRequest)
+    {
+        /** @var CommitRepository */
+        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commit     = $repository->findLastForMergeRequest($mergeRequest);
+
+        if ( ! $commit) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->redirect($this->generateUrl('commit_show', ['id' => $commit->getId()]));
     }
 }
