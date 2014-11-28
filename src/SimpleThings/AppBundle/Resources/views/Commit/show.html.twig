@@ -1,0 +1,23 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="ui steps">
+        <a class="step">
+            <div class="content">
+                <div class="title"> <i class="icon home"></i> Home</div>
+                <div class="description">... where the <i class="icon heart"></i> is</div>
+            </div>
+        </a>
+        <a class="step active">
+            <div class="content">
+                <div class="title"> <i class="icon file text"></i> Commit-Report</div>
+                <div class="description">@todo which commit</div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="column">foo</div>
+</div>
+{% endblock %}
