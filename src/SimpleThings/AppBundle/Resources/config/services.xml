@@ -15,6 +15,7 @@
         </service>
 
         <service id="simple_things_app.button_generator" class="SimpleThings\AppBundle\ButtonGenerator">
+            <argument type="service" id="router" />
         </service>
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
