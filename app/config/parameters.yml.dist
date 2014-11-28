@@ -22,5 +22,3 @@ parameters:
 
     gitlab_token: ~
     gitlab_url: ~
-
-    scrutinizer_bin: bin/scrutinizer.phar
