@@ -4,71 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cac1982342e49b44ce669140bac5698a",
+    "hash": "7c5edadc0282c9c6ab6d662ff9356618",
     "packages": [
-        {
-            "name": "badges/poser",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/badges/poser.git",
-                "reference": "f5e73a28bb8d7987ad6c72bb2d885189f603b34c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/badges/poser/zipball/f5e73a28bb8d7987ad6c72bb2d885189f603b34c",
-                "reference": "f5e73a28bb8d7987ad6c72bb2d885189f603b34c",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/console": "~2"
-            },
-            "require-dev": {
-                "behat/behat": "dev-master",
-                "phpspec/phpspec": "dev-master"
-            },
-            "bin": [
-                "bin/poser"
-            ],
-            "type": "lib",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PUGX\\Poser\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PUGX Community",
-                    "homepage": "https://github.com/PUGX/badge-poser/contributors"
-                },
-                {
-                    "name": "Shields Community",
-                    "homepage": "https://github.com/badges/poser/contributors"
-                },
-                {
-                    "name": "Giulio De Donato",
-                    "email": "liuggio@gmail.com"
-                }
-            ],
-            "description": "Poser, add badges on your readme..",
-            "homepage": "https://github.com/PUGX",
-            "keywords": [
-                "badge",
-                "composer",
-                "packagist",
-                "pin"
-            ],
-            "time": "2014-08-24 16:58:19"
-        },
         {
             "name": "composer/composer",
             "version": "1.0.0-alpha8",
@@ -2253,8 +2190,7 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "composer/composer": 15,
-        "badges/poser": 20
+        "composer/composer": 15
     },
     "prefer-stable": false,
     "platform": {
