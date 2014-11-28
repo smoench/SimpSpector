@@ -10,7 +10,6 @@
 
     <services>
         <service id="simple_things_app.git_checkout" class="SimpleThings\AppBundle\GitCheckout">
-            <argument type="service" id="gitlab_api"/>
             <argument type="service" id="simple_things_app.git_wrapper"/>
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
