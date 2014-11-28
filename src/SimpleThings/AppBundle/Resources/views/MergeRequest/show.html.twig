@@ -1,0 +1,59 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui steps">
+            <a class="step" href="{{ path('homepage') }}">
+                <div class="content">
+                    <div class="title"> <i class="icon home"></i> Home</div>
+                    <div class="description">... where the <i class="icon heart"></i> is</div>
+                </div>
+            </a>
+            <a class="step" href="{{ path('project_show', {id: merge_request.project.id }) }}">
+                <div class="content">
+                    <div class="title"> <i class="icon cubes"></i> Project</div>
+                    <div class="description">id <strong>{{ merge_request.project.remoteId }}</strong></div>
+                </div>
+            </a>
+            <a class="step active">
+                <div class="content">
+                    <div class="title"> <i class="share alternate icon"></i> MergeRequest</div>
+                    <div class="description">id <strong>{{ merge_request.remoteId }}</strong></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="icon text file inverted circular"></i> Commits
+            </h3>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>two</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a class="ui animated button">
+                                <div class="hidden content">show</div>
+                                <div class="visible content">
+                                    <i class="shop icon"></i>
+                                </div>
+                            </a>
+                        </td>
+                        <td>four</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

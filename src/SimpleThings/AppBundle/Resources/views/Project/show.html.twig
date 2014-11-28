@@ -1,0 +1,22 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="ui steps">
+        <a class="step" href="{{ path('homepage') }}">
+            <div class="content">
+                <div class="title"> <i class="icon home"></i> Home</div>
+                <div class="description">... where the <i class="icon heart"></i> is</div>
+            </div>
+        </a>
+        <a class="step active">
+            <div class="content">
+                <div class="title"> <i class="icon cubes"></i> Project</div>
+                <div class="description">id <strong>{{ project.remoteId }}</strong></div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="row">
+</div>
+{% endblock %}

@@ -6,25 +6,25 @@
 namespace SimpleThings\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/commit")
+ * @Route("/project")
  */
-class CommitController extends Controller
+class ProjectController extends Controller
 {
 
     /**
-     * @Route("/{id}/show", name="commit_show")
+     * @Route("/{id}/show", name="project_show")
      */
-    public function showAction(Commit $commit)
+    public function showAction(Project $project)
     {
         return $this->render(
-            "SimpleThingsAppBundle:Commit:show.html.twig",
-            ['commit' => $commit]
+            "SimpleThingsAppBundle:Project:show.html.twig",
+            ['project' => $project]
         );
     }
 }

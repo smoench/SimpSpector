@@ -6,25 +6,25 @@
 namespace SimpleThings\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Entity\MergeRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/commit")
+ * @Route("/merge-request")
  */
-class CommitController extends Controller
+class MergeRequestController extends Controller
 {
 
     /**
-     * @Route("/{id}/show", name="commit_show")
+     * @Route("/{id}/show", name="mergerequest_show")
      */
-    public function showAction(Commit $commit)
+    public function showAction(MergeRequest $mergeRequest)
     {
         return $this->render(
-            "SimpleThingsAppBundle:Commit:show.html.twig",
-            ['commit' => $commit]
+            "SimpleThingsAppBundle:MergeRequest:show.html.twig",
+            ['merge_request' => $mergeRequest]
         );
     }
 }
