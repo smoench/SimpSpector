@@ -18,7 +18,7 @@ class MergeRequestRepository extends EntityRepository
      * @param int $mergeId
      * @return bool
      */
-    public function hasMergeRequest($projectId, $mergeId)
+    public function findMergeRequestByRemote($projectId, $mergeId)
     {
         $query = $this->createQueryBuilder('m')
             ->join('m.project', 'p')
@@ -33,7 +33,7 @@ class MergeRequestRepository extends EntityRepository
 
         $query->setMaxResults(1);
 
-        return count($query->getResult()) > 0 ? true : false;
+        return $query->getOneOrNullResult();
     }
 
     /**

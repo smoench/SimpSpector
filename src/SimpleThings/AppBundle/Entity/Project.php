@@ -8,10 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class Project
 {
+    use Timestampable;
+
     /**
      * @var integer
      *
@@ -20,6 +23,27 @@ class Project
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $repositoryUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $webUrl;
 
     /**
      * @var string
@@ -51,6 +75,54 @@ class Project
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRepositoryUrl()
+    {
+        return $this->repositoryUrl;
+    }
+
+    /**
+     * @param string $repository
+     */
+    public function setRepositoryUrl($repository)
+    {
+        $this->repositoryUrl = $repository;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebUrl()
+    {
+        return $this->webUrl;
+    }
+
+    /**
+     * @param string $webUrl
+     */
+    public function setWebUrl($webUrl)
+    {
+        $this->webUrl = $webUrl;
     }
 
     /**

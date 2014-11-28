@@ -8,9 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\CommitRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Commit
 {
+    use Timestampable;
+
     const STATUS_NEW = 'new';
     const STATUS_RUN = 'run';
     const STATUS_SUCCESS = 'success';

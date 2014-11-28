@@ -9,9 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\MergeRequestRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class MergeRequest
 {
+    use Timestampable;
+
+    const STATUS_OPEN   = 'open';
+    const STATUS_CLOSED = 'closed';
+    const STATUS_MERGED = 'merged';
+
     /**
      * @var integer
      *
@@ -20,6 +27,20 @@ class MergeRequest
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $status;
 
     /**
      * @var string
@@ -55,16 +76,49 @@ class MergeRequest
     public function __construct()
     {
         $this->commits = new ArrayCollection();
+        $this->status  = self::STATUS_OPEN;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
     /**
@@ -80,7 +134,7 @@ class MergeRequest
     /**
      * Get remoteId
      *
-     * @return string 
+     * @return string
      */
     public function getRemoteId()
     {
@@ -100,7 +154,7 @@ class MergeRequest
     /**
      * Get sourceBranch
      *
-     * @return string 
+     * @return string
      */
     public function getSourceBranch()
     {

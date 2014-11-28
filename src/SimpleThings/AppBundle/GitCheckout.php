@@ -13,11 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
 class GitCheckout
 {
     /**
-     * @var Client
-     */
-    private $gitlabClient;
-
-    /**
      * @var string
      */
     private $baseDir;
@@ -28,15 +23,13 @@ class GitCheckout
     private $gitWrapper;
 
     /**
-     * @param Client $gitlabClient
      * @param GitWrapper $gitWrapper
      * @param string $baseDir
      */
-    public function __construct(Client $gitlabClient, GitWrapper $gitWrapper, $baseDir = '/tmp')
+    public function __construct(GitWrapper $gitWrapper, $baseDir = '/tmp')
     {
-        $this->gitlabClient = $gitlabClient;
         $this->gitWrapper = $gitWrapper;
-        $this->baseDir = $baseDir;
+        $this->baseDir    = $baseDir;
     }
 
     /**
@@ -46,19 +39,19 @@ class GitCheckout
      */
     public function create(Commit $commit)
     {
-        $project = $this->gitlabClient->api('projects')->show(
-            $commit->getMergeRequest()->getProject()->getRemoteId()
-        );
-
-        $workspace = new Workspace();
+        $workspace           = new Workspace();
         $workspace->revision = $commit->getRevision();
-        $workspace->path = $this->baseDir . '/' . $this->createFolderName($commit);
+        $workspace->path     = $this->baseDir . '/' . $this->createFolderName($commit);
 
         if (file_exists($workspace->path)) {
             $this->remove($workspace);
         }
 
-        $workingCopy = $this->gitWrapper->cloneRepository($project['ssh_url_to_repo'], $workspace->path);
+        $workingCopy = $this->gitWrapper->cloneRepository(
+            $commit->getMergeRequest()->getProject()->getRepositoryUrl(),
+            $workspace->path
+        );
+
         $workingCopy->checkout($workspace->revision);
 
         return $workspace;
