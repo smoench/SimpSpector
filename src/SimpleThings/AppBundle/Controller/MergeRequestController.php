@@ -54,7 +54,7 @@ class MergeRequestController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="mergerequest_imagebadge")
+     * @Route("/{id}/badge", name="mergerequest_imagebadge")
      */
     public function badgeAction(MergeRequest $mergeRequest)
     {
