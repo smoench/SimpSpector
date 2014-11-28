@@ -23,7 +23,8 @@ My Windows experience:
   * under Settings -> WebHooks check "Push events" and "Merge Request events"
   * enter `http://192.168.13.37/SimpSpector/web/app_dev.php/hooks/gitlab`
 * install assets:
-    ```bash
+
+```bash
 cd assets
 bower install
 npm install --dev
