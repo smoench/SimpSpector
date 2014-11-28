@@ -55,8 +55,6 @@ class MergeRequestRepository extends EntityRepository
             'branch'  => $branch
         ]);
 
-        $query->setMaxResults(1);
-
-        return $query->getSingleResult();
+        return $query->getOneOrNullResult();
     }
 } 
