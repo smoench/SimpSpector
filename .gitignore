@@ -1,3 +1,4 @@
+.cache
 /web/bundles/
 /app/config/parameters.yml
 /var/bootstrap.php.cache
@@ -15,3 +16,8 @@
 !bin/symfony_requirements
 !bin/dev-update
 /composer.phar
+/assets/bower_components
+/assets/node_modules
+/web/css
+/web/js
+

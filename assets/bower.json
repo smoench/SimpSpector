@@ -1,0 +1,15 @@
+{
+  "name": "SimpSpector Assets",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "~1.0.0"
+  }
+}
