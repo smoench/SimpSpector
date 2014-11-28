@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Workspace;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -28,21 +29,36 @@ class Composer extends AbstractGadget
 
     /**
      * @param Workspace $workspace
-     * @return mixed
+     * @throws \Exception
      */
-    public function run(Workspace $workspace)
+    public function prepare(Workspace $workspace)
     {
-        if (!isset($workspace->config['composer'])) {
-            return;
-        }
+        $processBuilder = new ProcessBuilder([
+            'composer',
+            'install',
+            '--no-interaction',
+            '--no-scripts',
+            '--no-plugins'
+        ]);
 
-        $processBuilder = new ProcessBuilder(['composer', 'install', '--no-interaction']);
         $processBuilder->setWorkingDirectory($workspace->path);
 
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
         $process->setEnv(['COMPOSER_HOME' => $this->composerHome]);
-        $process->run();
+
+        if ($process->run() !== 0) {
+            throw new \Exception($process->getErrorOutput());
+        }
+    }
+
+    /**
+     * @param Workspace $workspace
+     */
+    public function cleanup(Workspace $workspace)
+    {
+        $fs = new Filesystem();
+        $fs->remove($workspace->path . '/vendor');
     }
 
     /**

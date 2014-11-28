@@ -47,7 +47,5 @@ class CommitHandler
         $commit->setResult(
             $this->gadgetExecutor->run($workspace)
         );
-
-        //$this->gitCheckout->remove($workspace);
-    }    
+    }
 } 

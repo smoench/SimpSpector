@@ -14,9 +14,25 @@ interface GadgetInterface
 {
     /**
      * @param Workspace $workspace
+     * @return bool
+     */
+    public function isActive(Workspace $workspace);
+
+    /**
+     * @param Workspace $workspace
      * @return mixed
      */
     public function run(Workspace $workspace);
+
+    /**
+     * @param Workspace $workspace
+     */
+    public function prepare(Workspace $workspace);
+
+    /**
+     * @param Workspace $workspace
+     */
+    public function cleanup(Workspace $workspace);
 
     /**
      * @return int
