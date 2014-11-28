@@ -15,4 +15,3 @@
 !bin/symfony_requirements
 !bin/dev-update
 /composer.phar
-/.idea
