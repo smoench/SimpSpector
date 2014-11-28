@@ -15,7 +15,10 @@ class ScoreCalculator
      */
     public function get(Commit $commit)
     {
-        return new Score(70, $this->getColor(70));
+        $result = $commit->getResult();
+        $number = isset($result['phpcs']) && ! empty($result['phpcs']) ? 100 : 0;
+
+        return new Score($number, $this->getColor($number));
     }
 
     /**
