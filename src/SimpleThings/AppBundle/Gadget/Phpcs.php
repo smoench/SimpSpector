@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Workspace;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -38,11 +39,10 @@ class Phpcs extends AbstractGadget
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
 
-        if ($process->run() !== 0) {
-            throw new \Exception($process->getErrorOutput());
-        }
+        $process->run();
+        $output = $process->getOutput();
 
-        return $this->convertFromCsvToArray($process->getOutput());
+        return $this->convertFromCsvToArray($output);
     }
 
     /**
@@ -68,10 +68,10 @@ class Phpcs extends AbstractGadget
         ]);
 
         $resolver->setNormalizers([
-            'files'     => function ($value) {
+            'files'     => function (Options $options, $value) {
                 return is_array($value) ? $value : [$value];
             },
-            'standards' => function ($value) {
+            'standards' => function (Options $options, $value) {
                 return is_array($value) ? $value : [$value];
             },
         ]);
@@ -85,12 +85,17 @@ class Phpcs extends AbstractGadget
      */
     private function convertFromCsvToArray($xml)
     {
-        $handler = fopen($xml, 'r');
-        $header = array_map('strtolower', fgetcsv($handler));
+        $lines = explode(PHP_EOL, $xml);
+
+        $header = array_map('strtolower', str_getcsv(array_shift($lines)));
 
         $result = [];
-        while ($row = fgetcsv($handler) !== false) {
-            $result[] = array_combine($header, $row);
+        foreach ($lines as $line) {
+            if (!$line) {
+                continue;
+            }
+
+            $result[] = array_combine($header, str_getcsv($line));
         }
 
         return $result;
