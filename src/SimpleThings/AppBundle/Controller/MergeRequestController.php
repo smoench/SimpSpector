@@ -7,6 +7,7 @@ namespace SimpleThings\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SimpleThings\AppBundle\Entity\MergeRequest;
+use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class MergeRequestController extends Controller
      */
     public function lastCommitAction(MergeRequest $mergeRequest)
     {
+        /** @var CommitRepository */
         $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
         $commit     = $repository->findLastForMergeRequest($mergeRequest);
 
