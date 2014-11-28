@@ -80,12 +80,12 @@ class Phpcs extends AbstractGadget
     }
 
     /**
-     * @param string $xml
+     * @param string $csv
      * @return array
      */
-    private function convertFromCsvToArray($xml)
+    private function convertFromCsvToArray($csv)
     {
-        $lines = explode(PHP_EOL, $xml);
+        $lines = explode(PHP_EOL, $csv);
 
         $header = array_map('strtolower', str_getcsv(array_shift($lines)));
 
