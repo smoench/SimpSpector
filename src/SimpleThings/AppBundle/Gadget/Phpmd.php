@@ -10,11 +10,12 @@ use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class Phpcs extends AbstractGadget
+class Phpmd extends AbstractGadget
 {
     /**
      * @param Workspace $workspace
@@ -25,16 +26,10 @@ class Phpcs extends AbstractGadget
     {
         $options = $this->prepareOption((array)$workspace->config['phpcs']);
 
-        $processBuilder = new ProcessBuilder(['phpcs', '--report=csv']);
-
-        foreach ($options['standards'] as $standard) {
-            $processBuilder->add('--standard=' . $standard);
-        }
-
-        foreach ($options['files'] as $file) {
-            $processBuilder->add($file);
-        }
-
+        $processBuilder = new ProcessBuilder(['phpmd']);
+        $processBuilder->add(implode(',', $options['files']));
+        $processBuilder->add('xml');
+        $processBuilder->add(implode(',', $options['rulesets']));
         $processBuilder->setWorkingDirectory($workspace->path);
 
         $process = $processBuilder->getProcess();
@@ -43,11 +38,23 @@ class Phpcs extends AbstractGadget
         $process->run();
         $output = $process->getOutput();
 
-        $result = $this->convertFromCsvToArray($output);
+        $result = $this->convertFromXmlToArray($output);
+
+        if (!isset($result['file']) || !is_array($result['file'])) {
+            return [];
+        }
+
+        var_dump($result);
 
         $issues = [];
-        foreach ($result as $info) {
-            $issues[] = $this->createIssue($workspace, $info);
+
+        $files = (isset($result['file'][0])) ? $result['file'] : [$result['file']];
+        foreach ($files as $file) {
+            $violations = (isset($file['violation'][0])) ? $file['violation'] : [$file['violation']];
+
+            foreach ($violations as $violation) {
+                $issues[] = $this->createIssue($workspace, $file['@name'], $violation);
+            }
         }
 
         return $issues;
@@ -58,7 +65,7 @@ class Phpcs extends AbstractGadget
      */
     public function getName()
     {
-        return 'phpcs';
+        return 'phpmd';
     }
 
     /**
@@ -70,15 +77,15 @@ class Phpcs extends AbstractGadget
         $resolver = new OptionsResolver();
 
         $resolver->setDefaults([
-            'files'     => './',
-            'standards' => ['PSR1', 'PSR2']
+            'files'    => './',
+            'rulesets' => ['codesize', 'unusedcode']
         ]);
 
         $resolver->setNormalizers([
-            'files'     => function (Options $options, $value) {
+            'files'    => function (Options $options, $value) {
                 return is_array($value) ? $value : [$value];
             },
-            'standards' => function (Options $options, $value) {
+            'rulesets' => function (Options $options, $value) {
                 return is_array($value) ? $value : [$value];
             },
         ]);
@@ -87,51 +94,33 @@ class Phpcs extends AbstractGadget
     }
 
     /**
-     * @param string $csv
+     * @param string $xml
      * @return array
      */
-    private function convertFromCsvToArray($csv)
+    private function convertFromXmlToArray($xml)
     {
-        $lines = explode(PHP_EOL, $csv);
+        $encoder = new XmlEncoder('pmd');
 
-        $header = array_map('strtolower', str_getcsv(array_shift($lines)));
-
-        $result = [];
-        foreach ($lines as $line) {
-            if (!$line) {
-                continue;
-            }
-
-            $result[] = array_combine($header, str_getcsv($line));
-        }
-
-        return $result;
+        return $encoder->decode($xml, 'xml');
     }
 
     /**
      * @param Workspace $workspace
+     * @param string $file
      * @param array $data
      * @return Issue
      */
-    private function createIssue(Workspace $workspace, array $data)
+    private function createIssue(Workspace $workspace, $file, array $data)
     {
-        $issue = new Issue($data['message'], 'phpcs');
-        $issue->setFile($this->cleanupFilePath($workspace, $data['file']));
-        $issue->setLine($data['line']);
-
-        switch ($data['type']) {
-            case 'error':
-                $issue->setLevel(Issue::LEVEL_ERROR);
-                break;
-            case 'warning':
-                $issue->setLevel(Issue::LEVEL_WARNING);
-                break;
-        }
+        $issue = new Issue(trim($data['#']), 'phpmd', Issue::LEVEL_WARNING);
+        $issue->setFile($this->cleanupFilePath($workspace, $file));
+        $issue->setLine($data['@beginline']);
 
         $issue->setExtraInformation([
-            'source'   => $data['source'],
-            'severity' => $data['severity'],
-            'column'   => $data['column']
+            'rule'            => $data['@rule'],
+            'ruleset'         => $data['@ruleset'],
+            'externalInfoUrl' => $data['@externalInfoUrl'],
+            'priority'        => $data['@priority']
         ]);
 
         return $issue;
