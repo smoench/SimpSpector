@@ -33,25 +33,44 @@ class SimpSpectorExtra extends AbstractGadget
 
         $traverser->addVisitor($visitor);
 
-        chdir($workspace->path);
-        $finder = (new Finder())
-            ->files()
-            ->name('*.php')
-            ->in($folders);
+        $files = $this->findPhpFiles($workspace->path, $folders);
 
-        foreach ($finder as $file) {
+        $issues = [];
+        foreach ($files as $file) {
             try {
-                $file = $file->getRealpath();
+                $fileIssues = array_merge(
+                    $this->runPhpParser($file, $parser, $traverser, $visitor, $workspace),
+                    $this->runCommentParser($file)
+                );
 
-                $visitor->setCurrentFile($file);
-                $statements = $parser->parse(file_get_contents($file));
-                $traverser->traverse($statements);
+                usort(
+                    $fileIssues,
+                    function ($a, $b) {
+                        return $a->getLine() - $b->getLine();
+                    }
+                );
+
+                $issues = array_merge($issues, $fileIssues);
             } catch (\Exception $e) {
                 $visitor->addException($e);
             }
         }
 
-        return $visitor->getIssues();
+        return $issues;
+    }
+
+    private function runPhpParser($file, Parser $parser, NodeTraverser $traverser, Visitor $visitor, Workspace $workspace)
+    {
+        $visitor->setCurrentFile($this->cleanupFilePath($workspace, $file));
+        $statements = $parser->parse(file_get_contents($file));
+        $traverser->traverse($statements);
+
+        return $visitor->flushIssues();
+    }
+
+    private function runCommentParser($file)
+    {
+        return [];
     }
 
     /**
@@ -59,55 +78,7 @@ class SimpSpectorExtra extends AbstractGadget
      */
     public function getName()
     {
-
-        return 'phpcs';
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     */
-    private function prepareOption(array $options)
-    {
-        $resolver = new OptionsResolver();
-
-        $resolver->setDefaults([
-            'files'     => './',
-            'standards' => ['PSR1', 'PSR2']
-        ]);
-
-        $resolver->setNormalizers([
-            'files'     => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-            'standards' => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-        ]);
-
-        return $resolver->resolve($options);
-    }
-
-    /**
-     * @param string $csv
-     * @return array
-     */
-    private function convertFromCsvToArray($csv)
-    {
-        $lines = explode(PHP_EOL, $csv);
-
-        $header = array_map('strtolower', str_getcsv(array_shift($lines)));
-
-        $result = [];
-        foreach ($lines as $line) {
-            if (!$line) {
-                continue;
-            }
-
-            $result[] = array_combine($header, str_getcsv($line));
-        }
-
-        return $result;
+        return 'extra';
     }
 
     /**
@@ -146,5 +117,27 @@ class SimpSpectorExtra extends AbstractGadget
     private function cleanupFilePath(Workspace $workspace, $file)
     {
         return ltrim(str_replace($workspace->path, '', $file), '/');
+    }
+
+    private function findPhpFiles($path, array $folders)
+    {
+        $cwd = getcwd();
+        chdir($path);
+
+        $finder = (new Finder())
+            ->files()
+            ->name('*.php')
+            ->in($folders);
+        $files = iterator_to_array($finder);
+        $files = array_map(
+            function ($file) {
+                return $file->getRealpath();
+            },
+            $files
+        );
+
+        chdir($cwd);
+
+        return $files;
     }
 }

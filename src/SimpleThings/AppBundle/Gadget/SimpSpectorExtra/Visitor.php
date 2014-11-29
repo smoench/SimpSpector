@@ -44,6 +44,14 @@ class Visitor extends NodeVisitorAbstract
         return $this->issues;
     }
 
+    public function flushIssues()
+    {
+        $issues       = $this->issues;
+        $this->issues = [];
+
+        return $issues;
+    }
+
     public function addException(\Exception $error)
     {
         $this->addIssue('Exception: ' . $error->getMessage(), null, Issue::LEVEL_CRITICAL);

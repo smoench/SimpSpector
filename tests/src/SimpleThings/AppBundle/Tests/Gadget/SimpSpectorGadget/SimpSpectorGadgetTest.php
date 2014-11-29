@@ -14,7 +14,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     private function createIssue($message, $line, $level)
     {
         $issue = new Issue($message, 'extra', $level);
-        $issue->setFile(__DIR__ . '/_data/foo.php');
+        $issue->setFile('foo.php');
         $issue->setLine($line);
 
         return $issue;
