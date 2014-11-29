@@ -22,6 +22,8 @@ class Foo
          *
          * todo without all that email stuff
          *
+         * var_dump
+         *
          * @todo this I need
          */
 

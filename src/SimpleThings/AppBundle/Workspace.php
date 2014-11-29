@@ -24,4 +24,4 @@ class Workspace
      * @var array
      */
     public $config;
-} 
+}

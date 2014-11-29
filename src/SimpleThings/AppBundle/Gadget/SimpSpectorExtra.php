@@ -3,7 +3,7 @@ namespace SimpleThings\AppBundle\Gadget;
 
 use PhpParser\Parser;
 use PhpParser\NodeTraverser;
-use PhpParser\Lexer\Emulative as EmulativeLexer;
+use PhpParser\Lexer;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 use SimpleThings\AppBundle\Gadget\SimpSpectorExtra\Visitor;
@@ -27,12 +27,13 @@ class SimpSpectorExtra extends AbstractGadget
         $visitorOptions = (array)\igorw\get_in($workspace->config, ['extra', 'values'], []);
         $folders        = (array)\igorw\get_in($workspace->config, ['extra', 'files'], ['.']);
 
-        $parser    = new Parser(new EmulativeLexer());
+        $parser    = new Parser(new Lexer());
         $visitor   = new Visitor($visitorOptions);
         $traverser = new NodeTraverser();
 
         $traverser->addVisitor($visitor);
 
+        chdir($workspace->path);
         $finder = (new Finder())
             ->files()
             ->name('*.php')
@@ -40,8 +41,11 @@ class SimpSpectorExtra extends AbstractGadget
 
         foreach ($finder as $file) {
             try {
+                $file = $file->getRealpath();
+
                 $visitor->setCurrentFile($file);
-                $parser->parse(file_get_contents($file));
+                $statements = $parser->parse(file_get_contents($file));
+                $traverser->traverse($statements);
             } catch (\Exception $e) {
                 $visitor->addException($e);
             }
