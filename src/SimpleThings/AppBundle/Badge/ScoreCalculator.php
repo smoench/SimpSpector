@@ -15,10 +15,24 @@ class ScoreCalculator
      */
     public function get(Commit $commit)
     {
-        $result = $commit->getResult();
-        $number = isset($result['phpcs']) && ! empty($result['phpcs']) ? 100 : 0;
+        switch ($commit->getStatus()) {
+            case Commit::STATUS_SUCCESS:
+                $result = $commit->getResult();
+                $number = isset($result['phpcs']) && ! empty($result['phpcs']) ? 100 : 0;
+                $score  = new Score($number, $this->getColor($number));
+                break;
+            case Commit::STATUS_ERROR:
+                $score = new Score('-', 'FF0000');
+                break;
+            case Commit::STATUS_NEW:
+            case Commit::STATUS_RUN:
+            default:
+                $score = new Score('...', 'CCCCCC');
+                break;
+        }
 
-        return new Score($number, $this->getColor($number));
+
+        return $score;
     }
 
     /**
