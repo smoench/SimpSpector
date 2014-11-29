@@ -4,7 +4,6 @@
     "description": "SimpleThings Symfony Standard Edition",
     "autoload": {
         "psr-0": { "": "src/" }
-        "psr-0": { "": "tests/" }
     },
     "require": {
         "php": ">=5.4",
