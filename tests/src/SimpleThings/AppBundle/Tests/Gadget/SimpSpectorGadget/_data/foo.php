@@ -37,5 +37,12 @@ class Foo
         die();
 
         exit(10);
+
+        $foo = <<<PHP
+
+// @todo bar
+
+PHP;
+        extra_var_dump();
     }
 }
