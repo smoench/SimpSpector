@@ -1,43 +1,78 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
 
 {% block content %}
-<div class="row">
-    <div class="column wide sixteen">
-        <div class="ui steps">
-            <a class="step" href="{{ path('homepage') }}">
-                <div class="content">
-                    <div class="title"> <i class="icon home"></i> Home</div>
-                    <div class="description">... where the <i class="icon heart"></i> is</div>
-                </div>
-            </a>
-            <a class="step" href="{{ path('project_show', {id: commit.mergerequest.project.id }) }}">
-                <div class="content">
-                    <div class="title"> <i class="icon cubes"></i> Project</div>
-                    <div class="description">id <strong>{{ commit.mergerequest.project.remoteId }}</strong></div>
-                </div>
-            </a>
-            <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
-                <div class="content">
-                    <div class="title"> <i class="share alternate icon"></i> MergeRequest</div>
-                    <div class="description">id <strong>{{ commit.mergerequest.remoteId }}</strong></div>
-                </div>
-            </a>
-            <a class="step active">
-                <div class="content">
-                    <div class="title"> <i class="icon file text"></i> Commit-Report</div>
-                    <div class="description">rev <strong>{{ commit.revision }}</strong></div>
-                </div>
-            </a>
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                <a class="step" href="{{ path('homepage') }}">
+                    <div class="content">
+                        <div class="title"><i class="icon home"></i> Home</div>
+                        <div class="description">... where the <i class="icon heart"></i> is</div>
+                    </div>
+                </a>
+                <a class="step" href="{{ path('project_show', {id: commit.mergerequest.project.id }) }}">
+                    <div class="content">
+                        <div class="title"><i class="icon cubes"></i> Project</div>
+                        <div class="description">{{ commit.mergerequest.project.name }}</div>
+                    </div>
+                </a>
+                <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
+                    <div class="content">
+                        <div class="title"><i class="share alternate icon"></i> MergeRequest</div>
+                        <div class="description">{{ commit.mergerequest.name }}</div>
+                    </div>
+                </a>
+                <a class="step active">
+                    <div class="content">
+                        <div class="title"><i class="icon file text"></i> Commit-Report</div>
+                        <div class="description">rev <strong>{{ commit.revision|slice(0, 8) }}</strong></div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="column wide sixteen">
-        <div class="ui segment">
-            <h3 class="ui header dividing">php-cs ({{ commit.result.phpcs|length }})</h3>
-            {% include "SimpleThingsAppBundle:Commit:_phpcs.html.twig" with {phpcs: commit.result.phpcs} %}
+    {% if commit.status == constant('STATUS_NEW', commit) or commit.status == constant('STATUS_RUN', commit) %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon warning message">
+                    <i class="notched circle loading icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Just one second
+                        </div>
+                        <p>Processing... </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    {% elseif commit.status == constant('STATUS_ERROR', commit) %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon error message">
+                    <i class="notched bug icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Oh my gosh...
+                        </div>
+                        <p>YOU have a ERROR! </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if commit.result.phpcs is defined %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui segment">
+                    <h3 class="ui header dividing">php-cs ({{ commit.result.phpcs|length }})</h3>
+                    {% include "SimpleThingsAppBundle:Commit:_phpcs.html.twig" with {phpcs: commit.result.phpcs} %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 {% endblock %}

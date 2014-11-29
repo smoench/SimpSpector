@@ -25,7 +25,8 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>id</th>
-                        <th>rempte-id</th>
+                        <th>Name</th>
+                        <th>remote-id</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,7 @@
                         <td>
                             {{ project.id }}
                         </td>
+                        <td>{{ project.name }}</td>
                         <td>{{ project.remoteId }}</td>
                     </tr>
                     {% endfor %}

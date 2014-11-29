@@ -13,13 +13,13 @@
             <a class="step" href="{{ path('project_show', {id: merge_request.project.id }) }}">
                 <div class="content">
                     <div class="title"> <i class="icon cubes"></i> Project</div>
-                    <div class="description">id <strong>{{ merge_request.project.remoteId }}</strong></div>
+                    <div class="description">{{ merge_request.project.name }}</div>
                 </div>
             </a>
             <a class="step active">
                 <div class="content">
                     <div class="title"> <i class="share alternate icon"></i> MergeRequest</div>
-                    <div class="description">id <strong>{{ merge_request.remoteId }}</strong></div>
+                    <div class="description">{{ merge_request.name }}</div>
                 </div>
             </a>
         </div>
@@ -38,6 +38,7 @@
                         <th>&nbsp;</th>
                         <th>id</th>
                         <th>revision</th>
+                        <th>status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,6 +56,17 @@
                             {{ commit.id }}
                         </td>
                         <td>{{ commit.revision }}</td>
+                        <td>
+                            {% if commit.status == constant('STATUS_NEW', commit) %}
+                                <span class="ui label">New</span>
+                            {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                                <span class="ui yellow label">Proccess</span>
+                            {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                                <span class="ui green label">Success</span>
+                            {% else %}
+                                <span class="ui red label">Error</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

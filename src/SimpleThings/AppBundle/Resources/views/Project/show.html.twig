@@ -13,7 +13,7 @@
             <a class="step active">
                 <div class="content">
                     <div class="title"> <i class="icon cubes"></i> Project</div>
-                    <div class="description">id <strong>{{ project.remoteId }}</strong></div>
+                    <div class="description">{{ project.name }}</div>
                 </div>
             </a>
         </div>
@@ -31,7 +31,9 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>id</th>
-                        <th>rempte-id</th>
+                        <th>title</th>
+                        <th>remote-id</th>
+                        <th>status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +50,17 @@
                         <td>
                             {{ merge_request.id }}
                         </td>
+                        <td>{{ merge_request.name }}</td>
                         <td>{{ merge_request.remoteId }}</td>
+                        <td>
+                            {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
+                                <span class="ui green label">Open</span>
+                            {% elseif merge_request.status == constant('STATUS_MERGED', merge_request) %}
+                                <span class="ui purple label">Merged</span>
+                            {% else %}
+                                <span class="ui red label">Closed</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
