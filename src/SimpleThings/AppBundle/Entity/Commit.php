@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,9 +39,9 @@ class Commit
     /**
      * @var array
      *
-     * @ORM\Column(name="result", type="json_array", nullable=true)
+     * @ORM\Column(type="json_array", nullable=true)
      */
-    private $result;
+    private $gadgets;
 
     /**
      * @var MergeRequest
@@ -64,11 +65,20 @@ class Commit
     private $output;
 
     /**
+     * @var Issue[]
+     *
+     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
+     */
+    private $issues;
+
+    /**
      *
      */
     public function __construct()
     {
-        $this->status = self::STATUS_NEW;
+        $this->issues  = new ArrayCollection();
+        $this->status  = self::STATUS_NEW;
+        $this->gadgets = [];
     }
 
     /**
@@ -102,23 +112,19 @@ class Commit
     }
 
     /**
-     * Set result
-     *
-     * @param array $result
+     * @return array
      */
-    public function setResult(array $result)
+    public function getGadgets()
     {
-        $this->result = $result;
+        return $this->gadgets;
     }
 
     /**
-     * Get result
-     *
-     * @return array
+     * @param array $gadgets
      */
-    public function getResult()
+    public function setGadgets($gadgets)
     {
-        return $this->result;
+        $this->gadgets = $gadgets;
     }
 
     /**
@@ -167,5 +173,13 @@ class Commit
     public function setOutput($output)
     {
         $this->output = $output;
+    }
+
+    /**
+     * @return Issue[]|ArrayCollection
+     */
+    public function getIssues()
+    {
+        return $this->issues;
     }
 }

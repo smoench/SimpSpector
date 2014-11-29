@@ -17,8 +17,7 @@ class ScoreCalculator
     {
         switch ($commit->getStatus()) {
             case Commit::STATUS_SUCCESS:
-                $result = $commit->getResult();
-                $number = isset($result['phpcs']) && ! empty($result['phpcs']) ? 100 : 0;
+                $number = max(0, 100 - count($commit->getIssues()));
                 $score  = new Score($number, $this->getColor($number));
                 break;
             case Commit::STATUS_ERROR:
@@ -30,7 +29,6 @@ class ScoreCalculator
                 $score = new Score('...', 'CCCCCC');
                 break;
         }
-
 
         return $score;
     }

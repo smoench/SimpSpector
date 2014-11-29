@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ProcessBuilder;
@@ -50,6 +51,15 @@ class Composer extends AbstractGadget
         if ($process->run() !== 0) {
             throw new \Exception($process->getErrorOutput());
         }
+    }
+
+    /**
+     * @param Workspace $workspace
+     * @return Issue[]
+     */
+    public function run(Workspace $workspace)
+    {
+        return [];
     }
 
     /**

@@ -54,6 +54,8 @@ class GitCheckout
 
         $workingCopy->checkout($workspace->revision);
 
+        $workspace->path = realpath($workspace->path);
+
         return $workspace;
     }
 
