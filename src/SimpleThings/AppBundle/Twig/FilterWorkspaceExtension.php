@@ -20,7 +20,10 @@ class FilterWorkspaceExtension extends \Twig_Extension
      */
     public function __construct($gitRepositoryTemporaryDirectory)
     {
-        $this->gitRepositoryTemporaryDirectory = rtrim($gitRepositoryTemporaryDirectory, '/');
+        $this->gitRepositoryTemporaryDirectory = rtrim(
+            realpath($gitRepositoryTemporaryDirectory),
+            '/'
+        );
     }
 
     /**
@@ -39,9 +42,15 @@ class FilterWorkspaceExtension extends \Twig_Extension
      */
     public function filterWorkspace($file)
     {
+        $realpath = realpath($file);
+
+        if (empty($realpath)) {
+            return $file;
+        }
+
         $regex = '(' . preg_quote($this->gitRepositoryTemporaryDirectory) . '/\d+_\d+_[\da-f]+/)i';
 
-        return preg_replace($regex, '', $file);
+        return preg_replace($regex, '', $realpath);
     }
 
     /**
