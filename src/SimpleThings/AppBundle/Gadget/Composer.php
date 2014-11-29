@@ -31,6 +31,7 @@ class Composer extends AbstractGadget
     /**
      * @param Workspace $workspace
      * @throws \Exception
+     * @return Issue[]
      */
     public function prepare(Workspace $workspace)
     {
@@ -48,9 +49,17 @@ class Composer extends AbstractGadget
         $process->setTimeout(3600);
         $process->setEnv(['COMPOSER_HOME' => $this->composerHome]);
 
-        if ($process->run() !== 0) {
-            throw new \Exception($process->getErrorOutput());
+        if ($process->run() === 0) {
+            return [];
         }
+
+        $issue = new Issue('you have a composer problem', 'composer', Issue::LEVEL_CRITICAL);
+        $issue->setExtraInformation([
+            'output'      => $process->getOutput(),
+            'errorOutput' => $process->getErrorOutput()
+        ]);
+
+        return [$issue];
     }
 
     /**
@@ -60,15 +69,6 @@ class Composer extends AbstractGadget
     public function run(Workspace $workspace)
     {
         return [];
-    }
-
-    /**
-     * @param Workspace $workspace
-     */
-    public function cleanup(Workspace $workspace)
-    {
-        $fs = new Filesystem();
-        $fs->remove($workspace->path . '/vendor');
     }
 
     /**

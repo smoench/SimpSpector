@@ -33,16 +33,16 @@ class GadgetExecutor
     public function run(Workspace $workspace)
     {
         $gadgets = $this->repository->getSortedGadgets();
+        $issues = [];
 
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
             }
 
-            $gadget->prepare($workspace);
+            $issues = array_merge($issues, $gadget->prepare($workspace));
         }
 
-        $issues = [];
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
@@ -56,7 +56,7 @@ class GadgetExecutor
                 continue;
             }
 
-            $gadget->cleanup($workspace);
+            $issues = array_merge($issues, $gadget->cleanup($workspace));
         }
 
         return $issues;

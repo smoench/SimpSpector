@@ -3,6 +3,7 @@
 namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Entity\Issue;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -52,9 +53,29 @@ class CommitHandler
      */
     public function handle(Commit $commit)
     {
-        $workspace         = $this->gitCheckout->create($commit);
-        $workspace->config = $this->configLoader->load($workspace);
+        $workspace = $this->gitCheckout->create($commit);
 
+        try {
+            $workspace->config = $this->configLoader->load($workspace);
+        } catch (\Exception $e) {
+            $issue = new Issue($e->getMessage(), 'simpspector', Issue::LEVEL_CRITICAL);
+            $issue->setCommit($commit);
+            $commit->getIssues()->add($issue);
+
+            $this->gitCheckout->remove($workspace);
+
+            return;
+        }
+
+        $this->execute($commit, $workspace);
+    }
+
+    /**
+     * @param Commit $commit
+     * @param Workspace $workspace
+     */
+    private function execute(Commit $commit, Workspace $workspace)
+    {
         $commit->setGadgets(array_keys($workspace->config));
 
         $issues = $this->gadgetExecutor->run($workspace);
@@ -73,5 +94,7 @@ class CommitHandler
 
             $commit->getIssues()->add($issue);
         }
+
+        $this->gitCheckout->remove($workspace);
     }
 } 

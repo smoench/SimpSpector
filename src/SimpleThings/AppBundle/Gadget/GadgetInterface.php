@@ -27,11 +27,13 @@ interface GadgetInterface
 
     /**
      * @param Workspace $workspace
+     * @return Issue[]
      */
     public function prepare(Workspace $workspace);
 
     /**
      * @param Workspace $workspace
+     * @return Issue[]
      */
     public function cleanup(Workspace $workspace);
 
