@@ -24,7 +24,7 @@ class Phpmd extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOption((array)$workspace->config['phpcs']);
+        $options = $this->prepareOption((array)$workspace->config['phpmd']);
 
         $processBuilder = new ProcessBuilder(['phpmd']);
         $processBuilder->add(implode(',', $options['files']));
@@ -43,8 +43,6 @@ class Phpmd extends AbstractGadget
         if (!isset($result['file']) || !is_array($result['file'])) {
             return [];
         }
-
-        var_dump($result);
 
         $issues = [];
 
