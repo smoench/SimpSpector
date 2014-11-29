@@ -123,12 +123,14 @@
                                         {{ issue.level|upper }}: {{ issue.message }}
                                     </div>
 
-                                    <div class="ui attached segment">
-                                        <div class="ui top right attached label">
-                                            Line {{ issue.line }}
-                                        </div>
+                                    {% if issue.codeSnippet is not empty %}
+                                        <div class="ui attached segment">
+                                            <div class="ui top right attached label">
+                                                Line {{ issue.line }}
+                                            </div>
                                             {{ issue.codeSnippet|raw }}
-                                    </div>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endfor %}
