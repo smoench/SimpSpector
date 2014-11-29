@@ -35,7 +35,8 @@
 <div class="row">
     <div class="column wide sixteen">
         <div class="ui segment">
-            <pre>{{ dump(commit.result) }}</pre>
+            <h3 class="ui header dividing">php-cs ({{ commit.result.phpcs|length }})</h3>
+            {% include "SimpleThingsAppBundle:Commit:_phpcs.html.twig" with {phpcs: commit.result.phpcs} %}
         </div>
     </div>
 </div>
