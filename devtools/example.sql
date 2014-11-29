@@ -9,6 +9,7 @@
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+SET FOREIGN_KEY_CHECKS=0;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -26,6 +27,7 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `commit`
 --
 
+DROP TABLE `commit`;
 CREATE TABLE IF NOT EXISTS `commit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `merge_request_id` int(11) DEFAULT NULL,
@@ -60,6 +62,7 @@ INSERT INTO `commit` (`id`, `merge_request_id`, `revision`, `gadgets`, `status`,
 -- Tabellenstruktur für Tabelle `issue`
 --
 
+DROP TABLE `issue`;
 CREATE TABLE IF NOT EXISTS `issue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `commit_id` int(11) DEFAULT NULL,
@@ -140,6 +143,7 @@ INSERT INTO `issue` (`id`, `commit_id`, `gadget`, `level`, `file`, `line`, `code
 -- Tabellenstruktur für Tabelle `merge_request`
 --
 
+DROP TABLE `merge_request`;
 CREATE TABLE IF NOT EXISTS `merge_request` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project_id` int(11) DEFAULT NULL,
@@ -173,6 +177,7 @@ INSERT INTO `merge_request` (`id`, `project_id`, `remoteId`, `sourceBranch`, `na
 -- Tabellenstruktur für Tabelle `migration_versions`
 --
 
+DROP TABLE `migration_versions`;
 CREATE TABLE IF NOT EXISTS `migration_versions` (
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`version`)
@@ -199,6 +204,7 @@ INSERT INTO `migration_versions` (`version`) VALUES
 -- Tabellenstruktur für Tabelle `project`
 --
 
+DROP TABLE `project`;
 CREATE TABLE IF NOT EXISTS `project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `remoteId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -239,6 +245,7 @@ ALTER TABLE `issue`
 ALTER TABLE `merge_request`
   ADD CONSTRAINT `FK_5F2666E1166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`);
 
+SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
