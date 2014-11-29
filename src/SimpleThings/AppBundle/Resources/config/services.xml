@@ -48,5 +48,13 @@
         <service id="simple_things_app.gadget.phpcs" class="SimpleThings\AppBundle\Gadget\Phpcs">
             <tag name="simpspector.gadget"/>
         </service>
+
+        <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
+
+        <!-- TWIG -->
+        <service id="simple_things_app.twig.extension.highlight" class="SimpleThings\AppBundle\Twig\HighlightExtension">
+            <argument type="service" id="simple_things_app.syntax_highlighter"/>
+            <tag name="twig.extension"/>
+        </service>
     </services>
 </container>

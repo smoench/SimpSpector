@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7c5edadc0282c9c6ab6d662ff9356618",
+    "hash": "4d1816a444320efb6d85e5450c3a2ac9",
     "packages": [
         {
             "name": "composer/composer",
@@ -855,6 +855,54 @@
                 "orm"
             ],
             "time": "2014-10-06 13:22:50"
+        },
+        {
+            "name": "easybook/geshi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easybook/geshi.git",
+                "reference": "223c3ac0964472ef19027a064eef23ab0689c602"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easybook/geshi/zipball/223c3ac0964472ef19027a064eef23ab0689c602",
+                "reference": "223c3ac0964472ef19027a064eef23ab0689c602",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">4.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benny Baumann",
+                    "email": "BenBE@geshi.org",
+                    "homepage": "http://blog.benny-baumann.de/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nigel McNie",
+                    "email": "nigel@geshi.org"
+                }
+            ],
+            "description": "GeSHi - Generic Syntax Highlighter. This is an unmodified port of GeSHi project code found on SourceForge.",
+            "homepage": "http://qbnz.com/highlighter",
+            "keywords": [
+                "highlight",
+                "highlighter",
+                "syntax"
+            ],
+            "time": "2014-05-11 07:59:00"
         },
         {
             "name": "igorw/get-in",
@@ -2099,7 +2147,8 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "composer/composer": 15
+        "composer/composer": 15,
+        "easybook/geshi": 20
     },
     "prefer-stable": false,
     "platform": {
