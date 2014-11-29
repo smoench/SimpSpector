@@ -15,11 +15,7 @@ class ScoreCalculator
      */
     public function get(Commit $commit)
     {
-        $score = new Score('...', 'CCCCCC');
         switch ($commit->getStatus()) {
-            case Commit::STATUS_NEW:
-            case Commit::STATUS_RUN:
-                break;
             case Commit::STATUS_SUCCESS:
                 $result = $commit->getResult();
                 $number = isset($result['phpcs']) && ! empty($result['phpcs']) ? 100 : 0;
@@ -27,6 +23,11 @@ class ScoreCalculator
                 break;
             case Commit::STATUS_ERROR:
                 $score = new Score('-', 'FF0000');
+                break;
+            case Commit::STATUS_NEW:
+            case Commit::STATUS_RUN:
+            default:
+                $score = new Score('...', 'CCCCCC');
                 break;
         }
 
