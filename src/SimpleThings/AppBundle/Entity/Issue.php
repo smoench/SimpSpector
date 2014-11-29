@@ -34,6 +34,8 @@ class Issue
 
     /**
      * @var string
+     *
+     * @ORM\Column(type="string")
      */
     private $message;
 
@@ -100,7 +102,7 @@ class Issue
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -108,7 +110,7 @@ class Issue
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMessage()
     {
@@ -116,7 +118,7 @@ class Issue
     }
 
     /**
-     * @param mixed $message
+     * @param string $message
      */
     public function setMessage($message)
     {

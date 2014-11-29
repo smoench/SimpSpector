@@ -25,15 +25,6 @@ abstract class AbstractGadget implements GadgetInterface
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
-     */
-    public function run(Workspace $workspace)
-    {
-        return [];
-    }
-
-    /**
-     * @param Workspace $workspace
      */
     public function prepare(Workspace $workspace)
     {

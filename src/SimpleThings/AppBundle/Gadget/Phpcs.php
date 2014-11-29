@@ -121,16 +121,17 @@ class Phpcs extends AbstractGadget
 
         switch ($data['type']) {
             case 'error':
-                $issue->setLine(Issue::LEVEL_ERROR);
+                $issue->setLevel(Issue::LEVEL_ERROR);
                 break;
             case 'warning':
-                $issue->setLine(Issue::LEVEL_WARNING);
+                $issue->setLevel(Issue::LEVEL_WARNING);
                 break;
         }
 
         $issue->setExtraInformation([
             'source'   => $data['source'],
-            'severity' => $data['severity']
+            'severity' => $data['severity'],
+            'column'   => $data['column']
         ]);
 
         return $issue;

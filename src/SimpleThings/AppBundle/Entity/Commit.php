@@ -67,7 +67,7 @@ class Commit
     /**
      * @var Issue[]
      *
-     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit")
+     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
      */
     private $issues;
 

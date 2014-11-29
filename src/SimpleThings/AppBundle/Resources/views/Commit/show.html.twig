@@ -40,9 +40,9 @@
 
                     <div class="content">
                         <div class="header">
-                            Just one second
+                            Just a moment.. or two... or...
                         </div>
-                        <p>Processing... </p>
+                        <p>Processing... refresh the page</p>
                     </div>
                 </div>
             </div>
@@ -55,16 +55,43 @@
 
                     <div class="content">
                         <div class="header">
-                            Oh my gosh...
+                            Sorry about that, chief
                         </div>
-                        <p>YOU have a ERROR! </p>
+                        <p>YOU have an ERROR! Ahhh...</p>
                     </div>
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% elseif commit.issues|length == 0 %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon success message">
+                    <i class="notched child icon"></i>
 
-    {% if commit.result.phpcs is defined %}
+                    <div class="content">
+                        <div class="header">
+                            Congratulations, Gadget, I dont't know how you did it
+                        </div>
+                        <p>You have no issues!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon yellow message">
+                    <i class="emergency icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Irregularities were found!
+                        </div>
+                        <p>Please help me...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="column wide sixteen">
                 <div class="ui segment">
