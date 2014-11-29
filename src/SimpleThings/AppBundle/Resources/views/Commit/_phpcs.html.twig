@@ -6,6 +6,7 @@
     <div>
         <h4>{{ message.type|upper }} [{{ message.severity }}]: {{ message.message }}</h4>
         <p>{{ message.source }}</p>
+        {{ highlight(message.file, message.line) }}
     </div>
 </div>
 {% endfor %}

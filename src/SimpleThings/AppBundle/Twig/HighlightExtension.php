@@ -31,7 +31,7 @@ class HighlightExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            'highlight' => new \Twig_SimpleFunction('higlight', [$this, 'highlight'], ['is_safe' => ['html']])
+            'highlight' => new \Twig_SimpleFunction('highlight', [$this, 'highlight'], ['is_safe' => ['html']])
         ];
     }
 

@@ -11,28 +11,14 @@ namespace SimpleThings\AppBundle;
 class SyntaxHighlighter
 {
     /**
-     * @var \GeSHi
-     */
-    protected $geshi;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->geshi = new \GeSHi('', 'php');
-        $this->geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
-    }
-
-    /**
      * @param string $file
      * @return string
      */
     public function highlight($file)
     {
-        $this->geshi->set_source(file_get_contents($file));
+        $geshi = $this->createGeshi(file_get_contents($file));
 
-        return $this->geshi->parse_code();
+        return $geshi->parse_code();
     }
 
     /**
@@ -43,32 +29,31 @@ class SyntaxHighlighter
      */
     public function highlightAroundLine($file, $line, $around = 5)
     {
-        $source = $this->getSlicedSource($file, $line, $around);
-
-        $this->geshi->set_source($source);
-        $this->geshi->start_line_numbers_at($line - $around);
-        $this->geshi->highlight_lines_extra([$line - $around + 1]);
-
-        return $this->geshi->parse_code();
-    }
-
-    /**
-     * @param string $file
-     * @param int $line
-     * @param int $around
-     * @return string
-     */
-    private function getSlicedSource($file, $line, $around = 5)
-    {
         $source = file_get_contents($file);
-
         $rows = explode(PHP_EOL, $source);
 
-        $offest = max($line - $around - 1, 0);
-        $length = min($around * 2 + 1, count($rows));
+        $offset = max($line - $around, 1) - 1;
+        $length = $around * 2 + 1;
+        if ($line + $length > count($rows)) {
+            $length = count($rows) - $offset;
+        }
 
-        $slicedSource = array_slice($rows, $offest, $length);
+        $slicedSource = array_slice($rows, $offset, $length);
+        $slicedSource = implode(PHP_EOL, $slicedSource);
 
-        return implode(PHP_EOL, $slicedSource);
+        $geshi = $this->createGeshi($slicedSource);
+        $geshi->start_line_numbers_at($offset + 1);
+        $geshi->highlight_lines_extra([$line - $offset]);
+
+        return $geshi->parse_code();
     }
-} 
+
+    private function createGeshi($source)
+    {
+        $geshi = new \GeSHi($source, 'php');
+        $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+
+        return $geshi;
+    }
+
+}
