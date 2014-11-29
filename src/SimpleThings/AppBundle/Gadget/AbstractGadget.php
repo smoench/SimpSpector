@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -18,16 +19,17 @@ abstract class AbstractGadget implements GadgetInterface
      */
     public function isActive(Workspace $workspace)
     {
-        return array_key_exists($this->getName(), $workspace->config);
+        return array_key_exists($this->getName(), $workspace->config)
+            && $workspace->config[$this->getName()] !== false;
     }
 
     /**
      * @param Workspace $workspace
-     * @return mixed
+     * @return Issue[]
      */
     public function run(Workspace $workspace)
     {
-        return true;
+        return [];
     }
 
     /**

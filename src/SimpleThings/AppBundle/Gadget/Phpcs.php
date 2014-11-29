@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +18,7 @@ class Phpcs extends AbstractGadget
 {
     /**
      * @param Workspace $workspace
-     * @return mixed
+     * @return Issue[]
      * @throws \Exception
      */
     public function run(Workspace $workspace)
@@ -42,7 +43,14 @@ class Phpcs extends AbstractGadget
         $process->run();
         $output = $process->getOutput();
 
-        return $this->convertFromCsvToArray($output);
+        $result = $this->convertFromCsvToArray($output);
+
+        $issues = [];
+        foreach ($result as $info) {
+            $issues[] = $this->createIssue($workspace, $info);
+        }
+
+        return $issues;
     }
 
     /**
@@ -99,5 +107,42 @@ class Phpcs extends AbstractGadget
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $data
+     * @return Issue
+     */
+    private function createIssue(Workspace $workspace, array $data)
+    {
+        $issue = new Issue($data['message'], 'phpcs');
+        $issue->setFile($this->cleanupFilePath($workspace, $data['file']));
+        $issue->setLine($data['line']);
+
+        switch ($data['type']) {
+            case 'error':
+                $issue->setLine(Issue::LEVEL_ERROR);
+                break;
+            case 'warning':
+                $issue->setLine(Issue::LEVEL_WARNING);
+                break;
+        }
+
+        $issue->setExtraInformation([
+            'source'   => $data['source'],
+            'severity' => $data['severity']
+        ]);
+
+        return $issue;
+    }
+
+    /**
+     * @param Workspace $workspace
+     * @param string $file
+     * @return string
+     */
+    private function cleanupFilePath(Workspace $workspace, $file)
+    {
+        return str_replace($workspace->path, '', $file);
     }
 }

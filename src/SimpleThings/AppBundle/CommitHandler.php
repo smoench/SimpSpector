@@ -44,8 +44,12 @@ class CommitHandler
         $workspace = $this->gitCheckout->create($commit);
         $workspace->config = $this->configLoader->load($workspace);
 
-        $commit->setResult(
-            $this->gadgetExecutor->run($workspace)
-        );
+        $commit->setGadgets(array_keys($workspace->config));
+
+        $issues = $this->gadgetExecutor->run($workspace);
+
+        foreach ($issues as $issue) {
+            $commit->getIssues()->add($issue);
+        }
     }
 } 

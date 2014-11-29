@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle;
 
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\Repository;
 
 /**
@@ -27,7 +28,7 @@ class GadgetExecutor
 
     /**
      * @param Workspace $workspace
-     * @return array
+     * @return Issue[]
      */
     public function run(Workspace $workspace)
     {
@@ -41,13 +42,13 @@ class GadgetExecutor
             $gadget->prepare($workspace);
         }
 
-        $result = [];
+        $issues = [];
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
             }
 
-            $result[$gadget->getName()] = $gadget->run($workspace);
+            $issues = array_merge($issues, $gadget->run($workspace));
         }
 
         foreach ($gadgets as $gadget) {
@@ -58,6 +59,6 @@ class GadgetExecutor
             $gadget->cleanup($workspace);
         }
 
-        return $result;
+        return $issues;
     }
 } 

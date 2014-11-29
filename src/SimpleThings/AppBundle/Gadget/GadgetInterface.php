@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -20,7 +21,7 @@ interface GadgetInterface
 
     /**
      * @param Workspace $workspace
-     * @return mixed
+     * @return Issue[]
      */
     public function run(Workspace $workspace);
 
