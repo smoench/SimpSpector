@@ -26,16 +26,6 @@ interface GadgetInterface
     public function run(Workspace $workspace);
 
     /**
-     * @param Workspace $workspace
-     */
-    public function prepare(Workspace $workspace);
-
-    /**
-     * @param Workspace $workspace
-     */
-    public function cleanup(Workspace $workspace);
-
-    /**
      * @return int
      */
     public function getPriority();

@@ -20,21 +20,7 @@ abstract class AbstractGadget implements GadgetInterface
     public function isActive(Workspace $workspace)
     {
         return array_key_exists($this->getName(), $workspace->config)
-            && $workspace->config[$this->getName()] !== false;
-    }
-
-    /**
-     * @param Workspace $workspace
-     */
-    public function prepare(Workspace $workspace)
-    {
-    }
-
-    /**
-     * @param Workspace $workspace
-     */
-    public function cleanup(Workspace $workspace)
-    {
+        && $workspace->config[$this->getName()] !== false;
     }
 
     /**

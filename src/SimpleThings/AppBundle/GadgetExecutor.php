@@ -33,30 +33,14 @@ class GadgetExecutor
     public function run(Workspace $workspace)
     {
         $gadgets = $this->repository->getSortedGadgets();
-
-        foreach ($gadgets as $gadget) {
-            if (!$gadget->isActive($workspace)) {
-                continue;
-            }
-
-            $gadget->prepare($workspace);
-        }
-
         $issues = [];
+
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
             }
 
             $issues = array_merge($issues, $gadget->run($workspace));
-        }
-
-        foreach ($gadgets as $gadget) {
-            if (!$gadget->isActive($workspace)) {
-                continue;
-            }
-
-            $gadget->cleanup($workspace);
         }
 
         return $issues;

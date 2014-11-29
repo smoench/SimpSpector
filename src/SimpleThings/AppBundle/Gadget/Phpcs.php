@@ -144,6 +144,6 @@ class Phpcs extends AbstractGadget
      */
     private function cleanupFilePath(Workspace $workspace, $file)
     {
-        return str_replace($workspace->path, '', $file);
+        return ltrim(str_replace($workspace->path, '', $file), '/');
     }
 }
