@@ -123,12 +123,17 @@
                                         {{ issue.level|upper }}: {{ issue.message }}
                                     </div>
 
-                                    <div class="ui attached segment">
-                                        <div class="ui top right attached label">
-                                            Line {{ issue.line }}
-                                        </div>
+                                    {% if issue.codeSnippet is not empty %}
+                                        <div class="ui attached segment">
+                                            <div class="ui top right attached label">
+                                                <a class="phpstorm" href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line + 1 }}">
+                                                    <i class="lightning inverted circular icon"></i>
+                                                </a>
+                                                Line {{ issue.line }}
+                                            </div>
                                             {{ issue.codeSnippet|raw }}
-                                    </div>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endfor %}

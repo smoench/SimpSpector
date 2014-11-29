@@ -54,6 +54,7 @@ class Composer extends AbstractGadget
         }
 
         $issue = new Issue('you have a composer problem', 'composer', Issue::LEVEL_CRITICAL);
+        $issue->setFile('composer.json');
         $issue->setExtraInformation([
             'output'      => $process->getOutput(),
             'errorOutput' => $process->getErrorOutput()
