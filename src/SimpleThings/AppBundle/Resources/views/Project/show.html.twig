@@ -32,7 +32,7 @@
                         <th>&nbsp;</th>
                         <th>id</th>
                         <th>title</th>
-                        <th>remote-id</th>
+                        <th>issues</th>
                         <th>status</th>
                     </tr>
                 </thead>
@@ -51,7 +51,7 @@
                             {{ merge_request.id }}
                         </td>
                         <td>{{ merge_request.name }}</td>
-                        <td>{{ merge_request.remoteId }}</td>
+                        <td>{{ (merge_request.commits|last).issues|length }}</td>
                         <td>
                             {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
                                 <span class="ui green label">Open</span>
