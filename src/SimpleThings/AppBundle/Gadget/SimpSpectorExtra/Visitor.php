@@ -30,6 +30,10 @@ class Visitor extends NodeVisitorAbstract
             $this->addIssue('var_dump calls should be avoided', $node, Issue::LEVEL_ERROR);
         }
 
+        if ($node instanceof Node\Expr\Exit_) {
+            $this->addIssue('die/exit calls should be avoided', $node, Issue::LEVEL_ERROR);
+        }
+
         if ($node instanceof Node\Stmt\Echo_) {
             $this->addIssue('echo statements should be avoided', $node, Issue::LEVEL_WARNING);
         }

@@ -35,5 +35,7 @@ class Foo
 
 
         die();
+
+        exit(10);
     }
 }

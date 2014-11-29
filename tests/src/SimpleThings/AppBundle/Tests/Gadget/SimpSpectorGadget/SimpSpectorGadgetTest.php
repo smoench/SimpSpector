@@ -32,11 +32,13 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
         $expectedIssues = [
             $this->createIssue('echo statements should be avoided', 9, Issue::LEVEL_WARNING),
             $this->createIssue('echo statements should be avoided', 13, Issue::LEVEL_WARNING),
-            $this->createIssue('unfinished todo', 19, Issue::LEVEL_WARNING),
-            $this->createIssue('unfinished todo', 21, Issue::LEVEL_WARNING),
-            $this->createIssue('unfinished todo', 23, Issue::LEVEL_WARNING),
-            $this->createIssue('unfinished todo', 27, Issue::LEVEL_WARNING),
+            //$this->createIssue('unfinished todo', 19, Issue::LEVEL_WARNING),
+            //$this->createIssue('unfinished todo', 21, Issue::LEVEL_WARNING),
+            //$this->createIssue('unfinished todo', 23, Issue::LEVEL_WARNING),
+            //$this->createIssue('unfinished todo', 27, Issue::LEVEL_WARNING),
             $this->createIssue('var_dump calls should be avoided', 32, Issue::LEVEL_ERROR),
+            $this->createIssue('die/exit calls should be avoided', 37, Issue::LEVEL_ERROR),
+            $this->createIssue('die/exit calls should be avoided', 39, Issue::LEVEL_ERROR),
         ];
 
         $this->assertEquals($expectedIssues, $issues);
