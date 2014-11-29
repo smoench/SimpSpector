@@ -7,7 +7,14 @@ namespace SimpleThings\AppBundle\Badge;
 
 class Score
 {
+    /**
+     * @var int
+     */
     public $number;
+
+    /**
+     * @var string
+     */
     public $color;
 
     /**
