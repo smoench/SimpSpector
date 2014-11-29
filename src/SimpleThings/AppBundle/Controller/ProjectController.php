@@ -5,7 +5,6 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
-use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Repository\CommitRepository;
@@ -34,7 +33,7 @@ class ProjectController extends Controller
             [
                 'project'        => $project,
                 'merge_requests' => $mergeRequests,
-                'masterCommits'  => $masterCommits
+                'master_commits' => $masterCommits
             ]
         );
     }
@@ -68,7 +67,7 @@ class ProjectController extends Controller
         $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
         $commit     = $repository->findLastInMaster($project);
 
-        if ( ! $commit) {
+        if (!$commit) {
             throw new NotFoundHttpException();
         }
 
