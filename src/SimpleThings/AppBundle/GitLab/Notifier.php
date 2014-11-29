@@ -2,10 +2,11 @@
 
 namespace SimpleThings\AppBundle\GitLab;
 
+use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\ButtonGenerator;
+use SimpleThings\AppBundle\Badge\Generator;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 
 /**
@@ -19,7 +20,7 @@ class Notifier
     private $client;
 
     /**
-     * @var ButtonGenerator
+     * @var Generator
      */
     private $generator;
 
@@ -30,10 +31,10 @@ class Notifier
 
     /**
      * @param Client $client
-     * @param ButtonGenerator $generator
+     * @param Generator $generator
      * @param LoggerInterface $logger
      */
-    function __construct(Client $client, ButtonGenerator $generator, LoggerInterface $logger = null)
+    function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
     {
         $this->client = $client;
         $this->generator = $generator;
@@ -45,10 +46,13 @@ class Notifier
      */
     public function notify(MergeRequest $mergeRequest)
     {
-        $response = $this->client->api('merge_requests')->addComment(
+        /** @var MergeRequests $mergeRequestApi */
+        $mergeRequestApi = $this->client->api('merge_requests');
+
+        $response = $mergeRequestApi->addComment(
             $mergeRequest->getProject()->getRemoteId(),
             $mergeRequest->getRemoteId(),
-            $this->generator->generate($mergeRequest)
+            $this->generator->getMarkdown($mergeRequest)
         );
 
         $this->logger->info('notify gitlab', $response);

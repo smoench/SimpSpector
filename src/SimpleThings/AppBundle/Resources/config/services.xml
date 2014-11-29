@@ -14,7 +14,8 @@
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
-        <service id="simple_things_app.button_generator" class="SimpleThings\AppBundle\ButtonGenerator">
+        <service id="simple_things_app.badge_generator" class="SimpleThings\AppBundle\Badge\Generator">
+            <argument type="service" id="router" />
         </service>
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
@@ -40,6 +41,8 @@
         </service>
 
         <service id="simple_things_app.gadget.repository" class="SimpleThings\AppBundle\Gadget\Repository"/>
+
+        <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
 
         <service id="simple_things_app.gadget.composer" class="SimpleThings\AppBundle\Gadget\Composer">
             <tag name="simpspector.gadget"/>

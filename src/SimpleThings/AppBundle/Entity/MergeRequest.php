@@ -184,4 +184,21 @@ class MergeRequest
     {
         return $this->commits;
     }
+
+    /**
+     * @return Commit
+     */
+    public function getLastCommit()
+    {
+        if (empty($this->commits)) {
+            return null;
+        }
+
+        $iterator = $this->commits->getIterator();
+        $iterator->uasort(function (Commit $first, Commit $second) {
+            return $first->getCreatedAt() < $second->getCreatedAt() ? 1 : -1;
+        });
+
+        return $iterator->current();
+    }
 }

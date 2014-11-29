@@ -14,10 +14,10 @@ class Commit
 {
     use Timestampable;
 
-    const STATUS_NEW = 'new';
-    const STATUS_RUN = 'run';
+    const STATUS_NEW     = 'new';
+    const STATUS_RUN     = 'run';
     const STATUS_SUCCESS = 'success';
-    const STATUS_ERROR = 'error';
+    const STATUS_ERROR   = 'error';
 
     /**
      * @var integer
@@ -55,6 +55,13 @@ class Commit
      * @ORM\Column(type="string")
      */
     private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $output;
 
     /**
      *
@@ -144,5 +151,21 @@ class Commit
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param string $output
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
     }
 }

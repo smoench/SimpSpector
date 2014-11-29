@@ -22,7 +22,7 @@ class ConfigLoader
         $configFile = $workspace->path . '/simpspector.yml';
 
         if (!file_exists($configFile)) {
-            throw new \Exception("missing simpsector.yml");
+            throw new \Exception("missing simpspector.yml");
         }
 
         return Yaml::parse(file_get_contents($configFile));
