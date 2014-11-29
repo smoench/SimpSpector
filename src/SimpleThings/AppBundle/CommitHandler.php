@@ -4,6 +4,7 @@ namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Exception\MissingSimpSpectorConfigException;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -41,7 +42,8 @@ class CommitHandler
         ConfigLoader $loader,
         GadgetExecutor $gadgetExecutor,
         SyntaxHighlighter $highlighter
-    ) {
+    )
+    {
         $this->gitCheckout    = $gitCheckout;
         $this->gadgetExecutor = $gadgetExecutor;
         $this->configLoader   = $loader;
@@ -61,6 +63,9 @@ class CommitHandler
             $issue = new Issue($e->getMessage(), 'simpspector', Issue::LEVEL_CRITICAL);
             $issue->setCommit($commit);
             $commit->getIssues()->add($issue);
+            if ($e instanceof MissingSimpSpectorConfigException) {
+                $issue->setFile('simpspector.yml');
+            }
 
             $this->gitCheckout->remove($workspace);
 

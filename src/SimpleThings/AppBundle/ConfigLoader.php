@@ -5,6 +5,7 @@
 
 namespace SimpleThings\AppBundle;
 
+use SimpleThings\AppBundle\Exception\MissingSimpSpectorConfigException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -22,7 +23,7 @@ class ConfigLoader
         $configFile = $workspace->path . '/simpspector.yml';
 
         if (!file_exists($configFile)) {
-            throw new \Exception("missing simpspector.yml");
+            throw new MissingSimpSpectorConfigException();
         }
 
         return Yaml::parse(file_get_contents($configFile));
