@@ -10,18 +10,27 @@
                         <div class="description">... where the <i class="icon heart"></i> is</div>
                     </div>
                 </a>
-                <a class="step" href="{{ path('project_show', {id: commit.mergerequest.project.id }) }}">
+                <a class="step" href="{{ path('project_show', {id: commit.project.id }) }}">
                     <div class="content">
                         <div class="title"><i class="icon cubes"></i> Project</div>
-                        <div class="description">{{ commit.mergerequest.project.name }}</div>
+                        <div class="description">{{ commit.project.name }}</div>
                     </div>
                 </a>
+                {% if commit.mergerequest %}
                 <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
                     <div class="content">
                         <div class="title"><i class="share alternate icon"></i> MergeRequest</div>
                         <div class="description">{{ commit.mergerequest.name }}</div>
                     </div>
                 </a>
+                {% else %}
+                    <a class="step" href="{{ path('project_master', {id: commit.project.id }) }}" hidden="">
+                        <div class="content">
+                            <div class="title"> <i class="sitemap alternate icon"></i> Master</div>
+                            <div class="description">Master Branch</div>
+                        </div>
+                    </a>
+                {% endif %}
                 <a class="step active">
                     <div class="content">
                         <div class="title"><i class="icon file text"></i> Commit-Report</div>

@@ -51,6 +51,13 @@ class Commit
     private $mergeRequest;
 
     /**
+     * @var Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="commits", cascade={"all"})
+     */
+    private $project;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string")
@@ -138,9 +145,25 @@ class Commit
     /**
      * @param MergeRequest $mergeRequest
      */
-    public function setMergeRequest(MergeRequest $mergeRequest)
+    public function setMergeRequest(MergeRequest $mergeRequest = null)
     {
         $this->mergeRequest = $mergeRequest;
+    }
+
+    /**
+     * @return Project
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param Project $project
+     */
+    public function setProject(Project $project)
+    {
+        $this->project = $project;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\Badge;
 
+use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
@@ -28,12 +29,25 @@ class Generator
      * @param MergeRequest $mergeRequest
      * @return string
      */
-    public function getMarkdown(MergeRequest $mergeRequest)
+    public function getMarkdownForMergeRequest(MergeRequest $mergeRequest)
     {
         return sprintf(
             '[![Build Status](%s)](%s)',
             $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
+        );
+    }
+
+    /**
+     * @param Project $project
+     * @return string
+     */
+    public function getMarkdownForProject(Project $project)
+    {
+        return sprintf(
+            '[![Build Status](%s)](%s)',
+            $this->router->generate('project_imagebadge', ['id' => $project->getId()], Router::ABSOLUTE_URL),
+            $this->router->generate('project_lastcommit', ['id' => $project->getId()], Router::ABSOLUTE_URL)
         );
     }
 }

@@ -26,7 +26,7 @@
                         <th>&nbsp;</th>
                         <th>id</th>
                         <th>Name</th>
-                        <th>remote-id</th>
+                        <th>issues</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@
                             {{ project.id }}
                         </td>
                         <td>{{ project.name }}</td>
-                        <td>{{ project.remoteId }}</td>
+                        <td>{{ (project.commits|last).issues|length }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -10,10 +10,16 @@
                         <div class="description">... where the <i class="icon heart"></i> is</div>
                     </div>
                 </a>
-                <a class="step active">
+                <a class="step" href="{{ path('project_show', {id: project.id }) }}">
                     <div class="content">
                         <div class="title"><i class="icon cubes"></i> Project</div>
                         <div class="description">{{ project.name }}</div>
+                    </div>
+                </a>
+                <a class="step active">
+                    <div class="content">
+                        <div class="title"><i class="sitemap alternate icon"></i> Master</div>
+                        <div class="description">Master Branch</div>
                     </div>
                 </a>
             </div>
@@ -24,8 +30,7 @@
         <div class="column wide sixteen">
             <div class="ui segment">
                 <h3 class="ui header">
-                    <i class="icon alternate sitemap inverted circular"></i>
-                    Master
+                    <i class="icon text file inverted circular"></i> Commits
                 </h3>
                 <table class="ui table">
                     <thead>
@@ -38,7 +43,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for commit in master_commits %}
+                    {% for commit in commits %}
                         <tr>
                             <td>
                                 <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
@@ -68,54 +73,23 @@
                     {% endfor %}
                     </tbody>
                 </table>
-
-                <a href="{{ path('project_master', {id: project.id}) }}">See more</a>
             </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="column wide sixteen">
             <div class="ui segment">
                 <h3 class="ui header">
-                    <i class="icon alternate share inverted circular"></i> MergeRequests
+                    <i class="icon text code inverted circular"></i> Badge
                 </h3>
-                <table class="ui table">
-                    <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>id</th>
-                        <th>title</th>
-                        <th>issues</th>
-                        <th>status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for merge_request in merge_requests %}
-                        <tr>
-                            <td>
-                                <a class="ui animated button"
-                                   href="{{ path('mergerequest_show', {id: merge_request.id}) }}">
-                                    <div class="hidden content">show</div>
-                                    <div class="visible content">
-                                        <i class="search icon"></i>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>
-                                {{ merge_request.id }}
-                            </td>
-                            <td>{{ merge_request.name }}</td>
-                            <td>{{ (merge_request.commits|last).issues|length }}</td>
-                            <td>
-                                {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
-                                    <span class="ui green label">Open</span>
-                                {% elseif merge_request.status == constant('STATUS_MERGED', merge_request) %}
-                                    <span class="ui purple label">Merged</span>
-                                {% else %}
-                                    <span class="ui red label">Closed</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+
+                <div class="ui tertiary inverted segment">
+                    <div class="ui top right attached label">Markdown</div>
+                    <p>{{ markdown }}</p>
+                </div>
+
+
             </div>
         </div>
     </div>

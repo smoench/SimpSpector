@@ -48,7 +48,7 @@ class GitCheckout
         }
 
         $workingCopy = $this->gitWrapper->cloneRepository(
-            $commit->getMergeRequest()->getProject()->getRepositoryUrl(),
+            $commit->getProject()->getRepositoryUrl(),
             $workspace->path
         );
 
@@ -74,9 +74,8 @@ class GitCheckout
     private function createFolderName(Commit $commit)
     {
         return sprintf(
-            "%s_%s_%s",
-            $commit->getMergeRequest()->getProject()->getId(),
-            $commit->getMergeRequest()->getId(),
+            "%s_%s",
+            $commit->getProject()->getId(),
             $commit->getRevision()
         );
     }
