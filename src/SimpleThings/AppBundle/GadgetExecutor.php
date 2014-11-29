@@ -40,23 +40,7 @@ class GadgetExecutor
                 continue;
             }
 
-            $issues = array_merge($issues, $gadget->prepare($workspace));
-        }
-
-        foreach ($gadgets as $gadget) {
-            if (!$gadget->isActive($workspace)) {
-                continue;
-            }
-
             $issues = array_merge($issues, $gadget->run($workspace));
-        }
-
-        foreach ($gadgets as $gadget) {
-            if (!$gadget->isActive($workspace)) {
-                continue;
-            }
-
-            $issues = array_merge($issues, $gadget->cleanup($workspace));
         }
 
         return $issues;

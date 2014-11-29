@@ -33,7 +33,7 @@ class Composer extends AbstractGadget
      * @throws \Exception
      * @return Issue[]
      */
-    public function prepare(Workspace $workspace)
+    public function run(Workspace $workspace)
     {
         $processBuilder = new ProcessBuilder([
             'composer',
@@ -63,19 +63,18 @@ class Composer extends AbstractGadget
     }
 
     /**
-     * @param Workspace $workspace
-     * @return Issue[]
-     */
-    public function run(Workspace $workspace)
-    {
-        return [];
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
         return 'composer';
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return 100;
     }
 }
