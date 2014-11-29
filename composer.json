@@ -23,7 +23,8 @@
         "igorw/get-in": "~1.0",
         "cpliakas/git-wrapper": "~1.0",
         "composer/composer": "~1.0@alpha",
-        "easybook/geshi": "dev-master"
+        "easybook/geshi": "dev-master",
+        "timetoogo/pinq": "~3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

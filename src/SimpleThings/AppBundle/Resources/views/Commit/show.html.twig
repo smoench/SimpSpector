@@ -97,17 +97,33 @@
                 <div class="ui segment">
                     <h3 class="ui header dividing">Issues ({{ commit.issues|length }})</h3>
 
-                    {% for issue in commit.issues %}
-                        <div class="ui segment">
-                            <div class="ui top attached label ellipsis">
-                                <span class="right">L{{ issue.line }}</span> {{ issue.file }}
+                    <div class="ui styled accordion">
+                        {% for file,list in issues %}
+                            <div class="title">
+                                <div style="float: right">
+                                    <span class="ui yellow right circular label">{{ list|length }}</span>
+                                </div>
+                                <i class="dropdown icon"></i>
+                                <i class="file icon"></i>
+                                {{ file }}
                             </div>
-                            <div>
-                                <h4>{{ issue.level|upper }}: {{ issue.message }}</h4>
-                                {{ issue.codeSnippet|raw }}
+                            <div class="content">
+                                {% for issue in list %}
+                                    <div class="ui top attached warning message">
+                                        <i class="warning icon"></i>
+                                        {{ issue.level|upper }}: {{ issue.message }}
+                                    </div>
+
+                                    <div class="ui attached segment">
+                                        <div class="ui top right attached label">
+                                            Line {{ issue.line }}
+                                        </div>
+                                            {{ issue.codeSnippet|raw }}
+                                    </div>
+                                {% endfor %}
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
