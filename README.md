@@ -3,10 +3,10 @@ SimpSpector
 
 **ALPHA** SimpSpector integrates with gitlab and inspects your code, using SimpSpector Gadgets (get it?)
 
-![Image](../blob/master/docs/dashboard.png?raw=true)
-![Image](../blob/master/docs/project.png?raw=true)
-![Image](../blob/master/docs/commit.png?raw=true)
-![Image](../blob/master/docs/commit2.png?raw=true)
+![Image](../master/docs/dashboard.png?raw=true)
+![Image](../master/docs/project.png?raw=true)
+![Image](../master/docs/commit.png?raw=true)
+![Image](../master/docs/commit2.png?raw=true)
 
 
 Install Development Environment
