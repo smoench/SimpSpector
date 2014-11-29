@@ -65,12 +65,16 @@ class MergeRequestController extends Controller
         $scoreCalculator = $this->get('simple_things_app.badge.score_calculator');
         $score           = $scoreCalculator->get($mergeRequest->getLastCommit());
 
-        return new Response($this->renderView("SimpleThingsAppBundle:Image:show.xml.twig", [
+        $response = new Response($this->renderView("SimpleThingsAppBundle:Image:show.xml.twig", [
             'score' => $score->number,
             'color' => $score->color,
         ]), 200, [
             'Content-Type'        => 'image/svg+xml',
             'Content-Disposition' => 'inline; filename="status.svg"'
         ]);
+        $response->setMaxAge(0);
+        $response->setExpires(new \DateTime('-1 hour'));
+
+        return $response;
     }
 }
