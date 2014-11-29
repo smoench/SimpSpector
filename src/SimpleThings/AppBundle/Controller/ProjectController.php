@@ -45,16 +45,34 @@ class ProjectController extends Controller
     public function masterAction(Project $project)
     {
         $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commits          = $commitRepository->findByMaster();
 
-        $commits = $commitRepository->findByMaster();
+        $markdown = $this->get('simple_things_app.badge_generator')->getMarkdownForProject($project);
 
         return $this->render(
             "SimpleThingsAppBundle:Project:master.html.twig",
             [
-                'project' => $project,
-                'commits' => $commits
+                'project'  => $project,
+                'commits'  => $commits,
+                'markdown' => $markdown
             ]
         );
+    }
+
+    /**
+     * @Route("/{id}/last-commit", name="project_lastcommit")
+     */
+    public function lastCommitAction(Project $project)
+    {
+        /** @var CommitRepository */
+        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commit     = $repository->findLastInMaster($project);
+
+        if ( ! $commit) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->redirect($this->generateUrl('commit_show', ['id' => $commit->getId()]));
     }
 
     /**
@@ -71,7 +89,7 @@ class ProjectController extends Controller
         /** @var CommitRepository $commitRepository */
         $commitRepository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
 
-        $score = $scoreCalculator->get($commitRepository->findLastInMaster());
+        $score = $scoreCalculator->get($commitRepository->findLastInMaster($project));
 
         $response = new Response($this->renderView("SimpleThingsAppBundle:Image:show.xml.twig", [
             'score' => $score->number,

@@ -36,9 +36,9 @@ class Notifier
      */
     function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
     {
-        $this->client = $client;
+        $this->client    = $client;
         $this->generator = $generator;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger    = $logger ?: new NullLogger();
     }
 
     /**
@@ -52,7 +52,7 @@ class Notifier
         $response = $mergeRequestApi->addComment(
             $mergeRequest->getProject()->getRemoteId(),
             $mergeRequest->getRemoteId(),
-            $this->generator->getMarkdown($mergeRequest)
+            $this->generator->getMarkdownForMergeRequest($mergeRequest)
         );
 
         $this->logger->info('notify gitlab', $response);

@@ -8,6 +8,7 @@ namespace SimpleThings\AppBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\MergeRequest;
+use SimpleThings\AppBundle\Entity\Project;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -40,14 +41,18 @@ class CommitRepository extends EntityRepository
     }
 
     /**
+     * @param Project $project
      * @return Commit
      */
-    public function findLastInMaster()
+    public function findLastInMaster(Project $project)
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.mergeRequest IS NULL')
+            ->andWhere('c.project = :project')
             ->orderBy('c.id', 'DESC')
             ->getQuery();
+
+        $query->setParameters(['project' => $project]);
 
         $query->setMaxResults(1);
 
