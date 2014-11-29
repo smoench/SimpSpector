@@ -1,7 +1,7 @@
 {% for message in phpcs %}
 <div class="ui segment">
     <div class="ui top attached label ellipsis">
-        <span class="right">L{{ message.line }}:C{{ message.column }}</span> {{ message.file|replace({"/tmp/checkouts/2_6_8c907c7cb574750fb6d044fd02aa2eea0ce0866b/":""}) }}
+        <span class="right">L{{ message.line }}:C{{ message.column }}</span> {{ message.file|filter_workspace() }}
     </div>
     <div>
         <h4>{{ message.type|upper }} [{{ message.severity }}]: {{ message.message }}</h4>

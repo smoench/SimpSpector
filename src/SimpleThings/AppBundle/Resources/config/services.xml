@@ -56,5 +56,10 @@
             <argument type="service" id="simple_things_app.syntax_highlighter"/>
             <tag name="twig.extension"/>
         </service>
+
+        <service id="simple_things_app.twig.extension.filter_workspace" class="SimpleThings\AppBundle\Twig\FilterWorkspaceExtension">
+            <argument type="string">%git_repository_tmp_dir%</argument>
+            <tag name="twig.extension"/>
+        </service>
     </services>
 </container>
