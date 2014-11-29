@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Repository\CommitRepository;
+use SimpleThings\AppBundle\Repository\MergeRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -63,7 +64,11 @@ class MergeRequestController extends Controller
     {
         /** @var ScoreCalculator $scoreCalculator */
         $scoreCalculator = $this->get('simple_things_app.badge.score_calculator');
-        $score           = $scoreCalculator->get($mergeRequest->getLastCommit());
+
+        /** @var CommitRepository $commitRepository */
+        $commitRepository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+
+        $score = $scoreCalculator->get($commitRepository->findLastForMergeRequest($mergeRequest));
 
         $response = new Response($this->renderView("SimpleThingsAppBundle:Image:show.xml.twig", [
             'score' => $score->number,
