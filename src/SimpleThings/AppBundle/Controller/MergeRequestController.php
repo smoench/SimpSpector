@@ -10,7 +10,9 @@ use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -55,6 +57,9 @@ class MergeRequestController extends Controller
 
     /**
      * @Route("/{id}/badge", name="mergerequest_imagebadge")
+     *
+     * @param MergeRequest $mergeRequest
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function badgeAction(MergeRequest $mergeRequest)
     {
@@ -66,7 +71,7 @@ class MergeRequestController extends Controller
             'score' => $score->number,
             'color' => $score->color,
         ]), 200, [
-            'Content-Type'        => 'image/svg',
+            'Content-Type'        => 'image/svg+xml',
             'Content-Disposition' => 'inline; filename="status.svg"'
         ]);
     }
