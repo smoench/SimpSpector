@@ -32,7 +32,7 @@ class Generator
     public function getMarkdownForMergeRequest(MergeRequest $mergeRequest)
     {
         return sprintf(
-            '[![Build Status](%s)](%s)',
+            '[![SimpSpection Status](%s)](%s)',
             $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
         );
