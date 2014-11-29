@@ -1,0 +1,79 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui steps">
+            <a class="step" href="{{ path('homepage') }}">
+                <div class="content">
+                    <div class="title"> <i class="icon home"></i> Home</div>
+                    <div class="description">... where the <i class="icon heart"></i> is</div>
+                </div>
+            </a>
+            <a class="step" href="{{ path('project_show', {id: project.id }) }}">
+                <div class="content">
+                    <div class="title"> <i class="icon cubes"></i> Project</div>
+                    <div class="description">{{ project.name }}</div>
+                </div>
+            </a>
+            <a class="step active">
+                <div class="content">
+                    <div class="title"> <i class="sitemap alternate icon"></i> Master</div>
+                    <div class="description">Master Branch</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="icon text file inverted circular"></i> Commits
+            </h3>
+            <table class="ui table">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>id</th>
+                        <th>revision</th>
+                        <th>issues</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commit in commits %}
+                    <tr>
+                        <td>
+                            <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
+                                <div class="hidden content">show</div>
+                                <div class="visible content">
+                                    <i class="search icon"></i>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            {{ commit.id }}
+                        </td>
+                        <td>{{ commit.revision }}</td>
+                        <td>{{ commit.issues|length }}</td>
+                        <td>
+                            {% if commit.status == constant('STATUS_NEW', commit) %}
+                                <span class="ui label">New</span>
+                            {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                                <span class="ui yellow label">Proccess</span>
+                            {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                                <span class="ui green label">Success</span>
+                            {% else %}
+                                <span class="ui red label">Error</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

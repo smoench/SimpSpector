@@ -60,11 +60,19 @@ class Project
     private $mergeRequests;
 
     /**
+     * @var Commit[]
+     *
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="project")
+     */
+    private $commits;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->mergeRequests = new ArrayCollection();
+        $this->commits       = new ArrayCollection();
     }
 
     /**
@@ -154,5 +162,13 @@ class Project
     public function getMergeRequests()
     {
         return $this->mergeRequests;
+    }
+
+    /**
+     * @return Commit[]
+     */
+    public function getCommits()
+    {
+        return $this->commits;
     }
 }

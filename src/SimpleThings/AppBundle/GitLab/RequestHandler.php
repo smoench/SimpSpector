@@ -102,6 +102,7 @@ class RequestHandler
         $revision = $this->getLastRevisionFromBranch($projectId, $branch);
 
         $commit = new Commit();
+        $commit->setProject($mergeRequest->getProject());
         $commit->setMergeRequest($mergeRequest);
         $commit->setRevision($revision);
 
@@ -123,11 +124,18 @@ class RequestHandler
         /** @var MergeRequestRepository $repository */
         $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
 
-        if (!$mergeRequest = $repository->findLastMergeRequestByBranch($projectId, $branch)) {
+        if(!$project = $this->findProject($projectId)) {
+            $project = $this->createProject($projectId);
+        }
+
+        if ($branch == 'master') {
+            $mergeRequest = null;
+        } elseif (!$mergeRequest = $repository->findLastMergeRequestByBranch($project, $branch)) {
             return;
         }
 
         $commit = new Commit();
+        $commit->setProject($project);
         $commit->setMergeRequest($mergeRequest);
         $commit->setRevision($revision);
 
@@ -205,7 +213,7 @@ class RequestHandler
     {
         /** @var EntityRepository $projectRepository */
         $projectRepository = $this->em->getRepository('SimpleThings\AppBundle\Entity\Project');
-        $results           = $projectRepository->findAll(['remoteId' => $projectId]);
+        $results           = $projectRepository->findBy(['remoteId' => $projectId]);
 
         return count($results) === 1 ? $results[0] : null;
     }

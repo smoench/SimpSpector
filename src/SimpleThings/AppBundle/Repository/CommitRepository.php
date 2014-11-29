@@ -22,6 +22,10 @@ class CommitRepository extends EntityRepository
         return $this->findBy(['status' => Commit::STATUS_NEW]);
     }
 
+    /**
+     * @param MergeRequest $mergeRequest
+     * @return Commit
+     */
     public function findLastForMergeRequest(MergeRequest $mergeRequest)
     {
         $query = $this->createQueryBuilder('c')
@@ -33,5 +37,38 @@ class CommitRepository extends EntityRepository
         $query->setMaxResults(1);
 
         return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @return Commit
+     */
+    public function findLastInMaster()
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.mergeRequest IS NULL')
+            ->orderBy('c.id', 'DESC')
+            ->getQuery();
+
+        $query->setMaxResults(1);
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @param null $limit
+     * @return Commit[]
+     */
+    public function findByMaster($limit = null)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.mergeRequest IS NULL')
+            ->orderBy('c.id', 'DESC')
+            ->getQuery();
+
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getResult();
     }
 }
