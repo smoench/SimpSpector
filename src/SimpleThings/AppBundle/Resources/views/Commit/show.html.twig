@@ -17,16 +17,16 @@
                     </div>
                 </a>
                 {% if commit.mergerequest %}
-                <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
-                    <div class="content">
-                        <div class="title"><i class="share alternate icon"></i> MergeRequest</div>
-                        <div class="description">{{ commit.mergerequest.name }}</div>
-                    </div>
-                </a>
+                    <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
+                        <div class="content">
+                            <div class="title"><i class="share alternate icon"></i> MergeRequest</div>
+                            <div class="description">{{ commit.mergerequest.name }}</div>
+                        </div>
+                    </a>
                 {% else %}
                     <a class="step" href="{{ path('project_master', {id: commit.project.id }) }}" hidden="">
                         <div class="content">
-                            <div class="title"> <i class="sitemap alternate icon"></i> Master</div>
+                            <div class="title"><i class="sitemap alternate icon"></i> Master</div>
                             <div class="description">Master Branch</div>
                         </div>
                     </a>
@@ -118,15 +118,39 @@
                             </div>
                             <div class="content">
                                 {% for issue in list %}
-                                    <div class="ui top attached warning message">
-                                        <i class="warning icon"></i>
-                                        {{ issue.level|upper }}: {{ issue.message }}
+                                    <div class="ui top attached
+                                        {% if issue.level == constant('LEVEL_NOTICE', issue) %}
+                                        blue
+                                        {% elseif issue.level == constant('LEVEL_WARNING', issue) %}
+                                        yellow
+                                        {% elseif issue.level == constant('LEVEL_ERROR', issue) %}
+                                        orange
+                                        {% elseif issue.level == constant('LEVEL_CRITICAL', issue) %}
+                                        red
+                                        {% endif %}
+                                        message">
+                                        <h4>
+                                            {% if issue.level == constant('LEVEL_NOTICE', issue) %}
+                                                <i class="info icon"></i>
+                                            {% elseif issue.level == constant('LEVEL_WARNING', issue) %}
+                                                <i class="warning icon"></i>
+                                            {% elseif issue.level == constant('LEVEL_ERROR', issue) %}
+                                                <i class="bug icon"></i>
+                                            {% elseif issue.level == constant('LEVEL_CRITICAL', issue) %}
+                                                <i class="fire icon"></i>
+                                            {% endif %}
+                                            {{ issue.gadget|upper }}
+                                            {{ issue.level|upper }}
+                                        </h4>
+
+                                        <p>{{ issue.message }}</p>
                                     </div>
 
                                     {% if issue.codeSnippet is not empty %}
                                         <div class="ui attached segment">
                                             <div class="ui top right attached label">
-                                                <a class="phpstorm" href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line + 1 }}">
+                                                <a class="phpstorm"
+                                                   href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line }}">
                                                     <i class="lightning inverted circular icon"></i>
                                                 </a>
                                                 Line {{ issue.line }}

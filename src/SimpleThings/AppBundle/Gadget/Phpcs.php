@@ -58,7 +58,6 @@ class Phpcs extends AbstractGadget
      */
     public function getName()
     {
-
         return 'phpcs';
     }
 
@@ -110,6 +109,7 @@ class Phpcs extends AbstractGadget
     }
 
     /**
+     * @param Workspace $workspace
      * @param array $data
      * @return Issue
      */

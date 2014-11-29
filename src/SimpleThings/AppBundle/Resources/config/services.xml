@@ -53,6 +53,10 @@
             <tag name="simpspector.gadget"/>
         </service>
 
+        <service id="simple_things_app.gadget.phpmd" class="SimpleThings\AppBundle\Gadget\Phpmd">
+            <tag name="simpspector.gadget"/>
+        </service>
+
         <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
 
         <!-- TWIG -->

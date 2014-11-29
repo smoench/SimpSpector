@@ -2,3 +2,5 @@ composer: ~
 phpcs:
   files: src/
   standards: [PSR1, PSR2]
+phpmd:
+  files: src/
