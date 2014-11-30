@@ -9,23 +9,17 @@ class CommentCommenterGadget
 {
     /**
      * @param string $filename
-     * @return string
+     * @return array
      */
     public function extract($filename)
     {
-        $withComments    = file_get_contents($filename);
-        $withoutComments = php_strip_whitespace($filename);
-        $comments        = '';
-
-        $j = 0;
-        for ($i = 0; $i < strlen($withComments); $i++) {
-            if ($withoutComments[$j] === $withComments[$i]) {
-                $j++;
-            } else {
-                $comments .= $withComments[$i];
-            }
-        }
-
-        return $comments;
+        return array_map(function ($comment) {
+            return [
+                'content' => $comment[1],
+                'line'    => $comment[2],
+            ];
+        }, array_filter(token_get_all(file_get_contents($filename)), function ($token) {
+            return (count($token) === 3) && (in_array($token[0], [372 /* T_COMMENT */, 373 /* T_DOC_COMMENT */]));
+        }));
     }
 }
