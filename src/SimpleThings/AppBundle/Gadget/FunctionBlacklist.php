@@ -17,7 +17,7 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class FunctionBlacklist extends AbstractGadget
 {
-    const NAME = 'extra';
+    const NAME = 'function_blacklist';
 
     /**
      * @param Workspace $workspace

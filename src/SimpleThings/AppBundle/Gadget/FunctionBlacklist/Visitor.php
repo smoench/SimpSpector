@@ -4,6 +4,7 @@ namespace SimpleThings\AppBundle\Gadget\FunctionBlacklist;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Gadget\FunctionBlacklist;
 
 /*
  * @author Tobias Olry <tobias.olry@gmail.com>
@@ -79,7 +80,7 @@ class Visitor extends NodeVisitorAbstract
 
     private function addIssue($message, Node $node = null, $level = Issue::LEVEL_ERROR)
     {
-        $issue = new Issue($message, 'extra', $level);
+        $issue = new Issue($message, FunctionBlacklist::NAME, $level);
         $issue->setFile($this->currentFile);
 
         if ($node) {
