@@ -10,4 +10,6 @@ function_blacklist:
     die: notice
     echo: notice
     var_dump: error
-
+comment_commenter:
+  files: src/
+  blacklist: ["todo", "dirty hack"]
