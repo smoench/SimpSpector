@@ -1,5 +1,5 @@
 <?php
-namespace SimpleThings\AppBundle\Gadget\SimpSpectorExtra;
+namespace SimpleThings\AppBundle\Gadget\FunctionBlacklist;
 
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;

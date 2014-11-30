@@ -3,7 +3,7 @@
 namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\Gadget\SimpSpectorExtra;
+use SimpleThings\AppBundle\Gadget\FunctionBlacklist;
 use SimpleThings\AppBundle\Workspace;
 
 /*
@@ -13,7 +13,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 {
     private function createIssue($message, $line, $level)
     {
-        $issue = new Issue($message, SimpSpectorExtra::NAME, $level);
+        $issue = new Issue($message, FunctionBlacklist::NAME, $level);
         $issue->setFile('foo.php');
         $issue->setLine($line);
 
@@ -24,9 +24,9 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [SimpSpectorExtra::NAME => []];
+        $workspace->config = [FunctionBlacklist::NAME => []];
 
-        $gadget = new SimpSpectorExtra();
+        $gadget = new FunctionBlacklist();
         $issues = $gadget->run($workspace);
 
         $expectedIssues = [
@@ -45,9 +45,9 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['die' => 'critical']]];
+        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['die' => 'critical']]];
 
-        $gadget = new SimpSpectorExtra();
+        $gadget = new FunctionBlacklist();
         $issues = $gadget->run($workspace);
 
         $expectedIssues = [
@@ -57,7 +57,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedIssues, $issues);
 
-        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['exit' => 'critical']]];
+        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['exit' => 'critical']]];
 
         $issues = $gadget->run($workspace);
 
@@ -73,9 +73,9 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
+        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
 
-        $gadget = new SimpSpectorExtra();
+        $gadget = new FunctionBlacklist();
         $issues = $gadget->run($workspace);
 
         $expectedIssues = [

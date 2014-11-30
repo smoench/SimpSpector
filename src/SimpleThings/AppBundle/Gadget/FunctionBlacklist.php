@@ -6,7 +6,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\Lexer;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
-use SimpleThings\AppBundle\Gadget\SimpSpectorExtra\Visitor;
+use SimpleThings\AppBundle\Gadget\FunctionBlacklist\Visitor;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +15,7 @@ use Symfony\Component\Process\ProcessBuilder;
 /*
  * @author Tobias Olry <tobias.olry@gmail.com>
  */
-class SimpSpectorExtra extends AbstractGadget
+class FunctionBlacklist extends AbstractGadget
 {
     const NAME = 'extra';
 
