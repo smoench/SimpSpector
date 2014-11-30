@@ -35,42 +35,17 @@ class SimpSpectorExtra extends AbstractGadget
 
         $files = $this->findPhpFiles($workspace->path, $folders);
 
-        $issues = [];
         foreach ($files as $file) {
             try {
-                $fileIssues = array_merge(
-                    $this->runPhpParser($file, $parser, $traverser, $visitor, $workspace),
-                    $this->runCommentParser($file)
-                );
-
-                usort(
-                    $fileIssues,
-                    function ($a, $b) {
-                        return $a->getLine() - $b->getLine();
-                    }
-                );
-
-                $issues = array_merge($issues, $fileIssues);
+                $visitor->setCurrentFile($this->cleanupFilePath($workspace, $file));
+                $statements = $parser->parse(file_get_contents($file));
+                $traverser->traverse($statements);
             } catch (\Exception $e) {
                 $visitor->addException($e);
             }
         }
 
-        return $issues;
-    }
-
-    private function runPhpParser($file, Parser $parser, NodeTraverser $traverser, Visitor $visitor, Workspace $workspace)
-    {
-        $visitor->setCurrentFile($this->cleanupFilePath($workspace, $file));
-        $statements = $parser->parse(file_get_contents($file));
-        $traverser->traverse($statements);
-
-        return $visitor->flushIssues();
-    }
-
-    private function runCommentParser($file)
-    {
-        return [];
+        return $visitor->getIssues();
     }
 
     /**
@@ -79,34 +54,6 @@ class SimpSpectorExtra extends AbstractGadget
     public function getName()
     {
         return 'extra';
-    }
-
-    /**
-     * @param array $data
-     * @return Issue
-     */
-    private function createIssue(Workspace $workspace, array $data)
-    {
-        $issue = new Issue($data['message'], 'phpcs');
-        $issue->setFile($this->cleanupFilePath($workspace, $data['file']));
-        $issue->setLine($data['line']);
-
-        switch ($data['type']) {
-            case 'error':
-                $issue->setLevel(Issue::LEVEL_ERROR);
-                break;
-            case 'warning':
-                $issue->setLevel(Issue::LEVEL_WARNING);
-                break;
-        }
-
-        $issue->setExtraInformation([
-            'source'   => $data['source'],
-            'severity' => $data['severity'],
-            'column'   => $data['column']
-        ]);
-
-        return $issue;
     }
 
     /**

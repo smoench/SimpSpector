@@ -12,6 +12,7 @@ class Visitor extends NodeVisitorAbstract
 {
     private $currentFile;
     private $issues;
+    private $lastNode;
 
     public function __construct(array $options)
     {
@@ -26,7 +27,11 @@ class Visitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Name && $node->getFirst() == 'var_dump') {
+        if (
+            $node instanceof Node\Name &&
+            $this->lastNode instanceof Node\Expr\FuncCall &&
+            $node->getFirst() == 'var_dump'
+        ) {
             $this->addIssue('var_dump calls should be avoided', $node, Issue::LEVEL_ERROR);
         }
 
@@ -37,19 +42,13 @@ class Visitor extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\Echo_) {
             $this->addIssue('echo statements should be avoided', $node, Issue::LEVEL_WARNING);
         }
+
+        $this->lastNode = $node;
     }
 
     public function getIssues()
     {
         return $this->issues;
-    }
-
-    public function flushIssues()
-    {
-        $issues       = $this->issues;
-        $this->issues = [];
-
-        return $issues;
     }
 
     public function addException(\Exception $error)
