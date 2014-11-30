@@ -44,6 +44,6 @@ class Foo
 
 PHP;
         var_dump();
-        extra_var_dump();
+        \extra_var_dump();
     }
 }

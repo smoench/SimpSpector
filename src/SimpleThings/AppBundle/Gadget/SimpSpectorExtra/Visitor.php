@@ -50,7 +50,11 @@ class Visitor extends NodeVisitorAbstract
         }
 
         if (isset($this->blacklist['echo']) && $node instanceof Node\Stmt\Echo_) {
-            $this->addIssueForBlacklistedFunction('echo', $node, Issue::LEVEL_WARNING);
+            $this->addIssueForBlacklistedFunction(
+                'echo',
+                $node,
+                $this->translateErrorLevel($this->blacklist['echo'])
+            );
         }
     }
 

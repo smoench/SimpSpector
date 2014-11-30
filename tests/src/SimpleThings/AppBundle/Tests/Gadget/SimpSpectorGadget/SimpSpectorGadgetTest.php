@@ -20,7 +20,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
         return $issue;
     }
 
-    public function testFoo()
+    public function testDefaultConfig()
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
@@ -36,6 +36,50 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
             $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_ERROR),
             $this->createIssue('function / statement "die/exit" is blacklisted', 39, Issue::LEVEL_ERROR),
             $this->createIssue('function / statement "var_dump" is blacklisted', 46, Issue::LEVEL_ERROR),
+        ];
+
+        $this->assertEquals($expectedIssues, $issues);
+    }
+
+    public function testExitDie()
+    {
+        $workspace         = new Workspace();
+        $workspace->path   = __DIR__ . '/_data';
+        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['die' => 'critical']]];
+
+        $gadget = new SimpSpectorExtra();
+        $issues = $gadget->run($workspace);
+
+        $expectedIssues = [
+            $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
+            $this->createIssue('function / statement "die/exit" is blacklisted', 39, Issue::LEVEL_CRITICAL),
+        ];
+
+        $this->assertEquals($expectedIssues, $issues);
+
+        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['exit' => 'critical']]];
+
+        $issues = $gadget->run($workspace);
+
+        $expectedIssues = [
+            $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
+            $this->createIssue('function / statement "die/exit" is blacklisted', 39, Issue::LEVEL_CRITICAL),
+        ];
+
+        $this->assertEquals($expectedIssues, $issues);
+    }
+
+    public function testNormalFunction()
+    {
+        $workspace         = new Workspace();
+        $workspace->path   = __DIR__ . '/_data';
+        $workspace->config = [SimpSpectorExtra::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
+
+        $gadget = new SimpSpectorExtra();
+        $issues = $gadget->run($workspace);
+
+        $expectedIssues = [
+            $this->createIssue('function / statement "extra_var_dump" is blacklisted', 47, Issue::LEVEL_WARNING),
         ];
 
         $this->assertEquals($expectedIssues, $issues);
