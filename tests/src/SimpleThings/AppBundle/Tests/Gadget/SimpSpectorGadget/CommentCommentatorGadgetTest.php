@@ -20,22 +20,64 @@ class CommentCommentatorGadgetTest extends \PHPUnit_Framework_TestCase
     public function testCommentExtractorNoComment()
     {
         $comments = $this->OUT->extract($this->getTestFilename('small-without-comments.php'));
-        $this->assertTrue(! trim($comments));
+        $this->assertEmpty($comments);
     }
 
     public function testCommentExtractorComment()
     {
         $comments = $this->OUT->extract($this->getTestFilename('small-with-comments.php'));
-        $this->assertContains('ABC', $comments);
-        $this->assertContains('DEF', $comments);
-        $this->assertNotContains('$a = ', $comments);
+
+        $hasAbc = false;
+        $hasDef = false;
+        foreach ($comments as $comment) {
+            if (strpos($comment['content'], 'ABC') !== false) {
+                $hasAbc = true;
+                $this->assertEquals(2, $comment['line']);
+            }
+            if (strpos($comment['content'], 'DEF') !== false) {
+                $hasDef = true;
+                $this->assertEquals(3, $comment['line']);
+            }
+        }
+        $this->assertEquals(2, count($comments));
+        $this->assertTrue($hasAbc);
+        $this->assertTrue($hasDef);
+    }
+
+    public function testWithClass()
+    {
+        $comments = $this->OUT->extract($this->getTestFilename('min-with-class.php'));
+
+        $hasAbc = false;
+        $hasDef = false;
+        foreach ($comments as $comment) {
+            if (strpos($comment['content'], 'ABC') !== false) {
+                $hasAbc = true;
+                $this->assertEquals(6, $comment['line']);
+            }
+            if (strpos($comment['content'], 'DEF') !== false) {
+                $hasDef = true;
+                $this->assertEquals(7, $comment['line']);
+            }
+        }
+        $this->assertEquals(2, count($comments));
+        $this->assertTrue($hasAbc);
+        $this->assertTrue($hasDef);
     }
 
     public function testCommentsOfFoo()
     {
         $comments = $this->OUT->extract($this->getTestFilename('foo.php'));
-        $this->assertContains('do something here', $comments);
-        $this->assertNotContains('iamok', $comments);
+
+        $hasDoSomethingComment = false;
+        foreach ($comments as $comment) {
+            if (strpos($comment['content'], 'do something here') !== false) {
+                $hasDoSomethingComment = true;
+                $this->assertEquals(11, $comment['line']);
+            }
+        }
+        $this->assertEquals(2, count($comments));
+        $this->assertTrue($hasDoSomethingComment);
     }
 
     /**
