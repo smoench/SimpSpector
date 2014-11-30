@@ -13,11 +13,12 @@ class Visitor extends NodeVisitorAbstract
     private $currentFile;
     private $issues;
     private $lastNode;
+    private $blacklist;
 
-    public function __construct(array $options)
+    public function __construct(array $blacklist)
     {
-        // @todo parse options
-        $this->issues = [];
+        $this->blacklist = $blacklist;
+        $this->issues  = [];
     }
 
     public function setCurrentFile($file)

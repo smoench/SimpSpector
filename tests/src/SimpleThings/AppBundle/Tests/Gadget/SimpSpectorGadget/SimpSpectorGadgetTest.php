@@ -13,7 +13,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 {
     private function createIssue($message, $line, $level)
     {
-        $issue = new Issue($message, 'extra', $level);
+        $issue = new Issue($message, SimpSpectorExtra::NAME, $level);
         $issue->setFile('foo.php');
         $issue->setLine($line);
 
@@ -24,7 +24,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = ['extra' => []];
+        $workspace->config = [SimpSpectorExtra::NAME => []];
 
         $gadget = new SimpSpectorExtra();
         $issues = $gadget->run($workspace);

@@ -17,6 +17,8 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class SimpSpectorExtra extends AbstractGadget
 {
+    const NAME = 'extra';
+
     /**
      * @param Workspace $workspace
      * @return Issue[]
@@ -24,16 +26,15 @@ class SimpSpectorExtra extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $visitorOptions = (array)\igorw\get_in($workspace->config, ['extra', 'values'], []);
-        $folders        = (array)\igorw\get_in($workspace->config, ['extra', 'files'], ['.']);
+        $options = $this->prepareOptions($workspace->config[self::NAME]);
 
         $parser    = new Parser(new Lexer());
-        $visitor   = new Visitor($visitorOptions);
+        $visitor   = new Visitor($options['blacklist']);
         $traverser = new NodeTraverser();
 
         $traverser->addVisitor($visitor);
 
-        $files = $this->findPhpFiles($workspace->path, $folders);
+        $files = $this->findPhpFiles($workspace->path, $options['files']);
 
         foreach ($files as $file) {
             try {
@@ -53,7 +54,7 @@ class SimpSpectorExtra extends AbstractGadget
      */
     public function getName()
     {
-        return 'extra';
+        return self::NAME;
     }
 
     /**
@@ -86,5 +87,39 @@ class SimpSpectorExtra extends AbstractGadget
         chdir($cwd);
 
         return $files;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    private function prepareOptions(array $options)
+    {
+        $resolver = new OptionsResolver();
+
+        $resolver->setDefaults(
+            [
+                'blacklist' => [
+                    'die'      => 'error',
+                    'var_dump' => 'error',
+                    'echo'     => 'warning',
+                    'dump'     => 'error',
+                ],
+                'files'     => ['.'],
+            ]
+        );
+
+        $normalizeArray = function (Options $options, $value) {
+                return is_array($value) ? $value : [$value];
+        };
+
+        $resolver->setNormalizers(
+            [
+                'files'     => $normalizeArray,
+                'blacklist' => $normalizeArray,
+            ]
+        );
+
+        return $resolver->resolve($options);
     }
 }
