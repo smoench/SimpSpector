@@ -76,12 +76,12 @@ class SimpSpectorExtra extends AbstractGadget
             ->files()
             ->name('*.php')
             ->in($folders);
-        $files = iterator_to_array($finder);
+
         $files = array_map(
             function ($file) {
                 return $file->getRealpath();
             },
-            $files
+            iterator_to_array($finder)
         );
 
         chdir($cwd);
@@ -99,13 +99,13 @@ class SimpSpectorExtra extends AbstractGadget
 
         $resolver->setDefaults(
             [
+                'files'     => ['.'],
                 'blacklist' => [
                     'die'      => 'error',
                     'var_dump' => 'error',
                     'echo'     => 'warning',
                     'dump'     => 'error',
                 ],
-                'files'     => ['.'],
             ]
         );
 

@@ -8,7 +8,7 @@ class Foo
     {
         echo "var_dump";
 
-        // @todo do something here
+        // some comment
 
         echo "foo";
     }
@@ -16,15 +16,15 @@ class Foo
     private function bar()
     {
         /**
-         * some @todo just in the middle
+         * A large comment
          *
-         * no real@todo wouldnt you say?
+         * including var_dump()
          *
-         * todo without all that email stuff
+         * todo and die() and exit()
          *
-         * var_dump
+         * echo "foo";
          *
-         * @todo this I need
+         *
          */
 
         iamok();
@@ -43,6 +43,7 @@ class Foo
 // @todo bar
 
 PHP;
+        var_dump();
         extra_var_dump();
     }
 }

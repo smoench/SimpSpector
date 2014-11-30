@@ -12,7 +12,6 @@ class Visitor extends NodeVisitorAbstract
 {
     private $currentFile;
     private $issues;
-    private $lastNode;
     private $blacklist;
 
     public function __construct(array $blacklist)
@@ -28,23 +27,31 @@ class Visitor extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if (
-            $node instanceof Node\Name &&
-            $this->lastNode instanceof Node\Expr\FuncCall &&
-            $node->getFirst() == 'var_dump'
-        ) {
-            $this->addIssue('var_dump calls should be avoided', $node, Issue::LEVEL_ERROR);
+        if ($node instanceof Node\Name && isset($this->blacklist[$node->getFirst()])) {
+            $this->addIssueForBlacklistedFunction(
+                $node->getFirst(),
+                $node,
+                $this->translateErrorLevel($this->blacklist[$node->getFirst()])
+            );
         }
 
-        if ($node instanceof Node\Expr\Exit_) {
-            $this->addIssue('die/exit calls should be avoided', $node, Issue::LEVEL_ERROR);
+        if (isset($this->blacklist['die']) && $node instanceof Node\Expr\Exit_) {
+            $this->addIssueForBlacklistedFunction(
+                'die/exit',
+                $node,
+                $this->translateErrorLevel($this->blacklist['die'])
+            );
+        } elseif (isset($this->blacklist['exit']) && $node instanceof Node\Expr\Exit_) {
+            $this->addIssueForBlacklistedFunction(
+                'die/exit',
+                $node,
+                $this->translateErrorLevel($this->blacklist['exit'])
+            );
         }
 
-        if ($node instanceof Node\Stmt\Echo_) {
-            $this->addIssue('echo statements should be avoided', $node, Issue::LEVEL_WARNING);
+        if (isset($this->blacklist['echo']) && $node instanceof Node\Stmt\Echo_) {
+            $this->addIssueForBlacklistedFunction('echo', $node, Issue::LEVEL_WARNING);
         }
-
-        $this->lastNode = $node;
     }
 
     public function getIssues()
@@ -57,6 +64,15 @@ class Visitor extends NodeVisitorAbstract
         $this->addIssue('Exception: ' . $error->getMessage(), null, Issue::LEVEL_CRITICAL);
     }
 
+    private function addIssueForBlacklistedFunction($function, Node $node, $level)
+    {
+        $this->addIssue(
+            sprintf('function / statement "%s" is blacklisted', $function),
+            $node,
+            $level
+        );
+    }
+
     private function addIssue($message, Node $node = null, $level = Issue::LEVEL_ERROR)
     {
         $issue = new Issue($message, 'extra', $level);
@@ -67,5 +83,21 @@ class Visitor extends NodeVisitorAbstract
         }
 
         $this->issues[] = $issue;
+    }
+
+    private function translateErrorLevel($string)
+    {
+        switch(trim(strtolower($string))) {
+            case 'notice':
+                return Issue::LEVEL_NOTICE;
+            case 'warning':
+                return Issue::LEVEL_WARNING;
+            case 'error':
+                return Issue::LEVEL_ERROR;
+            case 'critical':
+                return Issue::LEVEL_CRITICAL;
+            default:
+                throw new \RuntimeException('unknown error level ' . $string);
+        }
     }
 }
