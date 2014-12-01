@@ -18,7 +18,7 @@ class CommentCommenterGadget extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOption((array)$workspace->config['commentCommenter']);
+        $options = $this->prepareOption((array)$workspace->config['comment_commenter']);
         $issues  = [];
         foreach ($this->findPhpFiles($workspace->path, $options['files']) as $filename) {
             $issues = array_merge($this->processFile($filename, $options), $issues);
@@ -71,12 +71,21 @@ class CommentCommenterGadget extends AbstractGadget
     {
         $comments = $this->extract($filename);
         $issues   = [];
-        foreach ($options['blacklist'] as $needle => $level) {
-            if (strpos($comments['content'], $needle) === false) {
-                continue;
-            }
+        foreach ($comments as $comment) {
+            foreach ($options['blacklist'] as $needle => $level) {
+                $exp = explode($needle, $comment['content']);
+                array_pop($exp);
+                $offset = 0;
+                foreach ($exp as $s) {
+                    $offset += count(explode("\n", $s)) - 1;
 
-            $issues[] = new Issue('found %s in a comment', $this->getName(), $level);
+                    $issue = new Issue(sprintf('found "%s" in a comment', $needle), $this->getName(), $level);
+                    $issue->setFile($filename);
+                    $issue->setLine($comment['line'] + $offset);
+
+                    $issues[] = $issue;
+                }
+            }
         }
 
         return $issues;
@@ -96,5 +105,11 @@ class CommentCommenterGadget extends AbstractGadget
         }, array_filter(token_get_all(file_get_contents($filename)), function ($token) {
             return (count($token) === 3) && (in_array($token[0], [372 /* T_COMMENT */, 373 /* T_DOC_COMMENT */]));
         }));
+    }
+
+    private function findPhpFiles($path, $files)
+    {
+        // @todo remove if tolry's method is merged
+        return glob($path . '/*.php');
     }
 }
