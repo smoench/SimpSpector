@@ -24,7 +24,8 @@
         "cpliakas/git-wrapper": "~1.0",
         "composer/composer": "~1.0@alpha",
         "easybook/geshi": "dev-master",
-        "timetoogo/pinq": "~3.0"
+        "timetoogo/pinq": "~3.0",
+        "nikic/php-parser": "~1.0.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

@@ -4,3 +4,10 @@ phpcs:
   standards: [PSR1, PSR2]
 phpmd:
   files: src/
+function_blacklist:
+  files: src/
+  blacklist:
+    die: notice
+    echo: notice
+    var_dump: error
+

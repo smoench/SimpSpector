@@ -34,8 +34,7 @@ My Windows experience:
 cd assets
 bower install
 npm install --dev
-gulp styles
-gulp js
+gulp styles js
 
 ```
 
