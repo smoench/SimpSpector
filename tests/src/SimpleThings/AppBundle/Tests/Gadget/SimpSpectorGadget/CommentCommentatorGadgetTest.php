@@ -2,7 +2,7 @@
 
 namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
 
-use SimpleThings\AppBundle\Gadget\CommentCommenterGadget;
+use SimpleThings\AppBundle\Gadget\CommentBlacklistGadget;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -10,12 +10,12 @@ use SimpleThings\AppBundle\Workspace;
  */
 class CommentCommentatorGadgetTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var CommentCommenterGadget */
+    /** @var CommentBlacklistGadget */
     private $OUT;
 
     protected function setUp()
     {
-        $this->OUT = new CommentCommenterGadget();
+        $this->OUT = new CommentBlacklistGadget();
     }
 
     public function testFixtures()
