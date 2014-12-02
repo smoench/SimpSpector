@@ -10,15 +10,27 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Lars Wallenborn <lars@wallenborn.net>
  */
-class CommentCommenterGadget extends AbstractGadget
+class CommentBlacklistGadget extends AbstractGadget
 {
+    const NAME = 'comment_blacklist';
+
     /**
      * @param Workspace $workspace
      * @return Issue[]
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOption((array)$workspace->config['comment_commenter']);
+        $options = $this->prepareOptions(
+            (array)$workspace->config[self::NAME],
+            [
+                'files'     => './',
+                'blacklist' => [
+                    'todo'       => Issue::LEVEL_WARNING,
+                    'dirty hack' => Issue::LEVEL_WARNING,
+                ]
+            ],
+            ['files', 'blacklist']
+        );
         $issues  = [];
         foreach ($this->findPhpFiles($workspace->path, $options['files']) as $filename) {
             $issues = array_merge($this->processFile($filename, $options), $issues);
@@ -28,38 +40,11 @@ class CommentCommenterGadget extends AbstractGadget
     }
 
     /**
-     * @param array $options
-     * @return array
-     */
-    private function prepareOption(array $options)
-    {
-        $resolver = new OptionsResolver();
-
-        $resolver->setDefaults([
-            'files'     => './',
-            'blacklist' => [
-                'todo'       => Issue::LEVEL_WARNING,
-                'dirty hack' => Issue::LEVEL_WARNING,
-            ]
-        ]);
-
-        $ensureArray = function (Options $options, $value) {
-            return is_array($value) ? $value : [$value];
-        };
-        $resolver->setNormalizers([
-            'files'     => $ensureArray,
-            'blacklist' => $ensureArray,
-        ]);
-
-        return $resolver->resolve($options);
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
-        return 'comment_commenter';
+        return self::NAME;
     }
 
     /**
@@ -105,11 +90,5 @@ class CommentCommenterGadget extends AbstractGadget
         }, array_filter(token_get_all(file_get_contents($filename)), function ($token) {
             return (count($token) === 3) && (in_array($token[0], [372 /* T_COMMENT */, 373 /* T_DOC_COMMENT */]));
         }));
-    }
-
-    private function findPhpFiles($path, $files)
-    {
-        // @todo remove if tolry's method is merged
-        return glob($path . '/*.php');
     }
 }

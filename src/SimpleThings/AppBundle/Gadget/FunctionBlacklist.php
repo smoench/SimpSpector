@@ -26,7 +26,18 @@ class FunctionBlacklist extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOptions($workspace->config[self::NAME]);
+        $options = $this->prepareOptions(
+            $workspace->config[self::NAME],
+            [
+                'files'     => ['.'],
+                'blacklist' => [
+                    'die'      => 'error',
+                    'var_dump' => 'error',
+                    'echo'     => 'warning',
+                    'dump'     => 'error',
+                ],
+            ],
+            ['files', 'blacklist']);
 
         $parser    = new Parser(new Lexer());
         $visitor   = new Visitor($options['blacklist']);
@@ -55,71 +66,5 @@ class FunctionBlacklist extends AbstractGadget
     public function getName()
     {
         return self::NAME;
-    }
-
-    /**
-     * @param Workspace $workspace
-     * @param string $file
-     * @return string
-     */
-    private function cleanupFilePath(Workspace $workspace, $file)
-    {
-        return ltrim(str_replace($workspace->path, '', $file), '/');
-    }
-
-    private function findPhpFiles($path, array $folders)
-    {
-        $cwd = getcwd();
-        chdir($path);
-
-        $finder = (new Finder())
-            ->files()
-            ->name('*.php')
-            ->in($folders);
-
-        $files = array_map(
-            function ($file) {
-                return $file->getRealpath();
-            },
-            iterator_to_array($finder)
-        );
-
-        chdir($cwd);
-
-        return $files;
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     */
-    private function prepareOptions(array $options)
-    {
-        $resolver = new OptionsResolver();
-
-        $resolver->setDefaults(
-            [
-                'files'     => ['.'],
-                'blacklist' => [
-                    'die'      => 'error',
-                    'var_dump' => 'error',
-                    'echo'     => 'warning',
-                    'dump'     => 'error',
-                ],
-            ]
-        );
-
-        $normalizeArray = function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-        };
-
-        $resolver->setNormalizers(
-            [
-                'files'     => $normalizeArray,
-                'blacklist' => $normalizeArray,
-            ]
-        );
-
-        return $resolver->resolve($options);
     }
 }
