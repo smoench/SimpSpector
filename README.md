@@ -33,7 +33,7 @@ My Windows experience:
 ```bash
 cd assets
 bower install
-npm install --dev
+npm install
 gulp styles js
 
 ```
