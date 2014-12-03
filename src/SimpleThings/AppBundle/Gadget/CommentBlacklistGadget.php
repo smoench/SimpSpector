@@ -25,8 +25,8 @@ class CommentBlacklistGadget extends AbstractGadget
             [
                 'files'     => './',
                 'blacklist' => [
-                    'todo'       => Issue::LEVEL_WARNING,
-                    'dirty hack' => Issue::LEVEL_WARNING,
+                    'todo'        => Issue::LEVEL_NOTICE,
+                    'dont commit' => Issue::LEVEL_ERROR,
                 ]
             ],
             ['files', 'blacklist']
