@@ -1,4 +1,5 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -110,7 +111,7 @@
                         {% for file,list in issues %}
                             <div class="title">
                                 <div style="float: right">
-                                    <span class="ui yellow right circular label">{{ list|length }}</span>
+                                    {{ _.levels(list) }}
                                 </div>
                                 <i class="dropdown icon"></i>
                                 <i class="file icon"></i>

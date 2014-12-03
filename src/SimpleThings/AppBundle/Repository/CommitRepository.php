@@ -60,14 +60,81 @@ class CommitRepository extends EntityRepository
     }
 
     /**
-     * @param null $limit
-     * @return Commit[]
+     * @param Project $project
+     * @return Commit
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findByMaster($limit = null)
+    public function findLastSuccessInMaster(Project $project)
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.mergeRequest IS NULL')
+            ->andWhere('c.project = :project')
+            ->andWhere('c.status = :status')
             ->orderBy('c.id', 'DESC')
+            ->getQuery();
+
+        $query->setParameters(
+            [
+                'project' => $project,
+                'status'  => Commit::STATUS_SUCCESS
+            ]
+        );
+
+        $query->setMaxResults(1);
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @param Project $project
+     * @param int|null $limit
+     * @return Commit[]
+     */
+    public function findByMaster(Project $project, $limit = null)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.mergeRequest IS NULL')
+            ->andWhere('c.project = :project')
+            ->orderBy('c.id', 'DESC')
+            ->getQuery();
+
+        $query->setParameters(['project' => $project]);
+
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getResult();
+    }
+
+    /**
+     * @param int|null $limit
+     * @return Commit[]
+     */
+    public function findGlobalCommits($limit = null)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->orderBy('c.createdDate', 'DESC')
+            ->getQuery();
+
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getResult();
+    }
+
+    /**
+     * @param Project $project
+     * @param int|null $limit
+     * @return Commit[]
+     */
+    public function findCommitsByProject(Project $project, $limit = null)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.project = :project')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('project', $project)
             ->getQuery();
 
         if ($limit) {
