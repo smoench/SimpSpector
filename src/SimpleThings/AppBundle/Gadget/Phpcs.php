@@ -16,6 +16,8 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class Phpcs extends AbstractGadget
 {
+    const NAME = 'phpcs';
+
     /**
      * @param Workspace $workspace
      * @return Issue[]
@@ -23,7 +25,14 @@ class Phpcs extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOption((array)$workspace->config['phpcs']);
+        $options = $this->prepareOptions(
+            (array)$workspace->config[self::NAME],
+            [
+                'files'     => './',
+                'standards' => ['PSR1', 'PSR2']
+            ],
+            ['files', 'standards']
+        );
 
         $processBuilder = new ProcessBuilder(['phpcs', '--report=csv']);
 
@@ -58,32 +67,7 @@ class Phpcs extends AbstractGadget
      */
     public function getName()
     {
-        return 'phpcs';
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     */
-    private function prepareOption(array $options)
-    {
-        $resolver = new OptionsResolver();
-
-        $resolver->setDefaults([
-            'files'     => './',
-            'standards' => ['PSR1', 'PSR2']
-        ]);
-
-        $resolver->setNormalizers([
-            'files'     => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-            'standards' => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-        ]);
-
-        return $resolver->resolve($options);
+        return self::NAME;
     }
 
     /**
@@ -98,7 +82,7 @@ class Phpcs extends AbstractGadget
 
         $result = [];
         foreach ($lines as $line) {
-            if (!$line) {
+            if ( ! $line) {
                 continue;
             }
 
@@ -115,7 +99,7 @@ class Phpcs extends AbstractGadget
      */
     private function createIssue(Workspace $workspace, array $data)
     {
-        $issue = new Issue($data['message'], 'phpcs');
+        $issue = new Issue($data['message'], self::NAME);
         $issue->setFile($this->cleanupFilePath($workspace, $data['file']));
         $issue->setLine($data['line']);
 
@@ -135,15 +119,5 @@ class Phpcs extends AbstractGadget
         ]);
 
         return $issue;
-    }
-
-    /**
-     * @param Workspace $workspace
-     * @param string $file
-     * @return string
-     */
-    private function cleanupFilePath(Workspace $workspace, $file)
-    {
-        return ltrim(str_replace($workspace->path, '', $file), '/');
     }
 }

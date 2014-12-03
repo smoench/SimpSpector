@@ -17,6 +17,8 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
  */
 class Phpmd extends AbstractGadget
 {
+    const NAME = 'phpmd';
+
     /**
      * @param Workspace $workspace
      * @return Issue[]
@@ -24,7 +26,14 @@ class Phpmd extends AbstractGadget
      */
     public function run(Workspace $workspace)
     {
-        $options = $this->prepareOption((array)$workspace->config['phpmd']);
+        $options = $this->prepareOptions(
+            (array)$workspace->config[self::NAME],
+            [
+                'files'    => './',
+                'rulesets' => ['codesize', 'unusedcode']
+            ],
+            ['files', 'rulesets']
+        );
 
         $processBuilder = new ProcessBuilder(['phpmd']);
         $processBuilder->add(implode(',', $options['files']));
@@ -40,7 +49,7 @@ class Phpmd extends AbstractGadget
 
         $result = $this->convertFromXmlToArray($output);
 
-        if (!isset($result['file']) || !is_array($result['file'])) {
+        if ( ! isset($result['file']) || ! is_array($result['file'])) {
             return [];
         }
 
@@ -63,32 +72,7 @@ class Phpmd extends AbstractGadget
      */
     public function getName()
     {
-        return 'phpmd';
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     */
-    private function prepareOption(array $options)
-    {
-        $resolver = new OptionsResolver();
-
-        $resolver->setDefaults([
-            'files'    => './',
-            'rulesets' => ['codesize', 'unusedcode']
-        ]);
-
-        $resolver->setNormalizers([
-            'files'    => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-            'rulesets' => function (Options $options, $value) {
-                return is_array($value) ? $value : [$value];
-            },
-        ]);
-
-        return $resolver->resolve($options);
+        return self::NAME;
     }
 
     /**
@@ -110,7 +94,7 @@ class Phpmd extends AbstractGadget
      */
     private function createIssue(Workspace $workspace, $file, array $data)
     {
-        $issue = new Issue(trim($data['#']), 'phpmd', Issue::LEVEL_WARNING);
+        $issue = new Issue(trim($data['#']), self::NAME, Issue::LEVEL_WARNING);
         $issue->setFile($this->cleanupFilePath($workspace, $file));
         $issue->setLine($data['@beginline']);
 
@@ -122,15 +106,5 @@ class Phpmd extends AbstractGadget
         ]);
 
         return $issue;
-    }
-
-    /**
-     * @param Workspace $workspace
-     * @param string $file
-     * @return string
-     */
-    private function cleanupFilePath(Workspace $workspace, $file)
-    {
-        return ltrim(str_replace($workspace->path, '', $file), '/');
     }
 }

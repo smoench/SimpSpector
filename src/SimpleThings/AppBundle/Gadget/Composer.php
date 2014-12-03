@@ -15,6 +15,8 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class Composer extends AbstractGadget
 {
+    const NAME = 'composer';
+
     /**
      * @var string
      */
@@ -53,7 +55,7 @@ class Composer extends AbstractGadget
             return [];
         }
 
-        $issue = new Issue('you have a composer problem', 'composer', Issue::LEVEL_CRITICAL);
+        $issue = new Issue('you have a composer problem', self::NAME, Issue::LEVEL_CRITICAL);
         $issue->setFile('composer.json');
         $issue->setExtraInformation([
             'output'      => $process->getOutput(),
@@ -68,7 +70,7 @@ class Composer extends AbstractGadget
      */
     public function getName()
     {
-        return 'composer';
+        return self::NAME;
     }
 
     /**
