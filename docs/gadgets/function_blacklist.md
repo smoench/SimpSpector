@@ -1,4 +1,4 @@
-Function Blacklist (function_blacklist)
+Function Blacklist Gadget (function_blacklist)
 =======================================
 
 This gadget checks for blacklisted functions and adds issues for every occurence. The error level can be configured for every function individually.

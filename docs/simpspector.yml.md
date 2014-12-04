@@ -1,3 +1,8 @@
+configuring projects to use SimpSpector
+=======================================
+
+You can tell SimpSpector what tests to run on your project by placing a `simpspector.yml` configuration file in your project's root folder.
+
 simpspector.yml configuration file
 ==================================
 
