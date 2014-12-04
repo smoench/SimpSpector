@@ -3,7 +3,10 @@
 
     {% if groups.level is defined %}
         {% for level,issues in groups.level %}
-            <span class="ui label {{ issues|first|level_color }} tooltip" title="{{ level }}">{{ issues|length }}</span>
+            <span class="ui label {{ issues|first|level_color }} tooltip" title="{{ level }}">
+                <i class="{{ issues|first|level_icon }} icon"></i>
+                {{ issues|length }}
+            </span>
         {% endfor %}
     {% endif %}
 {% endmacro %}

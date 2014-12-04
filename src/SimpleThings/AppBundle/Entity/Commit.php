@@ -155,7 +155,11 @@ class Commit
      */
     public function getProject()
     {
-        return $this->project;
+        if ($this->project) {
+            return $this->project;
+        }
+
+        return $this->getMergeRequest()->getProject(); // todo remove
     }
 
     /**

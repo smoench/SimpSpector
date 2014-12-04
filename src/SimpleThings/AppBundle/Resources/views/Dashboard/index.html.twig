@@ -1,55 +1,67 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
 
 {% block content %}
-<div class="row">
-    <div class="column wide sixteen">
-        <div class="ui steps">
-            <a class="step active">
-                <div class="content">
-                    <div class="title"> <i class="icon home"></i> Home</div>
-                    <div class="description">... where the <i class="icon heart"></i> is</div>
-                </div>
-            </a>
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                <a class="step active">
+                    <div class="content">
+                        <div class="title"><i class="icon home"></i> Home</div>
+                        <div class="description">... where the <i class="icon heart"></i> is</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="column wide sixteen">
-        <div class="ui segment">
-            <h3 class="ui header">
-                <i class="icon cubes inverted circular"></i> Projects
-            </h3>
-            <table class="ui table">
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>id</th>
-                        <th>Name</th>
-                        <th>issues</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for project in projects %}
-                    <tr>
-                        <td>
-                            <a class="ui animated button" href="{{ path('project_show', {id: project.id}) }}">
-                                <div class="hidden content">show</div>
-                                <div class="visible content">
-                                    <i class="search icon"></i>
-                                </div>
-                            </a>
-                        </td>
-                        <td>
-                            {{ project.id }}
-                        </td>
-                        <td>{{ project.name }}</td>
-                        <td>{{ (project.commits|last).issues|length }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+                    <a class="item active" data-tab="newsstream">
+                        <i class="rss icon"></i> Newsstream
+                    </a>
+                    <a class="item" data-tab="projects">
+                        <i class="cubes icon"></i> Projects
+                    </a>
+                </div>
+
+                <div class="ui tab active" data-tab="newsstream">
+                    {% include 'SimpleThingsAppBundle::feed.html.twig' with {commits: commits} %}
+                </div>
+
+                <div class="ui tab" data-tab="projects">
+                    <table class="ui table">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Name</th>
+                            <th>Issues</th>
+                            <th>Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for project in projects %}
+                            <tr>
+                                <td>
+                                    <a class="ui animated button" href="{{ path('project_show', {id: project.id}) }}">
+                                        <div class="hidden content">show</div>
+                                        <div class="visible content">
+                                            <i class="search icon"></i>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>{{ project.name }}</td>
+                                <td>{{ _.levels((project.commits|last).issues) }}</td>
+                                <td>-</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

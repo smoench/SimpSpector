@@ -45,7 +45,8 @@ class UtilExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'level_color' => new \Twig_SimpleFilter('level_color', [$this, 'colorLevel'])
+            'level_color' => new \Twig_SimpleFilter('level_color', [$this, 'colorLevel']),
+            'level_icon'  => new \Twig_SimpleFilter('level_icon', [$this, 'iconLevel'])
         ];
     }
 
@@ -55,20 +56,29 @@ class UtilExtension extends \Twig_Extension
      */
     public function groupIssues($issues)
     {
-        $groups = [
-            'gadget' => [],
-            'level'  => []
+        $gadgets = [];
+        $levels  = [
+            Issue::LEVEL_NOTICE   => [],
+            Issue::LEVEL_WARNING  => [],
+            Issue::LEVEL_ERROR    => [],
+            Issue::LEVEL_CRITICAL => []
         ];
 
         foreach ($issues as $issue) {
-            $groups['gadget'][$issue->getGadget()][] = $issue;
-            $groups['level'][$issue->getLevel()][]   = $issue;
+            $gadgets[$issue->getGadget()][] = $issue;
+            $levels[$issue->getLevel()][]   = $issue;
         }
 
-        ksort($groups['gadget']);
-        ksort($groups['level']);
+        ksort($gadgets);
 
-        return $groups;
+        $levels = array_filter($levels, function ($array) {
+            return !empty($array);
+        });
+
+        return [
+            'gadget' => $gadgets,
+            'level'  => $levels
+        ];
     }
 
     /**
@@ -86,6 +96,24 @@ class UtilExtension extends \Twig_Extension
                 return 'orange';
             case Issue::LEVEL_CRITICAL:
                 return 'red';
+        }
+    }
+
+    /**
+     * @param Issue $issue
+     * @return string
+     */
+    public function iconLevel(Issue $issue)
+    {
+        switch ($issue->getLevel()) {
+            case Issue::LEVEL_NOTICE:
+                return 'info';
+            case Issue::LEVEL_WARNING:
+                return 'warning';
+            case Issue::LEVEL_ERROR:
+                return 'bug';
+            case Issue::LEVEL_CRITICAL:
+                return 'fire';
         }
     }
 

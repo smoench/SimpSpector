@@ -114,7 +114,7 @@ class CommitRepository extends EntityRepository
     public function findGlobalCommits($limit = null)
     {
         $query = $this->createQueryBuilder('c')
-            ->orderBy('c.createdDate', 'DESC')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery();
 
         if ($limit) {
