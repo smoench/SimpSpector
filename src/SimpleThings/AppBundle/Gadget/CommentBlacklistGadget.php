@@ -57,20 +57,7 @@ class CommentBlacklistGadget extends AbstractGadget
         $comments = $this->extract($filename);
         $issues   = [];
         foreach ($comments as $comment) {
-            foreach ($options['blacklist'] as $needle => $level) {
-                $exp = explode($needle, $comment['content']);
-                array_pop($exp);
-                $offset = 0;
-                foreach ($exp as $s) {
-                    $offset += count(explode("\n", $s)) - 1;
-
-                    $issue = new Issue(sprintf('found "%s" in a comment', $needle), $this->getName(), $level);
-                    $issue->setFile($filename);
-                    $issue->setLine($comment['line'] + $offset);
-
-                    $issues[] = $issue;
-                }
-            }
+            $issues = array_merge($issues, $this->processComment($filename, $options, $comment));
         }
 
         return $issues;
@@ -93,5 +80,33 @@ class CommentBlacklistGadget extends AbstractGadget
                 'line'    => $comment[2],
             ];
         }, $commentTokens);
+    }
+
+    /**
+     * @param $filename
+     * @param array $options
+     * @param $comment
+     * @return array
+     */
+    private function processComment($filename, array $options, $comment)
+    {
+        $issues = [];
+        foreach ($options['blacklist'] as $needle => $level) {
+            $segment = explode($needle, $comment['content']);
+            array_pop($segment); // $segment has n+1 elements if there are n $needel s.
+
+            $offset = 0;
+            foreach ($segment as $s) {
+                $offset += count(explode("\n", $s)) - 1; // calculate the exact line number of the issue
+
+                $issue = new Issue(sprintf('found "%s" in a comment', $needle), $this->getName(), $level);
+                $issue->setFile($filename);
+                $issue->setLine($comment['line'] + $offset);
+
+                $issues[] = $issue;
+            }
+        }
+
+        return $issues;
     }
 }
