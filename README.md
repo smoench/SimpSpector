@@ -16,7 +16,7 @@ TODO
 phpStorm integration
 --------------------
 * download latest version from https://github.com/zolotov/RemoteCall/downloads and place it in phpStorm plugins directory
-* open a project and test if `http://localhost:8091/?message=SomeFile.php:11` works
+* open a project and test if `http://localhost:8091/?message=composer.json:11` works
 
 
 Documentation
