@@ -13,6 +13,7 @@ My Windows experience:
   * gitlab url: `127.0.0.1:64001/api/v3/`
   * `php bin/console doctrine:database:create`
   * `php bin/console doctrine:migrations:migrate`
+  * `cd web/css && ln -s ../../assets/bower_components/semantic/dist/themes .`
 * in gitlab
   * create a test project and check it out
   * under Settings -> WebHooks check "Push events" and "Merge Request events"
