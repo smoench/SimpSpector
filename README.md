@@ -1,12 +1,12 @@
 SimpSpector
 ===========
 
-**ALPHA** SimpSpector integrates with gitlab and inspects your code, using SimpSpector Gadgets (get it?)
+**ALPHA** SimpSpector integrates with gitlab (and in the future possible github and other providers) and inspects your code, using SimpSpector Gadgets (get it?)
 
-![Image](../master/docs/dashboard.png?raw=true)
-![Image](../master/docs/project.png?raw=true)
-![Image](../master/docs/commit.png?raw=true)
-![Image](../master/docs/commit2.png?raw=true)
+![Image](docs/img/dashboard.png?raw=true)
+![Image](docs/img/project.png?raw=true)
+![Image](docs/img/commit.png?raw=true)
+![Image](docs/img/commit2.png?raw=true)
 
 
 Install Development Environment
@@ -44,3 +44,7 @@ phpStorm integration
 * open a project and test if `http://localhost:8091/?message=SomeFile.php:11` works
 
 
+project configuration for SimpSpector
+-------------------------------------
+
+You can tell SimpSpector what tests to run on your project by placing a [simpspector.yml](docs/simpspector.yml.md) configuration file in your project's root folder.
