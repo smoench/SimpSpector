@@ -20,9 +20,9 @@ My Windows experience:
 * install assets:
 
 ```bash
-cd assets
-bower install
-npm install
-gulp styles js
+$ cd assets
+$ bower install
+$ npm install
+$ gulp styles js
 ```
 
