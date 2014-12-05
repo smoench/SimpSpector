@@ -1,0 +1,39 @@
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>&nbsp;</th>
+        <th>revision</th>
+        <th>issues</th>
+        <th>status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for commit in commits %}
+        <tr>
+            <td>
+                <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
+                    <div class="hidden content">show</div>
+                    <div class="visible content">
+                        <i class="search icon"></i>
+                    </div>
+                </a>
+            </td>
+            <td>{{ commit.revision }}</td>
+            <td>{{ _.levels(commit.issues) }}</td>
+            <td>
+                {% if commit.status == constant('STATUS_NEW', commit) %}
+                    <span class="ui label">New</span>
+                {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                    <span class="ui yellow label">Proccess</span>
+                {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                    <span class="ui green label">Success</span>
+                {% else %}
+                    <span class="ui red label">Error</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

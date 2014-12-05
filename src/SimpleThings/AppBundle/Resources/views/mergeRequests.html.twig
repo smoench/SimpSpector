@@ -1,0 +1,36 @@
+<table class="ui table">
+
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Issues</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for merge_request in merge_requests %}
+        <tr>
+            <td>
+                <a class="ui animated button" href="{{ path('mergerequest_show', {id: merge_request.id}) }}">
+                    <div class="hidden content">show</div>
+                    <div class="visible content">
+                        <i class="search icon"></i>
+                    </div>
+                </a>
+            </td>
+            <td>{{ merge_request.name }}</td>
+            <td>{{ _.levels((merge_request.commits|first).issues) }}</td>
+            <td>
+                {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
+                    <span class="ui green label">Open</span>
+                {% elseif merge_request.status == constant('STATUS_MERGED', merge_request) %}
+                    <span class="ui purple label">Merged</span>
+                {% else %}
+                    <span class="ui red label">Closed</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

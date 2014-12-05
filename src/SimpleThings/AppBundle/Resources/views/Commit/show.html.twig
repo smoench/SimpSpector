@@ -1,4 +1,5 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -104,13 +105,13 @@
         <div class="row">
             <div class="column wide sixteen">
                 <div class="ui segment">
-                    <h3 class="ui header dividing">Issues ({{ commit.issues|length }})</h3>
+                    <h3 class="ui header dividing">Issues {{ _.levels(commit.issues) }}</h3>
 
                     <div class="ui styled accordion">
                         {% for file,list in issues %}
                             <div class="title">
                                 <div style="float: right">
-                                    <span class="ui yellow right circular label">{{ list|length }}</span>
+                                    {{ _.levels(list) }}
                                 </div>
                                 <i class="dropdown icon"></i>
                                 <i class="file icon"></i>
@@ -118,27 +119,9 @@
                             </div>
                             <div class="content">
                                 {% for issue in list %}
-                                    <div class="ui top attached
-                                        {% if issue.level == constant('LEVEL_NOTICE', issue) %}
-                                        blue
-                                        {% elseif issue.level == constant('LEVEL_WARNING', issue) %}
-                                        yellow
-                                        {% elseif issue.level == constant('LEVEL_ERROR', issue) %}
-                                        orange
-                                        {% elseif issue.level == constant('LEVEL_CRITICAL', issue) %}
-                                        red
-                                        {% endif %}
-                                        message">
+                                    <div class="ui top attached {{ issue|level_color }} message">
                                         <h4>
-                                            {% if issue.level == constant('LEVEL_NOTICE', issue) %}
-                                                <i class="info icon"></i>
-                                            {% elseif issue.level == constant('LEVEL_WARNING', issue) %}
-                                                <i class="warning icon"></i>
-                                            {% elseif issue.level == constant('LEVEL_ERROR', issue) %}
-                                                <i class="bug icon"></i>
-                                            {% elseif issue.level == constant('LEVEL_CRITICAL', issue) %}
-                                                <i class="fire icon"></i>
-                                            {% endif %}
+                                            <i class="{{ issue|level_icon }} icon"></i>
                                             {{ issue.gadget|upper }}
                                             {{ issue.level|upper }}
                                         </h4>

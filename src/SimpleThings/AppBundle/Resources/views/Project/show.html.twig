@@ -1,4 +1,5 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -21,101 +22,67 @@
     </div>
 
     <div class="row">
-        <div class="column wide sixteen">
+        <div class="eleven wide column">
             <div class="ui segment">
-                <h3 class="ui header">
-                    <i class="icon alternate sitemap inverted circular"></i>
-                    Master
-                </h3>
-                <table class="ui table">
-                    <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>id</th>
-                        <th>revision</th>
-                        <th>issues</th>
-                        <th>status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for commit in master_commits %}
-                        <tr>
-                            <td>
-                                <a class="ui animated button" href="{{ path('commit_show', {id: commit.id}) }}">
-                                    <div class="hidden content">show</div>
-                                    <div class="visible content">
-                                        <i class="search icon"></i>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>
-                                {{ commit.id }}
-                            </td>
-                            <td>{{ commit.revision }}</td>
-                            <td>{{ commit.issues|length }}</td>
-                            <td>
-                                {% if commit.status == constant('STATUS_NEW', commit) %}
-                                    <span class="ui label">New</span>
-                                {% elseif commit.status == constant('STATUS_RUN', commit) %}
-                                    <span class="ui yellow label">Proccess</span>
-                                {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
-                                    <span class="ui green label">Success</span>
-                                {% else %}
-                                    <span class="ui red label">Error</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
 
-                <a href="{{ path('project_master', {id: project.id}) }}">See more</a>
+                <div class="ui secondary pointing menu">
+                    <a class="item active" data-tab="newsstream">
+                        <i class="rss icon"></i> Newsstream
+                    </a>
+                    {% if merge_requests|length > 0 %}
+                        <a class="item" data-tab="mergerequest">
+                            <i class="alternate share icon"></i> Merge Request
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="ui tab active" data-tab="newsstream">
+                    {% include 'SimpleThingsAppBundle::feed.html.twig' with {commits: project_commits} %}
+                </div>
+
+                <div class="ui tab" data-tab="mergerequest">
+                    {% include 'SimpleThingsAppBundle::mergeRequests.html.twig' with {merge_requests: merge_requests} %}
+                </div>
+
+            </div>
+        </div>
+        <div class="five wide column">
+
+            <div class="ui header attached top small">
+                <i class="icon alternate cubes"></i>
+                {{ project.name }}
             </div>
 
-            <div class="ui segment">
-                <h3 class="ui header">
-                    <i class="icon alternate share inverted circular"></i> MergeRequests
-                </h3>
-                <table class="ui table">
-                    <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>id</th>
-                        <th>title</th>
-                        <th>issues</th>
-                        <th>status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for merge_request in merge_requests %}
-                        <tr>
-                            <td>
-                                <a class="ui animated button"
-                                   href="{{ path('mergerequest_show', {id: merge_request.id}) }}">
-                                    <div class="hidden content">show</div>
-                                    <div class="visible content">
-                                        <i class="search icon"></i>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>
-                                {{ merge_request.id }}
-                            </td>
-                            <td>{{ merge_request.name }}</td>
-                            <td>{{ (merge_request.commits|last).issues|length }}</td>
-                            <td>
-                                {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
-                                    <span class="ui green label">Open</span>
-                                {% elseif merge_request.status == constant('STATUS_MERGED', merge_request) %}
-                                    <span class="ui purple label">Merged</span>
-                                {% else %}
-                                    <span class="ui red label">Closed</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="ui segment attached center aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="trophy icon"></i>
+                        {{ score(master_commit).number }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui segment attached">
+                {{ _.levels(master_commit.issues) }}
+            </div>
+
+            <div class="ui segment attached">
+                {{ _.gadgets(master_commit.issues) }}
+            </div>
+
+
+            <div class="ui segment attached">
+                Last master commit
+                <a href="{{ path('commit_show', {'id': master_commit.id}) }}">
+                    {{ master_commit.revision|slice(0, 8) }}
+                </a>
+            </div>
+
+            <div class="ui segment attached">
+                <a href="{{ path('project_master', {id: project.id}) }}">
+                    <i class="sitemap icon"></i>
+                    See master commits
+                </a>
             </div>
         </div>
     </div>

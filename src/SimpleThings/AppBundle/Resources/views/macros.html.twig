@@ -1,0 +1,22 @@
+{% macro levels(issues) %}
+    {% set groups = group_issues(issues) %}
+
+    {% if groups.level is defined %}
+        {% for level,issues in groups.level %}
+            <span class="ui label {{ issues|first|level_color }} tooltip" title="{{ level }}">
+                <i class="{{ issues|first|level_icon }} icon"></i>
+                {{ issues|length }}
+            </span>
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% macro gadgets(issues) %}
+    {% set groups = group_issues(issues) %}
+
+    {% if groups.gadget is defined %}
+        {% for gadget in groups.gadget|keys %}
+            <span class="ui label">{{ gadget }}</span>
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

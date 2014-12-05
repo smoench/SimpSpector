@@ -20,32 +20,47 @@ class ProjectController extends Controller
 {
     /**
      * @Route("/{id}/show", name="project_show")
+     *
+     * @param Project $project
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Project $project)
     {
         $mergeRequestRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\MergeRequest');
         $commitRepository       = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
 
-        $mergeRequests = $mergeRequestRepository->findBy(['project' => $project], ['id' => 'DESC']);
-        $masterCommits = $commitRepository->findByMaster(3);
+        $mergeRequests = $mergeRequestRepository->findBy(['project' => $project], [
+            'status' => 'DESC',
+            'id'     => 'DESC'
+        ]);
+
+        if (!$masterCommit = $commitRepository->findLastSuccessInMaster($project)) {
+            $masterCommit = $commitRepository->findLastInMaster($project);
+        }
+
+        $projectCommits = $commitRepository->findCommitsByProject($project);
 
         return $this->render(
             "SimpleThingsAppBundle:Project:show.html.twig",
             [
-                'project'        => $project,
-                'merge_requests' => $mergeRequests,
-                'master_commits' => $masterCommits
+                'project'         => $project,
+                'merge_requests'  => $mergeRequests,
+                'master_commit'   => $masterCommit,
+                'project_commits' => $projectCommits
             ]
         );
     }
 
     /**
      * @Route("/{id}/master", name="project_master")
+     *
+     * @param Project $project
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function masterAction(Project $project)
     {
         $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
-        $commits          = $commitRepository->findByMaster();
+        $commits          = $commitRepository->findByMaster($project);
 
         $markdown = $this->get('simple_things_app.badge_generator')->getMarkdownForProject($project);
 

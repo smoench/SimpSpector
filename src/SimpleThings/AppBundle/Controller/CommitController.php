@@ -18,6 +18,9 @@ class CommitController extends Controller
 {
     /**
      * @Route("/{id}/show", name="commit_show")
+     *
+     * @param Commit $commit
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Commit $commit)
     {
