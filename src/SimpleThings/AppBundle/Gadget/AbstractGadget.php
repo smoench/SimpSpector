@@ -85,7 +85,7 @@ abstract class AbstractGadget implements GadgetInterface
         $resolver = new OptionsResolver();
         $resolver->setDefaults($defaults);
 
-        $normalizers = [[]];
+        $normalizers = [];
         foreach ($fieldsToNormalize as $field) {
             $normalizers[$field] = function (Options $options, $value) {
                 return is_array($value) ? $value : [$value];
