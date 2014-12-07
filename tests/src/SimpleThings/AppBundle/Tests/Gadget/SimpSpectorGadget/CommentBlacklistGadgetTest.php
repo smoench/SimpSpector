@@ -8,7 +8,7 @@ use SimpleThings\AppBundle\Workspace;
 /**
  * @author Lars Wallenborn <lars@wallenborn.net>
  */
-class CommentCommentatorGadgetTest extends \PHPUnit_Framework_TestCase
+class CommentBlacklistGadgetTest extends \PHPUnit_Framework_TestCase
 {
     /** @var CommentBlacklistGadget */
     private $OUT;
@@ -23,7 +23,7 @@ class CommentCommentatorGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace = new Workspace();
 
         $workspace->path   = __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures';
-        $workspace->config = ['comment_commenter' => []];
+        $workspace->config = ['comment_blacklist' => []];
 
         $issues = $this->OUT->run($workspace);
 
