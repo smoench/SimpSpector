@@ -52,7 +52,7 @@ abstract class AbstractGadget implements GadgetInterface
      * @param string $pattern
      * @return array
      */
-    protected function findPhpFiles($path, array $folders, $pattern = '*.php')
+    protected function findFiles($path, array $folders, $pattern = '*.php')
     {
         $cwd = getcwd();
         chdir($path);

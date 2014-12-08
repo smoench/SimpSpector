@@ -32,7 +32,7 @@ class CommentBlacklistGadget extends AbstractGadget
             ['files', 'blacklist']
         );
         $issues  = [];
-        foreach ($this->findPhpFiles($workspace->path, $options['files']) as $filename) {
+        foreach ($this->findFiles($workspace->path, $options['files']) as $filename) {
             $issues = array_merge($this->processFile($filename, $options), $issues);
         }
 

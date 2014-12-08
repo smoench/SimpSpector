@@ -45,7 +45,7 @@ class FunctionBlacklist extends AbstractGadget
 
         $traverser->addVisitor($visitor);
 
-        $files = $this->findPhpFiles($workspace->path, $options['files']);
+        $files = $this->findFiles($workspace->path, $options['files']);
 
         foreach ($files as $file) {
             try {
