@@ -45,7 +45,7 @@ class RequestHandler
      * @param Notifier $notifier
      * @param LoggerInterface $logger
      */
-    function __construct(
+    public function __construct(
         EntityManager $em,
         Client $client,
         Notifier $notifier,
