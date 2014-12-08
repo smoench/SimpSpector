@@ -6,7 +6,7 @@ You can tell SimpSpector what tests to run on your project by placing a `simpspe
 simpspector.yml configuration file
 ----------------------------------
 
-Every **SimpSpector Gadget** posesses a short name, which is needed for activating the gadget. Simple add a key withe short name to the yml file.
+Every **SimpSpector Gadget** posesses a short name, which is needed for activating the gadget. Simple add a key with short name to the yml file.
 
 sample config:
 
