@@ -10,4 +10,8 @@ function_blacklist:
     die: notice
     echo: notice
     var_dump: error
-
+comment_blacklist:
+  files: src/
+  blacklist:
+    todo: notice
+    "dont commit": error

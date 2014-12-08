@@ -3,7 +3,7 @@
     "type": "project",
     "description": "SimpleThings Symfony Standard Edition",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {"": "src/"}
     },
     "require": {
         "php": ">=5.4",
@@ -28,7 +28,8 @@
         "nikic/php-parser": "~1.0.2"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "~4.0"
     },
     "scripts": {
         "post-install-cmd": [
