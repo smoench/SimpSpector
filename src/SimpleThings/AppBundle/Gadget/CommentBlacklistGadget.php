@@ -14,6 +14,9 @@ class CommentBlacklistGadget extends AbstractGadget
 {
     const NAME = 'comment_blacklist';
 
+    const T_COMMENT_TOKEN     = 372;
+    const T_DOC_COMMENT_TOKEN = 373;
+
     /**
      * @param Workspace $workspace
      * @return Issue[]
@@ -71,7 +74,7 @@ class CommentBlacklistGadget extends AbstractGadget
     {
         $allTokens     = token_get_all(file_get_contents($filename));
         $commentTokens = array_filter($allTokens, function ($token) {
-            return (count($token) === 3) && (in_array($token[0], [372 /* T_COMMENT */, 373 /* T_DOC_COMMENT */]));
+            return (count($token) === 3) && (in_array($token[0], [self::T_COMMENT_TOKEN, self::T_DOC_COMMENT_TOKEN]));
         });
 
         return array_map(function ($comment) {
