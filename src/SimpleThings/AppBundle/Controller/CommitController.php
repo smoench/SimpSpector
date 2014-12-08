@@ -28,7 +28,7 @@ class CommitController extends Controller
             ->groupBy(function (Issue $issue) { return $issue->getFile(); });
 
         return $this->render(
-            "SimpleThingsAppBundle:Commit:show.html.twig",
+            'SimpleThingsAppBundle:Commit:show.html.twig',
             ['commit' => $commit, 'issues' => $issues]
         );
     }
