@@ -94,18 +94,14 @@ class CommentBlacklistGadget extends AbstractGadget
     private function processComment($filename, array $options, $comment)
     {
         $issues = [];
-        foreach ($options['blacklist'] as $needle => $level) {
-            $segment = explode($needle, $comment['content']);
-            array_pop($segment); // $segment has n+1 elements if there are n $needel s.
-
-            $offset = 0;
-            foreach ($segment as $s) {
-                $offset += count(explode("\n", $s)) - 1; // calculate the exact line number of the issue
-
-                $issue = new Issue(sprintf('found "%s" in a comment', $needle), $this->getName(), $level);
+        foreach (explode("\n", $comment['content']) as $lineOffset => $line) {
+            foreach ($options['blacklist'] as $blacklistedWord => $errorLevel) {
+                if (stristr($line, $blacklistedWord) === false) {
+                    continue;
+                }
+                $issue = new Issue(sprintf('found "%s" in a comment', $blacklistedWord), $this->getName(), $errorLevel);
                 $issue->setFile($filename);
-                $issue->setLine($comment['line'] + $offset);
-
+                $issue->setLine($comment['line'] + $lineOffset);
                 $issues[] = $issue;
             }
         }
