@@ -20,7 +20,7 @@ class Generator
     /**
      * @param Router $router
      */
-    function __construct(Router $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }

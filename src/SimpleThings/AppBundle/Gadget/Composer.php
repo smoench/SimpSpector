@@ -25,7 +25,7 @@ class Composer extends AbstractGadget
     /**
      * @param string $composerHome
      */
-    function __construct($composerHome = '/tmp/.composer')
+    public function __construct($composerHome = '/tmp/.composer')
     {
         $this->composerHome = $composerHome;
     }
