@@ -9,7 +9,7 @@
             <div class="content">
                 <div class="date">{{ commit.createdAt|date('H:i:s d.m.Y') }}</div>
 
-                Project <a href="{{ path('project_show', {id: commit.project.id}) }}">{{ commit.project.name }}</a> have
+                Project <a href="{{ path('project_show', {id: commit.project.id}) }}">{{ commit.project.name }}</a> has
 
                 {% if commit.status == constant('STATUS_NEW', commit) %}
                     a new commit
