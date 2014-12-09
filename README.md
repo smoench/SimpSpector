@@ -1,6 +1,8 @@
 SimpSpector
 ===========
 
+[![Build Status](https://travis-ci.org/simplethings/SimpSpector.svg)](https://travis-ci.org/simplethings/SimpSpector)
+
 **ALPHA** SimpSpector integrates with gitlab (and in the future possible github and other providers) and inspects your code, using SimpSpector Gadgets (get it?)
 
 ![Image](docs/img/dashboard.png?raw=true)
