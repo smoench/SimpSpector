@@ -32,7 +32,7 @@ class Phpcs extends AbstractGadget
                 'standards'  => ['PSR1', 'PSR2'],
                 'extensions' => ['php']
             ],
-            ['files', 'standards']
+            ['files', 'standards', 'extensions']
         );
 
         $processBuilder = new ProcessBuilder(['phpcs', '--report=csv']);
