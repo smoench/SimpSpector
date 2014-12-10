@@ -7,6 +7,8 @@ namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\Repository;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Logger\NullLogger;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -27,11 +29,14 @@ class GadgetExecutor
     }
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Issue[]
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger = null)
     {
+        $logger = $logger ?: new NullLogger();
+
         $gadgets = $this->repository->getSortedGadgets();
         $issues = [];
 
@@ -40,7 +45,7 @@ class GadgetExecutor
                 continue;
             }
 
-            $issues = array_merge($issues, $gadget->run($workspace));
+            $issues = array_merge($issues, $gadget->run($workspace, $logger));
         }
 
         return $issues;

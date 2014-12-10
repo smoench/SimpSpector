@@ -6,9 +6,9 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -19,11 +19,11 @@ class Phpcs extends AbstractGadget
     const NAME = 'phpcs';
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Issue[]
-     * @throws \Exception
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
@@ -49,7 +49,16 @@ class Phpcs extends AbstractGadget
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
 
-        $process->run();
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                if (Process::ERR === $type) {
+                    $logger->writeln('ERR > ' . $buffer);
+                } else {
+                    $logger->writeln('OUT > ' . $buffer);
+                }
+            }
+        );
+
         $output = $process->getOutput();
 
         $result = $this->convertFromCsvToArray($output);
@@ -82,7 +91,7 @@ class Phpcs extends AbstractGadget
 
         $result = [];
         foreach ($lines as $line) {
-            if ( ! $line) {
+            if (!$line) {
                 continue;
             }
 
@@ -94,7 +103,7 @@ class Phpcs extends AbstractGadget
 
     /**
      * @param Workspace $workspace
-     * @param array $data
+     * @param array     $data
      * @return Issue
      */
     private function createIssue(Workspace $workspace, array $data)
@@ -112,11 +121,13 @@ class Phpcs extends AbstractGadget
                 break;
         }
 
-        $issue->setExtraInformation([
-            'source'   => $data['source'],
-            'severity' => $data['severity'],
-            'column'   => $data['column']
-        ]);
+        $issue->setExtraInformation(
+            [
+                'source'   => $data['source'],
+                'severity' => $data['severity'],
+                'column'   => $data['column']
+            ]
+        );
 
         return $issue;
     }

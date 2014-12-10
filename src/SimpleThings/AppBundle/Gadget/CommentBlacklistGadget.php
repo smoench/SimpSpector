@@ -3,9 +3,8 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Lars Wallenborn <lars@wallenborn.net>
@@ -18,10 +17,11 @@ class CommentBlacklistGadget extends AbstractGadget
     const T_DOC_COMMENT_TOKEN = 373;
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Issue[]
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
@@ -52,7 +52,7 @@ class CommentBlacklistGadget extends AbstractGadget
 
     /**
      * @param string $filename
-     * @param array $options
+     * @param array  $options
      * @return Issue[]
      */
     private function processFile($filename, array $options)
@@ -73,22 +73,31 @@ class CommentBlacklistGadget extends AbstractGadget
     private function extract($filename)
     {
         $allTokens     = token_get_all(file_get_contents($filename));
-        $commentTokens = array_filter($allTokens, function ($token) {
-            return (count($token) === 3) && (in_array($token[0], [self::T_COMMENT_TOKEN, self::T_DOC_COMMENT_TOKEN]));
-        });
+        $commentTokens = array_filter(
+            $allTokens,
+            function ($token) {
+                return (count($token) === 3) && (in_array(
+                    $token[0],
+                    [self::T_COMMENT_TOKEN, self::T_DOC_COMMENT_TOKEN]
+                ));
+            }
+        );
 
-        return array_map(function ($comment) {
-            return [
-                'content' => $comment[1],
-                'line'    => $comment[2],
-            ];
-        }, $commentTokens);
+        return array_map(
+            function ($comment) {
+                return [
+                    'content' => $comment[1],
+                    'line'    => $comment[2],
+                ];
+            },
+            $commentTokens
+        );
     }
 
     /**
-     * @param $filename
+     * @param       $filename
      * @param array $options
-     * @param $comment
+     * @param       $comment
      * @return array
      */
     private function processComment($filename, array $options, $comment)

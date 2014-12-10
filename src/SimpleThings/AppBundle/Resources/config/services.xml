@@ -18,11 +18,16 @@
             <argument type="service" id="router" />
         </service>
 
+        <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
+            <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
+        </service>
+
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
             <argument type="service" id="simple_things_app.git_checkout"/>
             <argument type="service" id="simple_things_app.config_loader"/>
             <argument type="service" id="simple_things_app.gadget_executor"/>
             <argument type="service" id="simple_things_app.syntax_highlighter"/>
+            <argument type="service" id="simple_things_app.logger.factory"/>
         </service>
 
         <service id="simple_things_app.config_loader" class="SimpleThings\AppBundle\ConfigLoader" />
