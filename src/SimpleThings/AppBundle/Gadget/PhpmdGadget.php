@@ -6,9 +6,9 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -33,11 +33,12 @@ class PhpmdGadget extends AbstractGadget
     }
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Result
      * @throws \Exception
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
@@ -57,7 +58,16 @@ class PhpmdGadget extends AbstractGadget
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
 
-        $process->run();
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                if (Process::ERR === $type) {
+                    $logger->writeln('ERR > ' . $buffer);
+                } else {
+                    $logger->writeln('OUT > ' . $buffer);
+                }
+            }
+        );
+
         $output = $process->getOutput();
 
         $data = $this->convertFromXmlToArray($output);
@@ -101,8 +111,8 @@ class PhpmdGadget extends AbstractGadget
 
     /**
      * @param Workspace $workspace
-     * @param string $file
-     * @param array $data
+     * @param string    $file
+     * @param array     $data
      * @return Issue
      */
     private function createIssue(Workspace $workspace, $file, array $data)
@@ -111,12 +121,14 @@ class PhpmdGadget extends AbstractGadget
         $issue->setFile($this->cleanupFilePath($workspace, $file));
         $issue->setLine($data['@beginline']);
 
-        $issue->setExtraInformation([
-            'rule'            => $data['@rule'],
-            'ruleset'         => $data['@ruleset'],
-            'externalInfoUrl' => $data['@externalInfoUrl'],
-            'priority'        => $data['@priority']
-        ]);
+        $issue->setExtraInformation(
+            [
+                'rule'            => $data['@rule'],
+                'ruleset'         => $data['@ruleset'],
+                'externalInfoUrl' => $data['@externalInfoUrl'],
+                'priority'        => $data['@priority']
+            ]
+        );
 
         return $issue;
     }

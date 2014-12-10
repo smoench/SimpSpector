@@ -3,9 +3,8 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Lars Wallenborn <lars@wallenborn.net>
@@ -15,10 +14,11 @@ class CommentBlacklistGadget extends AbstractGadget
     const NAME = 'comment_blacklist';
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Result
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
@@ -73,16 +73,25 @@ class CommentBlacklistGadget extends AbstractGadget
     private function extract($filename)
     {
         $allTokens     = token_get_all(file_get_contents($filename));
-        $commentTokens = array_filter($allTokens, function ($token) {
-            return (count($token) === 3) && (in_array($token[0], [T_COMMENT, T_DOC_COMMENT]));
-        });
+        $commentTokens = array_filter(
+            $allTokens,
+            function ($token) {
+                return (count($token) === 3) && (in_array(
+                    $token[0],
+                    [T_COMMENT, T_DOC_COMMENT]
+                ));
+            }
+        );
 
-        return array_map(function ($comment) {
-            return [
-                'content' => $comment[1],
-                'line'    => $comment[2],
-            ];
-        }, $commentTokens);
+        return array_map(
+            function ($comment) {
+                return [
+                    'content' => $comment[1],
+                    'line'    => $comment[2],
+                ];
+            },
+            $commentTokens
+        );
     }
 
     /**

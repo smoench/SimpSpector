@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -20,10 +21,11 @@ interface GadgetInterface
     public function isActive(Workspace $workspace);
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Result
      */
-    public function run(Workspace $workspace);
+    public function run(Workspace $workspace, AbstractLogger $logger);
 
     /**
      * @return string

@@ -7,6 +7,8 @@ namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\Repository;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Logger\NullLogger;
 use SimpleThings\AppBundle\Gadget\Result;
 
 /**
@@ -28,11 +30,14 @@ class GadgetExecutor
     }
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Result
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger = null)
     {
+        $logger = $logger ?: new NullLogger();
+
         $gadgets = $this->repository->getGadgets();
         $result  = new Result();
 
@@ -41,7 +46,7 @@ class GadgetExecutor
                 continue;
             }
 
-            $result->merge($gadget->run($workspace));
+            $result->merge($gadget->run($workspace, $logger));
         }
 
         return $result;

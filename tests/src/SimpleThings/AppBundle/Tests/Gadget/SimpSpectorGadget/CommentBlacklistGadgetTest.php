@@ -3,6 +3,7 @@
 namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
 
 use SimpleThings\AppBundle\Gadget\CommentBlacklistGadget;
+use SimpleThings\AppBundle\Logger\NullLogger;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -25,7 +26,7 @@ class CommentBlacklistGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace->path   = __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures';
         $workspace->config = ['comment_blacklist' => []];
 
-        $issues = $this->OUT->run($workspace)->getIssues();
+        $issues = $this->OUT->run($workspace, new NullLogger())->getIssues();
 
         $this->assertEquals(5, count($issues));
         $lineNumbers = [];

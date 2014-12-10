@@ -41,7 +41,7 @@ class GitCheckout
     {
         $workspace           = new Workspace();
         $workspace->revision = $commit->getRevision();
-        $workspace->path     = $this->baseDir . '/' . $this->createFolderName($commit);
+        $workspace->path     = $this->baseDir . '/' . Util::getUniqueIdByCommit($commit);
 
         if (file_exists($workspace->path)) {
             $this->remove($workspace);
@@ -67,16 +67,4 @@ class GitCheckout
         $fs = new Filesystem();
         $fs->remove($workspace->path);
     }
-
-    /**
-     * @return string
-     */
-    private function createFolderName(Commit $commit)
-    {
-        return sprintf(
-            "%s_%s",
-            $commit->getProject()->getId(),
-            $commit->getRevision()
-        );
-    }
-} 
+}
