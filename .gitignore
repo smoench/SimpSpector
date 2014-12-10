@@ -6,9 +6,11 @@
 /var/cache/*
 /var/logs/*
 /var/checkouts/*
+/var/job_logs/*
 !var/cache/.gitkeep
 !var/logs/.gitkeep
 !var/checkouts/.gitkeep
+!var/job_logs/.gitkeep
 /build/
 /vendor/
 /bin/*
