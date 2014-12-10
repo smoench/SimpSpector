@@ -21,7 +21,7 @@ class Score
      * @param int $number
      * @param string $color
      */
-    function __construct($number, $color)
+    public function __construct($number, $color)
     {
         $this->number = $number;
         $this->color  = $color;

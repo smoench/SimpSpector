@@ -34,7 +34,7 @@ class Notifier
      * @param Generator $generator
      * @param LoggerInterface $logger
      */
-    function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
+    public function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
     {
         $this->client    = $client;
         $this->generator = $generator;
