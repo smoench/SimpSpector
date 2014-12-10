@@ -28,10 +28,11 @@ class Phpcs extends AbstractGadget
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
             [
-                'files'     => './',
-                'standards' => ['PSR1', 'PSR2']
+                'files'      => './',
+                'standards'  => ['PSR1', 'PSR2'],
+                'extensions' => ['php']
             ],
-            ['files', 'standards']
+            ['files', 'standards', 'extensions']
         );
 
         $processBuilder = new ProcessBuilder(['phpcs', '--report=csv']);
@@ -39,6 +40,8 @@ class Phpcs extends AbstractGadget
         foreach ($options['standards'] as $standard) {
             $processBuilder->add('--standard=' . $standard);
         }
+
+        $processBuilder->add('--extensions=' . implode(',', $options['extensions']));
 
         foreach ($options['files'] as $file) {
             $processBuilder->add($file);
@@ -82,7 +85,7 @@ class Phpcs extends AbstractGadget
 
         $result = [];
         foreach ($lines as $line) {
-            if ( ! $line) {
+            if (!$line) {
                 continue;
             }
 
@@ -94,7 +97,7 @@ class Phpcs extends AbstractGadget
 
     /**
      * @param Workspace $workspace
-     * @param array $data
+     * @param array     $data
      * @return Issue
      */
     private function createIssue(Workspace $workspace, array $data)
@@ -112,11 +115,13 @@ class Phpcs extends AbstractGadget
                 break;
         }
 
-        $issue->setExtraInformation([
-            'source'   => $data['source'],
-            'severity' => $data['severity'],
-            'column'   => $data['column']
-        ]);
+        $issue->setExtraInformation(
+            [
+                'source'   => $data['source'],
+                'severity' => $data['severity'],
+                'column'   => $data['column']
+            ]
+        );
 
         return $issue;
     }
