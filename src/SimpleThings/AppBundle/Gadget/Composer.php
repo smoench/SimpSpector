@@ -54,7 +54,7 @@ class Composer extends AbstractGadget
         $process->setTimeout(3600);
         $process->setEnv(['COMPOSER_HOME' => $this->composerHome]);
 
-        $logger->writeln('CMD >' . $process->getCommandLine());
+        $logger->writeln('CMD > ' . $process->getCommandLine());
         $logger->writeln();
 
         $process->run(
