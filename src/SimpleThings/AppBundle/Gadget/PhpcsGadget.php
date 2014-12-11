@@ -66,6 +66,9 @@ class PhpcsGadget extends AbstractGadget
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
 
+        $logger->writeln('CMD >' . $process->getCommandLine());
+        $logger->writeln();
+
         $process->run(
             function ($type, $buffer) use ($logger) {
                 $logger->write($buffer);
