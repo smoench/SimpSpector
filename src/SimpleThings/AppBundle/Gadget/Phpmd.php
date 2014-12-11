@@ -46,11 +46,7 @@ class Phpmd extends AbstractGadget
 
         $process->run(
             function ($type, $buffer) use ($logger) {
-                if (Process::ERR === $type) {
-                    $logger->writeln('ERR > ' . $buffer);
-                } else {
-                    $logger->writeln('OUT > ' . $buffer);
-                }
+                $logger->write($buffer);
             }
         );
 

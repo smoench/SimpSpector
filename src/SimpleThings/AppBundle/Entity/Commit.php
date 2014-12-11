@@ -65,13 +65,6 @@ class Commit
     private $status;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $output;
-
-    /**
      * @var Issue[]
      *
      * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
@@ -184,22 +177,6 @@ class Commit
     public function setStatus($status)
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOutput()
-    {
-        return $this->output;
-    }
-
-    /**
-     * @param string $output
-     */
-    public function setOutput($output)
-    {
-        $this->output = $output;
     }
 
     /**

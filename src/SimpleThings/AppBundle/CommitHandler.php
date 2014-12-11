@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle;
 
+use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Exception\MissingSimpSpectorConfigException;
@@ -13,6 +14,11 @@ use SimpleThings\AppBundle\Logger\LoggerFactory;
  */
 class CommitHandler
 {
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
     /**
      * @var GitCheckout
      */
@@ -32,25 +38,29 @@ class CommitHandler
      * @var SyntaxHighlighter
      */
     private $highlighter;
+
     /**
      * @var LoggerFactory
      */
     private $loggerFactory;
 
     /**
-     * @param GitCheckout       $gitCheckout
-     * @param ConfigLoader      $loader
-     * @param GadgetExecutor    $gadgetExecutor
+     * @param EntityManager $em
+     * @param GitCheckout $gitCheckout
+     * @param ConfigLoader $loader
+     * @param GadgetExecutor $gadgetExecutor
      * @param SyntaxHighlighter $highlighter
-     * @param LoggerFactory     $loggerFactory
+     * @param LoggerFactory $loggerFactory
      */
     public function __construct(
+        EntityManager $em,
         GitCheckout $gitCheckout,
         ConfigLoader $loader,
         GadgetExecutor $gadgetExecutor,
         SyntaxHighlighter $highlighter,
         LoggerFactory $loggerFactory
     ) {
+        $this->em             = $em;
         $this->gitCheckout    = $gitCheckout;
         $this->gadgetExecutor = $gadgetExecutor;
         $this->configLoader   = $loader;
@@ -60,35 +70,44 @@ class CommitHandler
 
     /**
      * @param Commit $commit
+     * @return bool status
      */
     public function handle(Commit $commit)
     {
-        $workspace = $this->gitCheckout->create($commit);
         $logger = $this->loggerFactory->createLogger($commit);
 
         try {
-            $workspace->config = $this->configLoader->load($workspace);
-        } catch (\Exception $e) {
-            $issue = new Issue($e->getMessage(), 'simpspector', Issue::LEVEL_CRITICAL);
-            $issue->setCommit($commit);
-            $commit->getIssues()->add($issue);
-            if ($e instanceof MissingSimpSpectorConfigException) {
-                $issue->setFile('simpspector.yml');
-            }
+            $this->startProcess($commit);
 
-            $logger->writeln($e->getMessage());
+            $workspace = $this->gitCheckout->create($commit);
 
+            $this->loadConfiguration($commit, $workspace, $logger);
+            $this->execute($commit, $workspace, $logger);
+
+            $commit->setStatus(Commit::STATUS_SUCCESS);
+            $this->em->flush($commit);
             $this->gitCheckout->remove($workspace);
 
-            return;
-        }
+            $logger->writeln("");
+            $logger->writeln("finish :)");
 
-        $this->execute($commit, $workspace, $logger);
+        } catch (\Exception $e) {
+
+            $logger->writeln();
+            $logger->writeln(">> EXCEPTION <<");
+            $logger->writeln();
+
+            $logger->writeln($e->getMessage());
+            $logger->writeln($e->getTraceAsString());
+
+            $commit->setStatus(Commit::STATUS_ERROR);
+            $this->em->flush($commit);
+        }
     }
 
     /**
-     * @param Commit         $commit
-     * @param Workspace      $workspace
+     * @param Commit $commit
+     * @param Workspace $workspace
      * @param AbstractLogger $logger
      */
     private function execute(Commit $commit, Workspace $workspace, AbstractLogger $logger)
@@ -111,7 +130,41 @@ class CommitHandler
 
             $commit->getIssues()->add($issue);
         }
+    }
 
-        $this->gitCheckout->remove($workspace);
+    /**
+     * @param Commit $commit
+     */
+    private function startProcess(Commit $commit)
+    {
+        foreach($commit->getIssues() as $issue) {
+            $this->em->remove($issue);
+        }
+
+        $commit->getIssues()->clear();
+        $commit->setStatus(Commit::STATUS_RUN);
+
+        $this->em->flush($commit);
+    }
+
+    /**
+     * @param Commit $commit
+     * @param Workspace $workspace
+     * @throws MissingSimpSpectorConfigException
+     * @throws \Exception
+     */
+    private function loadConfiguration(Commit $commit, Workspace $workspace)
+    {
+        try {
+            $workspace->config = $this->configLoader->load($workspace);
+        } catch (MissingSimpSpectorConfigException $e) {
+
+            $issue = new Issue($e->getMessage(), 'simpspector', Issue::LEVEL_CRITICAL);
+            $issue->setCommit($commit);
+            $commit->getIssues()->add($issue);
+            $issue->setFile('simpspector.yml');
+
+            throw $e;
+        }
     }
 } 

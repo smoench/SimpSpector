@@ -20,7 +20,8 @@
                 {% if commit.mergerequest %}
                     <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
                         <div class="content">
-                            <div class="title"><i class="horizontally flipped share alternate icon"></i> MergeRequest</div>
+                            <div class="title"><i class="horizontally flipped share alternate icon"></i> MergeRequest
+                            </div>
                             <div class="description">{{ commit.mergerequest.name }}</div>
                         </div>
                     </a>
@@ -57,6 +58,11 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            setTimeout(function () {
+                location.reload();
+            }, 2000);
+        </script>
     {% elseif commit.status == constant('STATUS_ERROR', commit) %}
         <div class="row">
             <div class="column wide sixteen">
@@ -102,52 +108,38 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="column wide sixteen">
-                <div class="ui segment">
-                    <h3 class="ui header dividing">Issues {{ _.levels(commit.issues) }}</h3>
+    {% endif %}
 
-                    <div class="ui styled accordion">
-                        {% for file,list in issues %}
-                            <div class="title">
-                                <div style="float: right">
-                                    {{ _.levels(list) }}
-                                </div>
-                                <i class="dropdown icon"></i>
-                                <i class="file icon"></i>
-                                {{ file }}
-                            </div>
-                            <div class="content">
-                                {% for issue in list %}
-                                    <div class="ui top attached {{ issue|level_color }} message">
-                                        <h4>
-                                            <i class="{{ issue|level_icon }} icon"></i>
-                                            {{ issue.gadget|upper }}
-                                            {{ issue.level|upper }}
-                                        </h4>
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
 
-                                        <p>{{ issue.message }}</p>
-                                    </div>
+                <div class="ui secondary pointing menu">
 
-                                    {% if issue.codeSnippet is not empty %}
-                                        <div class="ui attached segment">
-                                            <div class="ui top right attached label">
-                                                <a class="phpstorm"
-                                                   href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line }}">
-                                                    <i class="lightning inverted circular icon"></i>
-                                                </a>
-                                                Line {{ issue.line }}
-                                            </div>
-                                            {{ issue.codeSnippet|raw }}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
+                    {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                        <a class="item active" data-tab="issues">
+                            <i class="bug icon"></i> Issues
+                        </a>
+                    {% endif %}
+
+                    <a class="item {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                       data-tab="logs">
+                        <i class="file text icon"></i> Logs
+                    </a>
+                </div>
+
+                {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                    <div class="ui tab active" data-tab="issues">
+                        {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' %}
                     </div>
+                {% endif %}
+
+                <div class="ui tab {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                     data-tab="logs">
+                    {{ render(controller('SimpleThingsAppBundle:Commit:log', {commit: commit})) }}
                 </div>
             </div>
         </div>
-    {% endif %}
+    </div>
 
 {% endblock %}

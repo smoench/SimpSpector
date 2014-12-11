@@ -29,7 +29,7 @@ class GadgetExecutor
     }
 
     /**
-     * @param Workspace      $workspace
+     * @param Workspace $workspace
      * @param AbstractLogger $logger
      * @return Issue[]
      */
@@ -38,16 +38,40 @@ class GadgetExecutor
         $logger = $logger ?: new NullLogger();
 
         $gadgets = $this->repository->getSortedGadgets();
-        $issues = [];
+        $result  = [];
+
+        $logger->writeln();
+        $logger->writeln("Go go gadgets!");
+        $logger->writeln();
 
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
             }
 
-            $issues = array_merge($issues, $gadget->run($workspace, $logger));
+            $logger->writeln();
+            $logger->writeln("------------------------------------");
+            $logger->writeln();
+
+            $logger->writeln(sprintf('run gadget "%s"', $gadget->getName()));
+            $logger->writeln();
+            $logger->writeln();
+
+            $issues = $gadget->run($workspace, $logger);
+
+            $logger->writeln();
+            $logger->writeln();
+            $logger->writeln(sprintf('%s issues found', count($issues)));
+
+            $result = array_merge($result, $issues);
         }
 
-        return $issues;
+        $logger->writeln();
+        $logger->writeln("===============================");
+        $logger->writeln();
+
+        $logger->writeln(sprintf('%s issues found', count($result)));
+
+        return $result;
     }
 } 

@@ -1,0 +1,42 @@
+{{ _.levels(commit.issues) }}
+
+<br><br>
+
+<div class="ui styled accordion">
+    {% for file,list in issues %}
+        <div class="title">
+            <div style="float: right">
+                {{ _.levels(list) }}
+            </div>
+            <i class="dropdown icon"></i>
+            <i class="file icon"></i>
+            {{ file }}
+        </div>
+        <div class="content">
+            {% for issue in list %}
+                <div class="ui top attached {{ issue|level_color }} message">
+                    <h4>
+                        <i class="{{ issue|level_icon }} icon"></i>
+                        {{ issue.gadget|upper }}
+                        {{ issue.level|upper }}
+                    </h4>
+
+                    <p>{{ issue.message }}</p>
+                </div>
+
+                {% if issue.codeSnippet is not empty %}
+                    <div class="ui attached segment">
+                        <div class="ui top right attached label">
+                            <a class="phpstorm"
+                               href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line }}">
+                                <i class="lightning inverted circular icon"></i>
+                            </a>
+                            Line {{ issue.line }}
+                        </div>
+                        {{ issue.codeSnippet|raw }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
