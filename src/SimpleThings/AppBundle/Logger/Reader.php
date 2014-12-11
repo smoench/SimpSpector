@@ -6,7 +6,6 @@
 namespace SimpleThings\AppBundle\Logger;
 
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Util;
 
 /**
  * @author David Badura <badura@simplethings.de>
@@ -32,7 +31,7 @@ class Reader
      */
     public function getContent(Commit $commit)
     {
-        $fileName = Util::getUniqueIdByCommit($commit) . '.log';
+        $fileName = $commit->getUniqueId() . '.log';
 
         $file = $this->path . '/' . $fileName;
 

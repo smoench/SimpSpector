@@ -186,4 +186,16 @@ class Commit
     {
         return $this->issues;
     }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return sprintf(
+            "%s_%s",
+            $this->getProject()->getId(),
+            $this->getRevision()
+        );
+    }
 }

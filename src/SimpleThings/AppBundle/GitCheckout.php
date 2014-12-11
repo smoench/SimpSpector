@@ -2,7 +2,6 @@
 
 namespace SimpleThings\AppBundle;
 
-use Gitlab\Client;
 use GitWrapper\GitWrapper;
 use SimpleThings\AppBundle\Entity\Commit;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,7 +40,7 @@ class GitCheckout
     {
         $workspace           = new Workspace();
         $workspace->revision = $commit->getRevision();
-        $workspace->path     = $this->baseDir . '/' . Util::getUniqueIdByCommit($commit);
+        $workspace->path     = $this->baseDir . '/' . $commit->getUniqueId();
 
         if (file_exists($workspace->path)) {
             $this->remove($workspace);
