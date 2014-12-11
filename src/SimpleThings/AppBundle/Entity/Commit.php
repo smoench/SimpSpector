@@ -195,4 +195,16 @@ class Commit
     {
         return new Result($this->issues->toArray());
     }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return sprintf(
+            "%s_%s",
+            $this->getProject()->getId(),
+            $this->getRevision()
+        );
+    }
 }
