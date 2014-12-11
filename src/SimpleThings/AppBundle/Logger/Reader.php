@@ -11,7 +11,7 @@ use SimpleThings\AppBundle\Util;
 /**
  * @author David Badura <badura@simplethings.de>
  */
-class LoggerFactory
+class Reader
 {
     /**
      * @var string
@@ -28,17 +28,18 @@ class LoggerFactory
 
     /**
      * @param Commit $commit
-     * @return FileLogger
+     * @return string
      */
-    public function createLogger(Commit $commit)
+    public function getContent(Commit $commit)
     {
         $fileName = Util::getUniqueIdByCommit($commit) . '.log';
+
         $file = $this->path . '/' . $fileName;
 
         if (file_exists($file)) {
-            unlink($file);
+            return file_get_contents($file);
         }
 
-        return new FileLogger($file);
+        return 'no log file found';
     }
 }

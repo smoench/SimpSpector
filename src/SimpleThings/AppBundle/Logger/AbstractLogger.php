@@ -13,7 +13,7 @@ abstract class AbstractLogger
     /**
      * @param string $message
      */
-    public function writeln($message)
+    public function writeln($message = "")
     {
         $this->write($message . "\n");
     }

@@ -24,7 +24,12 @@
             <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
         </service>
 
+        <service id="simple_things_app.logger.reader" class="SimpleThings\AppBundle\Logger\Reader">
+            <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
+        </service>
+
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument type="service" id="simple_things_app.git_checkout"/>
             <argument type="service" id="simple_things_app.config_loader"/>
             <argument type="service" id="simple_things_app.gadget_executor"/>
