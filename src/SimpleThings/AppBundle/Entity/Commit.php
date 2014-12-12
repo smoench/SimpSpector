@@ -67,7 +67,7 @@ class Commit
     /**
      * @var string
      *
-     * ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $output;
 
