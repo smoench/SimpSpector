@@ -16,11 +16,6 @@ class Repository
     private $gadgets = [];
 
     /**
-     * @var GadgetInterface[]|null
-     */
-    private $sortedGadgets;
-
-    /**
      * @param GadgetInterface $gadget
      * @throws \Exception
      */
@@ -31,7 +26,6 @@ class Repository
         }
 
         $this->gadgets[$gadget->getName()] = $gadget;
-        $this->sortedGadgets = null;
     }
 
     /**
@@ -67,27 +61,5 @@ class Repository
     public function getGadgets()
     {
         return $this->gadgets;
-    }
-
-    /**
-     * @return GadgetInterface[]
-     */
-    public function getSortedGadgets()
-    {
-        if ($this->sortedGadgets) {
-            $this->sortedGadgets;
-        }
-
-        $this->sortedGadgets = array_values($this->gadgets);
-
-        usort($this->sortedGadgets, function (GadgetInterface $a, GadgetInterface $b) {
-            if ($a->getPriority() == $b->getPriority()) {
-                return 0;
-            }
-
-            return ($a->getPriority() > $b->getPriority()) ? -1 : 1;
-        });
-
-        return $this->sortedGadgets;
     }
 } 
