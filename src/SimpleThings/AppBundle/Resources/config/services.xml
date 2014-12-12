@@ -6,6 +6,8 @@
 
     <parameters>
         <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
+        <parameter key="phpmd_bin">%kernel.root_dir%/../bin/phpmd</parameter>
+        <parameter key="phpcs_bin">%kernel.root_dir%/../bin/phpcs</parameter>
     </parameters>
 
     <services>
@@ -45,19 +47,30 @@
 
         <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
 
+        <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
+
+        <!-- GADGETS -->
         <service id="simple_things_app.gadget.composer" class="SimpleThings\AppBundle\Gadget\Composer">
             <tag name="simpspector.gadget"/>
         </service>
 
         <service id="simple_things_app.gadget.phpcs" class="SimpleThings\AppBundle\Gadget\Phpcs">
+            <argument type="string">%phpcs_bin%</argument>
             <tag name="simpspector.gadget"/>
         </service>
 
         <service id="simple_things_app.gadget.phpmd" class="SimpleThings\AppBundle\Gadget\Phpmd">
+            <argument type="string">%phpmd_bin%</argument>
             <tag name="simpspector.gadget"/>
         </service>
 
-        <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
+        <service id="simple_things_app.gadget.comment_blacklist" class="SimpleThings\AppBundle\Gadget\CommentBlacklistGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simple_things_app.gadget.function_blacklist" class="SimpleThings\AppBundle\Gadget\FunctionBlacklist">
+            <tag name="simpspector.gadget"/>
+        </service>
 
         <!-- TWIG -->
         <service id="simple_things_app.twig.extension.highlight" class="SimpleThings\AppBundle\Twig\HighlightExtension">
