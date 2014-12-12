@@ -20,6 +20,19 @@ class Phpmd extends AbstractGadget
     const NAME = 'phpmd';
 
     /**
+     * @var string
+     */
+    private $bin;
+
+    /**
+     * @param string $bin
+     */
+    public function __construct($bin)
+    {
+        $this->bin = $bin;
+    }
+
+    /**
      * @param Workspace $workspace
      * @return Issue[]
      * @throws \Exception
@@ -35,7 +48,7 @@ class Phpmd extends AbstractGadget
             ['files', 'rulesets']
         );
 
-        $processBuilder = new ProcessBuilder(['phpmd']);
+        $processBuilder = new ProcessBuilder([$this->bin]);
         $processBuilder->add(implode(',', $options['files']));
         $processBuilder->add('xml');
         $processBuilder->add(implode(',', $options['rulesets']));

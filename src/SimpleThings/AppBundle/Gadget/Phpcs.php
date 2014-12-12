@@ -19,6 +19,19 @@ class Phpcs extends AbstractGadget
     const NAME = 'phpcs';
 
     /**
+     * @var string
+     */
+    private $bin;
+
+    /**
+     * @param string $bin
+     */
+    public function __construct($bin)
+    {
+        $this->bin = $bin;
+    }
+
+    /**
      * @param Workspace $workspace
      * @return Issue[]
      * @throws \Exception
@@ -35,7 +48,7 @@ class Phpcs extends AbstractGadget
             ['files', 'standards', 'extensions']
         );
 
-        $processBuilder = new ProcessBuilder(['phpcs', '--report=csv']);
+        $processBuilder = new ProcessBuilder([$this->bin, '--report=csv']);
 
         foreach ($options['standards'] as $standard) {
             $processBuilder->add('--standard=' . $standard);
@@ -97,7 +110,7 @@ class Phpcs extends AbstractGadget
 
     /**
      * @param Workspace $workspace
-     * @param array     $data
+     * @param array $data
      * @return Issue
      */
     private function createIssue(Workspace $workspace, array $data)
