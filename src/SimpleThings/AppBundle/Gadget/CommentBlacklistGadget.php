@@ -14,8 +14,8 @@ class CommentBlacklistGadget extends AbstractGadget
 {
     const NAME = 'comment_blacklist';
 
-    const T_COMMENT_TOKEN     = 372;
-    const T_DOC_COMMENT_TOKEN = 373;
+    const T_COMMENT_TOKEN     = T_COMMENT;
+    const T_DOC_COMMENT_TOKEN = T_DOC_COMMENT;
 
     /**
      * @param Workspace $workspace
