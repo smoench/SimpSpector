@@ -26,11 +26,6 @@ interface GadgetInterface
     public function run(Workspace $workspace);
 
     /**
-     * @return int
-     */
-    public function getPriority();
-
-    /**
      * @return string
      */
     public function getName();

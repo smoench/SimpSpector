@@ -32,7 +32,7 @@ class GadgetExecutor
      */
     public function run(Workspace $workspace)
     {
-        $gadgets = $this->repository->getSortedGadgets();
+        $gadgets = $this->repository->getGadgets();
         $issues = [];
 
         foreach ($gadgets as $gadget) {

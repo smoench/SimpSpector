@@ -22,7 +22,6 @@
         "zeichen32/gitlabapibundle": "~2.0",
         "igorw/get-in": "~1.0",
         "cpliakas/git-wrapper": "~1.0",
-        "composer/composer": "~1.0@alpha",
         "phpmd/phpmd": "~2.1",
         "squizlabs/php_codesniffer": "~2.0",
         "easybook/geshi": "dev-master",

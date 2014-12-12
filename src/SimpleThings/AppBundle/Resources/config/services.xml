@@ -50,10 +50,6 @@
         <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
 
         <!-- GADGETS -->
-        <service id="simple_things_app.gadget.composer" class="SimpleThings\AppBundle\Gadget\Composer">
-            <tag name="simpspector.gadget"/>
-        </service>
-
         <service id="simple_things_app.gadget.phpcs" class="SimpleThings\AppBundle\Gadget\Phpcs">
             <argument type="string">%phpcs_bin%</argument>
             <tag name="simpspector.gadget"/>

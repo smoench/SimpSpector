@@ -28,14 +28,6 @@ abstract class AbstractGadget implements GadgetInterface
     }
 
     /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 0;
-    }
-
-    /**
      * @param Workspace $workspace
      * @param string $file
      * @return string
