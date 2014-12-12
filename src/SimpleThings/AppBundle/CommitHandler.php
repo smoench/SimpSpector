@@ -137,7 +137,7 @@ class CommitHandler
      */
     private function startProcess(Commit $commit)
     {
-        foreach($commit->getIssues() as $issue) {
+        foreach ($commit->getIssues() as $issue) {
             $this->em->remove($issue);
         }
 
