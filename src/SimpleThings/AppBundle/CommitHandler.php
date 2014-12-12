@@ -4,8 +4,6 @@ namespace SimpleThings\AppBundle;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\Exception\MissingSimpSpectorConfigException;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
 
@@ -81,7 +79,7 @@ class CommitHandler
 
             $workspace = $this->gitCheckout->create($commit);
 
-            $this->loadConfiguration($commit, $workspace, $logger);
+            $workspace->config = $this->configLoader->load($workspace);
             $this->execute($commit, $workspace, $logger);
 
             $commit->setStatus(Commit::STATUS_SUCCESS);
@@ -145,26 +143,5 @@ class CommitHandler
         $commit->setStatus(Commit::STATUS_RUN);
 
         $this->em->flush($commit);
-    }
-
-    /**
-     * @param Commit $commit
-     * @param Workspace $workspace
-     * @throws MissingSimpSpectorConfigException
-     * @throws \Exception
-     */
-    private function loadConfiguration(Commit $commit, Workspace $workspace)
-    {
-        try {
-            $workspace->config = $this->configLoader->load($workspace);
-        } catch (MissingSimpSpectorConfigException $e) {
-
-            $issue = new Issue($e->getMessage(), 'simpspector', Issue::LEVEL_CRITICAL);
-            $issue->setCommit($commit);
-            $commit->getIssues()->add($issue);
-            $issue->setFile('simpspector.yml');
-
-            throw $e;
-        }
     }
 } 
