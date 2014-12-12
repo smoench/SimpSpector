@@ -25,7 +25,7 @@ class CommentBlacklistGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace->path   = __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures';
         $workspace->config = ['comment_blacklist' => []];
 
-        $issues = $this->OUT->run($workspace);
+        $issues = $this->OUT->run($workspace)->getIssues();
 
         $this->assertEquals(5, count($issues));
         $lineNumbers = [];

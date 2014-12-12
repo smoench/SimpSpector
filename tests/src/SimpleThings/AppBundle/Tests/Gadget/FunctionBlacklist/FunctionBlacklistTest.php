@@ -3,17 +3,17 @@
 namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\Gadget\FunctionBlacklist;
+use SimpleThings\AppBundle\Gadget\FunctionBlacklistGadget;
 use SimpleThings\AppBundle\Workspace;
 
-/*
+/**
  * @author Tobias Olry <tobias.olry@gmail.com>
  */
 class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 {
     private function createIssue($message, $line, $level)
     {
-        $issue = new Issue($message, FunctionBlacklist::NAME, $level);
+        $issue = new Issue($message, FunctionBlacklistGadget::NAME, $level);
         $issue->setFile('foo.php');
         $issue->setLine($line);
 
@@ -24,10 +24,10 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [FunctionBlacklist::NAME => []];
+        $workspace->config = [FunctionBlacklistGadget::NAME => []];
 
-        $gadget = new FunctionBlacklist();
-        $issues = $gadget->run($workspace);
+        $gadget = new FunctionBlacklistGadget();
+        $issues = $gadget->run($workspace)->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "echo" is blacklisted', 9, Issue::LEVEL_WARNING),
@@ -45,10 +45,10 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['die' => 'critical']]];
+        $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['die' => 'critical']]];
 
-        $gadget = new FunctionBlacklist();
-        $issues = $gadget->run($workspace);
+        $gadget = new FunctionBlacklistGadget();
+        $issues = $gadget->run($workspace)->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
@@ -57,9 +57,9 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedIssues, $issues);
 
-        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['exit' => 'critical']]];
+        $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['exit' => 'critical']]];
 
-        $issues = $gadget->run($workspace);
+        $issues = $gadget->run($workspace)->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
@@ -73,10 +73,10 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     {
         $workspace         = new Workspace();
         $workspace->path   = __DIR__ . '/_data';
-        $workspace->config = [FunctionBlacklist::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
+        $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
 
-        $gadget = new FunctionBlacklist();
-        $issues = $gadget->run($workspace);
+        $gadget = new FunctionBlacklistGadget();
+        $issues = $gadget->run($workspace)->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "extra_var_dump" is blacklisted', 47, Issue::LEVEL_WARNING),
