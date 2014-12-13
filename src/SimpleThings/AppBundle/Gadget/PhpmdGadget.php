@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class Phpmd extends AbstractGadget
+class PhpmdGadget extends AbstractGadget
 {
     const NAME = 'phpmd';
 
@@ -27,14 +27,14 @@ class Phpmd extends AbstractGadget
     /**
      * @param string $bin
      */
-    public function __construct($bin)
+    public function __construct($bin = 'phpmd')
     {
         $this->bin = $bin;
     }
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      * @throws \Exception
      */
     public function run(Workspace $workspace)
@@ -60,24 +60,24 @@ class Phpmd extends AbstractGadget
         $process->run();
         $output = $process->getOutput();
 
-        $result = $this->convertFromXmlToArray($output);
+        $data = $this->convertFromXmlToArray($output);
 
-        if ( ! isset($result['file']) || ! is_array($result['file'])) {
+        if ( ! isset($data['file']) || ! is_array($data['file'])) {
             return [];
         }
 
-        $issues = [];
+        $result = new Result();
 
-        $files = (isset($result['file'][0])) ? $result['file'] : [$result['file']];
+        $files = (isset($data['file'][0])) ? $data['file'] : [$data['file']];
         foreach ($files as $file) {
             $violations = (isset($file['violation'][0])) ? $file['violation'] : [$file['violation']];
 
             foreach ($violations as $violation) {
-                $issues[] = $this->createIssue($workspace, $file['@name'], $violation);
+                $result->addIssue($this->createIssue($workspace, $file['@name'], $violation));
             }
         }
 
-        return $issues;
+        return $result;
     }
 
     /**

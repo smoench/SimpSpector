@@ -4,28 +4,51 @@ namespace SimpleThings\AppBundle\Gadget\FunctionBlacklist;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
 use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\Gadget\FunctionBlacklist;
+use SimpleThings\AppBundle\Gadget\FunctionBlacklistGadget;
+use SimpleThings\AppBundle\Gadget\Result;
 
-/*
+/**
  * @author Tobias Olry <tobias.olry@gmail.com>
+ * @author David Badura <d.a.badura@gmail.com>
  */
 class Visitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
     private $currentFile;
-    private $issues;
+
+    /**
+     * @var array
+     */
     private $blacklist;
 
-    public function __construct(array $blacklist)
+    /**
+     * @var Result
+     */
+    private $result;
+
+    /**
+     * @param array $blacklist
+     * @param Result $result
+     */
+    public function __construct(array $blacklist, Result $result)
     {
         $this->blacklist = $blacklist;
-        $this->issues  = [];
+        $this->result    = $result;
     }
 
+    /**
+     * @param string $file
+     */
     public function setCurrentFile($file)
     {
         $this->currentFile = $file;
     }
 
+    /**
+     * @param Node $node
+     */
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Name && isset($this->blacklist[$node->getFirst()])) {
@@ -59,16 +82,27 @@ class Visitor extends NodeVisitorAbstract
         }
     }
 
-    public function getIssues()
+    /**
+     * @return Result
+     */
+    public function getResult()
     {
-        return $this->issues;
+        return $this->result;
     }
 
+    /**
+     * @param \Exception $error
+     */
     public function addException(\Exception $error)
     {
         $this->addIssue('Exception: ' . $error->getMessage(), null, Issue::LEVEL_CRITICAL);
     }
 
+    /**
+     * @param string $function
+     * @param Node $node
+     * @param string $level
+     */
     private function addIssueForBlacklistedFunction($function, Node $node, $level)
     {
         $this->addIssue(
@@ -78,21 +112,30 @@ class Visitor extends NodeVisitorAbstract
         );
     }
 
+    /**
+     * @param string $message
+     * @param Node $node
+     * @param string $level
+     */
     private function addIssue($message, Node $node = null, $level = Issue::LEVEL_ERROR)
     {
-        $issue = new Issue($message, FunctionBlacklist::NAME, $level);
+        $issue = new Issue($message, FunctionBlacklistGadget::NAME, $level);
         $issue->setFile($this->currentFile);
 
         if ($node) {
             $issue->setLine($node->getLine());
         }
 
-        $this->issues[] = $issue;
+        $this->result->addIssue($issue);
     }
 
+    /**
+     * @param string $string
+     * @return string
+     */
     private function translateErrorLevel($string)
     {
-        switch(trim(strtolower($string))) {
+        switch (trim(strtolower($string))) {
             case 'notice':
                 return Issue::LEVEL_NOTICE;
             case 'warning':

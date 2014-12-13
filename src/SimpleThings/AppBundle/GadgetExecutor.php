@@ -7,6 +7,7 @@ namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\Repository;
+use SimpleThings\AppBundle\Gadget\Result;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -28,21 +29,21 @@ class GadgetExecutor
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      */
     public function run(Workspace $workspace)
     {
         $gadgets = $this->repository->getGadgets();
-        $issues = [];
+        $result  = new Result();
 
         foreach ($gadgets as $gadget) {
             if (!$gadget->isActive($workspace)) {
                 continue;
             }
 
-            $issues = array_merge($issues, $gadget->run($workspace));
+            $result->merge($gadget->run($workspace));
         }
 
-        return $issues;
+        return $result;
     }
 } 

@@ -7,14 +7,12 @@ namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class Phpcs extends AbstractGadget
+class PhpcsGadget extends AbstractGadget
 {
     const NAME = 'phpcs';
 
@@ -26,14 +24,14 @@ class Phpcs extends AbstractGadget
     /**
      * @param string $bin
      */
-    public function __construct($bin)
+    public function __construct($bin = 'phpcs')
     {
         $this->bin = $bin;
     }
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      * @throws \Exception
      */
     public function run(Workspace $workspace)
@@ -68,14 +66,14 @@ class Phpcs extends AbstractGadget
         $process->run();
         $output = $process->getOutput();
 
-        $result = $this->convertFromCsvToArray($output);
+        $rawIssues = $this->convertFromCsvToArray($output);
 
-        $issues = [];
-        foreach ($result as $info) {
-            $issues[] = $this->createIssue($workspace, $info);
+        $result = new Result();
+        foreach ($rawIssues as $info) {
+            $result->addIssue($this->createIssue($workspace, $info));
         }
 
-        return $issues;
+        return $result;
     }
 
     /**

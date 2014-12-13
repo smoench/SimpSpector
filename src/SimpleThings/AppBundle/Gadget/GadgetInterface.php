@@ -21,7 +21,7 @@ interface GadgetInterface
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      */
     public function run(Workspace $workspace);
 

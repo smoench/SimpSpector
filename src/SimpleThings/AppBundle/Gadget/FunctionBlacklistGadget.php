@@ -12,16 +12,16 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\ProcessBuilder;
 
-/*
+/**
  * @author Tobias Olry <tobias.olry@gmail.com>
  */
-class FunctionBlacklist extends AbstractGadget
+class FunctionBlacklistGadget extends AbstractGadget
 {
     const NAME = 'function_blacklist';
 
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      * @throws \Exception
      */
     public function run(Workspace $workspace)
@@ -39,8 +39,9 @@ class FunctionBlacklist extends AbstractGadget
             ],
             ['files', 'blacklist']);
 
+        $result    = new Result();
         $parser    = new Parser(new Lexer());
-        $visitor   = new Visitor($options['blacklist']);
+        $visitor   = new Visitor($options['blacklist'], $result);
         $traverser = new NodeTraverser();
 
         $traverser->addVisitor($visitor);
@@ -57,7 +58,7 @@ class FunctionBlacklist extends AbstractGadget
             }
         }
 
-        return $visitor->getIssues();
+        return $result;
     }
 
     /**

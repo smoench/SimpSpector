@@ -42,8 +42,7 @@ class CommitHandler
         ConfigLoader $loader,
         GadgetExecutor $gadgetExecutor,
         SyntaxHighlighter $highlighter
-    )
-    {
+    ) {
         $this->gitCheckout    = $gitCheckout;
         $this->gadgetExecutor = $gadgetExecutor;
         $this->configLoader   = $loader;
@@ -83,9 +82,9 @@ class CommitHandler
     {
         $commit->setGadgets(array_keys($workspace->config));
 
-        $issues = $this->gadgetExecutor->run($workspace);
+        $result = $this->gadgetExecutor->run($workspace);
 
-        foreach ($issues as $issue) {
+        foreach ($result->getIssues() as $issue) {
             $issue->setCommit($commit);
 
             if ($issue->getFile() && $issue->getLine()) {

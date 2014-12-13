@@ -14,12 +14,9 @@ class CommentBlacklistGadget extends AbstractGadget
 {
     const NAME = 'comment_blacklist';
 
-    const T_COMMENT_TOKEN     = T_COMMENT;
-    const T_DOC_COMMENT_TOKEN = T_DOC_COMMENT;
-
     /**
      * @param Workspace $workspace
-     * @return Issue[]
+     * @return Result
      */
     public function run(Workspace $workspace)
     {
@@ -34,12 +31,14 @@ class CommentBlacklistGadget extends AbstractGadget
             ],
             ['files', 'blacklist']
         );
-        $issues  = [];
+
+        $result = new Result();
+
         foreach ($this->findFiles($workspace->path, $options['files']) as $filename) {
-            $issues = array_merge($this->processFile($filename, $options), $issues);
+            $result->merge($this->processFile($filename, $options));
         }
 
-        return $issues;
+        return $result;
     }
 
     /**
@@ -53,17 +52,18 @@ class CommentBlacklistGadget extends AbstractGadget
     /**
      * @param string $filename
      * @param array $options
-     * @return Issue[]
+     * @return Result
      */
     private function processFile($filename, array $options)
     {
         $comments = $this->extract($filename);
-        $issues   = [];
+
+        $result = new Result();
         foreach ($comments as $comment) {
-            $issues = array_merge($issues, $this->processComment($filename, $options, $comment));
+            $result->merge($this->processComment($filename, $options, $comment));
         }
 
-        return $issues;
+        return $result;
     }
 
     /**
@@ -74,7 +74,7 @@ class CommentBlacklistGadget extends AbstractGadget
     {
         $allTokens     = token_get_all(file_get_contents($filename));
         $commentTokens = array_filter($allTokens, function ($token) {
-            return (count($token) === 3) && (in_array($token[0], [self::T_COMMENT_TOKEN, self::T_DOC_COMMENT_TOKEN]));
+            return (count($token) === 3) && (in_array($token[0], [T_COMMENT, T_DOC_COMMENT]));
         });
 
         return array_map(function ($comment) {
@@ -86,26 +86,30 @@ class CommentBlacklistGadget extends AbstractGadget
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      * @param array $options
-     * @param $comment
-     * @return array
+     * @param string $comment
+     * @return Result
      */
     private function processComment($filename, array $options, $comment)
     {
-        $issues = [];
+        $result = new Result();
+
         foreach (explode("\n", $comment['content']) as $lineOffset => $line) {
             foreach ($options['blacklist'] as $blacklistedWord => $errorLevel) {
+
                 if (stristr($line, $blacklistedWord) === false) {
                     continue;
                 }
+
                 $issue = new Issue(sprintf('found "%s" in a comment', $blacklistedWord), $this->getName(), $errorLevel);
                 $issue->setFile($filename);
                 $issue->setLine($comment['line'] + $lineOffset);
-                $issues[] = $issue;
+
+                $result->addIssue($issue);
             }
         }
 
-        return $issues;
+        return $result;
     }
 }
