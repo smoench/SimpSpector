@@ -24,7 +24,7 @@ class PhpcsGadget extends AbstractGadget
     /**
      * @param string $bin
      */
-    public function __construct($bin)
+    public function __construct($bin = 'phpcs')
     {
         $this->bin = $bin;
     }

@@ -27,7 +27,7 @@ class PhpmdGadget extends AbstractGadget
     /**
      * @param string $bin
      */
-    public function __construct($bin)
+    public function __construct($bin = 'phpmd')
     {
         $this->bin = $bin;
     }
