@@ -39,7 +39,7 @@ class Visitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param $file
+     * @param string $file
      */
     public function setCurrentFile($file)
     {
@@ -99,9 +99,9 @@ class Visitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param $function
+     * @param string $function
      * @param Node $node
-     * @param $level
+     * @param string $level
      */
     private function addIssueForBlacklistedFunction($function, Node $node, $level)
     {
@@ -113,7 +113,7 @@ class Visitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @param Node $node
      * @param string $level
      */
@@ -130,7 +130,8 @@ class Visitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param $string
+     * @param string $string
+     * @return string
      */
     private function translateErrorLevel($string)
     {
