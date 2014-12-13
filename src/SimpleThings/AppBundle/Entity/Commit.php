@@ -4,6 +4,7 @@ namespace SimpleThings\AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use SimpleThings\AppBundle\Gadget\Result;
 
 /**
  *
@@ -208,5 +209,13 @@ class Commit
     public function getIssues()
     {
         return $this->issues;
+    }
+
+    /**
+     * @return Result
+     */
+    public function getResult()
+    {
+        return new Result($this->issues->toArray());
     }
 }

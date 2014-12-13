@@ -15,7 +15,15 @@ class Result
     /**
      * @var Issue[]
      */
-    private $issues = [];
+    private $issues;
+
+    /**
+     * @param array $issues
+     */
+    public function __construct(array $issues = [])
+    {
+        $this->issues = $issues;
+    }
 
     /**
      * @param Issue $issue
