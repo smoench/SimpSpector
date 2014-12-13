@@ -71,7 +71,7 @@ abstract class AbstractGadget implements GadgetInterface
      * @param string[] $fieldsToNormalize
      * @return array
      */
-    protected function prepareOptions(array $options, array $defaults, array $fieldsToNormalize)
+    protected function prepareOptions(array $options, array $defaults, array $fieldsToNormalize = [])
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults($defaults);

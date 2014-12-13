@@ -8,6 +8,7 @@
         <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
         <parameter key="phpmd_bin">%kernel.root_dir%/../bin/phpmd</parameter>
         <parameter key="phpcs_bin">%kernel.root_dir%/../bin/phpcs</parameter>
+        <parameter key="security_checker_bin">%kernel.root_dir%/../bin/security-checker</parameter>
     </parameters>
 
     <services>
@@ -79,6 +80,11 @@
         </service>
 
         <service id="simple_things_app.gadget.function_blacklist" class="SimpleThings\AppBundle\Gadget\FunctionBlacklistGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simple_things_app.gadget.security_checker" class="SimpleThings\AppBundle\Gadget\SecurityCheckerGadget">
+            <argument type="string">%security_checker_bin%</argument>
             <tag name="simpspector.gadget"/>
         </service>
 

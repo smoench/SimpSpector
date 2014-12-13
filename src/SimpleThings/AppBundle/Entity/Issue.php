@@ -72,6 +72,13 @@ class Issue
      *
      * @ORM\Column(type="text", nullable=true)
      */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $codeSnippet;
 
     /**
@@ -203,6 +210,22 @@ class Issue
     public function setCodeSnippet($codeSnippet)
     {
         $this->codeSnippet = $codeSnippet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     /**
