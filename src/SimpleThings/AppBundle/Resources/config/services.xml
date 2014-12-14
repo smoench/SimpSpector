@@ -20,12 +20,16 @@
             <argument type="service" id="router" />
         </service>
 
-        <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
+        <service id="simple_things_app.logger.file_locator" class="SimpleThings\AppBundle\Logger\FileLocator">
             <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
         </service>
 
+        <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
+            <argument type="service" id="simple_things_app.logger.file_locator"/>
+        </service>
+
         <service id="simple_things_app.logger.reader" class="SimpleThings\AppBundle\Logger\Reader">
-            <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
+            <argument type="service" id="simple_things_app.logger.file_locator"/>
         </service>
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">

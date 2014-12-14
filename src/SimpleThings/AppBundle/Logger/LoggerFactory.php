@@ -13,16 +13,16 @@ use SimpleThings\AppBundle\Entity\Commit;
 class LoggerFactory
 {
     /**
-     * @var string
+     * @var FileLocator
      */
-    private $path;
+    private $locator;
 
     /**
-     * @param string $path
+     * @param FileLocator $locator
      */
-    public function __construct($path = '/tmp')
+    public function __construct(FileLocator $locator)
     {
-        $this->path = $path;
+        $this->locator = $locator;
     }
 
     /**
@@ -31,8 +31,7 @@ class LoggerFactory
      */
     public function createLogger(Commit $commit)
     {
-        $fileName = $commit->getUniqueId() . '.log';
-        $file = $this->path . '/' . $fileName;
+        $file = $this->locator->getLogFilePath($commit);
 
         if (file_exists($file)) {
             unlink($file);
