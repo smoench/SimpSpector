@@ -5,39 +5,16 @@
     <div class="row">
         <div class="column wide sixteen">
             <div class="ui steps">
-                <a class="step" href="{{ path('homepage') }}">
-                    <div class="content">
-                        <div class="title"><i class="icon home"></i> Home</div>
-                        <div class="description">... where the <i class="icon heart"></i> is</div>
-                    </div>
-                </a>
-                <a class="step" href="{{ path('project_show', {id: commit.project.id }) }}">
-                    <div class="content">
-                        <div class="title"><i class="icon cubes"></i> Project</div>
-                        <div class="description">{{ commit.project.name }}</div>
-                    </div>
-                </a>
+                {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
+                {{ _.step(commit.project.name, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
+
                 {% if commit.mergerequest %}
-                    <a class="step" href="{{ path('mergerequest_show', {id: commit.mergerequest.id }) }}">
-                        <div class="content">
-                            <div class="title"><i class="horizontally flipped share alternate icon"></i> MergeRequest</div>
-                            <div class="description">{{ commit.mergerequest.name }}</div>
-                        </div>
-                    </a>
+                    {{ _.step(commit.mergerequest.name, 'Merge Request', 'horizontally flipped share alternate icon', path('mergerequest_show', {id: commit.mergerequest.id })) }}
                 {% else %}
-                    <a class="step" href="{{ path('project_master', {id: commit.project.id }) }}" hidden="">
-                        <div class="content">
-                            <div class="title"><i class="sitemap alternate icon"></i> Master</div>
-                            <div class="description">Master Branch</div>
-                        </div>
-                    </a>
+                    {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', path('project_master', {id: commit.id })) }}
                 {% endif %}
-                <a class="step active">
-                    <div class="content">
-                        <div class="title"><i class="icon file text"></i> Commit-Report</div>
-                        <div class="description">rev <strong>{{ commit.revision|slice(0, 8) }}</strong></div>
-                    </div>
-                </a>
+
+                {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
             </div>
         </div>
     </div>
