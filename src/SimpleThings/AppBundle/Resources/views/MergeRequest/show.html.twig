@@ -1,27 +1,13 @@
 {% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
 
 {% block content %}
 <div class="row">
     <div class="column wide sixteen">
         <div class="ui steps">
-            <a class="step" href="{{ path('homepage') }}">
-                <div class="content">
-                    <div class="title"> <i class="icon home"></i> Home</div>
-                    <div class="description">... where the <i class="icon heart"></i> is</div>
-                </div>
-            </a>
-            <a class="step" href="{{ path('project_show', {id: merge_request.project.id }) }}">
-                <div class="content">
-                    <div class="title"> <i class="icon cubes"></i> Project</div>
-                    <div class="description">{{ merge_request.project.name }}</div>
-                </div>
-            </a>
-            <a class="step active">
-                <div class="content">
-                    <div class="title"> <i class="horizontally flipped share alternate icon"></i> MergeRequest</div>
-                    <div class="description">{{ merge_request.name }}</div>
-                </div>
-            </a>
+            {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
+            {{ _.step(merge_request.project.name, 'Project', 'icon cubes', path('project_show', {id: merge_request.project.id })) }}
+            {{ _.step(merge_request.name, 'Merge Request', 'horizontally flipped share alternate icon', '') }}
         </div>
     </div>
 </div>
