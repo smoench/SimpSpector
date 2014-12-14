@@ -22,7 +22,7 @@
 {% endmacro %}
 
 {% macro step(title, description, icon, url) %}
-<a class="step{{ url == '' ? ' active' : '' }}" href="{{ url }}">
+<a class="step tooltip{{ url == '' ? ' active' : '' }}" href="{{ url }}" title="{{ title }}">
     <div class="content">
         <div class="title ellipsis"> <i class="{{ icon }}"></i> {{ title|raw }}</div>
         <div class="description ellipsis">{{ description|raw }}</div>
