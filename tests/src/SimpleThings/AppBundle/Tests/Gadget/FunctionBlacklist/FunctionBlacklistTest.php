@@ -4,6 +4,7 @@ namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\FunctionBlacklistGadget;
+use SimpleThings\AppBundle\Logger\NullLogger;
 use SimpleThings\AppBundle\Workspace;
 
 /**
@@ -27,7 +28,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace->config = [FunctionBlacklistGadget::NAME => []];
 
         $gadget = new FunctionBlacklistGadget();
-        $issues = $gadget->run($workspace)->getIssues();
+        $issues = $gadget->run($workspace, new NullLogger())->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "echo" is blacklisted', 9, Issue::LEVEL_WARNING),
@@ -48,7 +49,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['die' => 'critical']]];
 
         $gadget = new FunctionBlacklistGadget();
-        $issues = $gadget->run($workspace)->getIssues();
+        $issues = $gadget->run($workspace, new NullLogger())->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
@@ -59,7 +60,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
 
         $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['exit' => 'critical']]];
 
-        $issues = $gadget->run($workspace)->getIssues();
+        $issues = $gadget->run($workspace, new NullLogger())->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "die/exit" is blacklisted', 37, Issue::LEVEL_CRITICAL),
@@ -76,7 +77,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
         $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
 
         $gadget = new FunctionBlacklistGadget();
-        $issues = $gadget->run($workspace)->getIssues();
+        $issues = $gadget->run($workspace, new NullLogger())->getIssues();
 
         $expectedIssues = [
             $this->createIssue('function / statement "extra_var_dump" is blacklisted', 47, Issue::LEVEL_WARNING),

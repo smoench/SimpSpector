@@ -66,13 +66,6 @@ class Commit
     private $status;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $output;
-
-    /**
      * @var Issue[]
      *
      * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
@@ -188,22 +181,6 @@ class Commit
     }
 
     /**
-     * @return string
-     */
-    public function getOutput()
-    {
-        return $this->output;
-    }
-
-    /**
-     * @param string $output
-     */
-    public function setOutput($output)
-    {
-        $this->output = $output;
-    }
-
-    /**
      * @return Issue[]|ArrayCollection
      */
     public function getIssues()
@@ -217,5 +194,17 @@ class Commit
     public function getResult()
     {
         return new Result($this->issues->toArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueId()
+    {
+        return sprintf(
+            "%s_%s",
+            $this->getProject()->getId(),
+            $this->getRevision()
+        );
     }
 }

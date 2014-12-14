@@ -12,4 +12,8 @@ $(document).ready(function () {
     $('.ui.secondary.pointing.menu .item').tab();
 
     $('.tooltip').popup();
+
+    $('.scroll-down').each(function() {
+        $(this).scrollTop(50000);
+    });
 });

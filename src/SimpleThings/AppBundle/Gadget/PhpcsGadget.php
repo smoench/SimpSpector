@@ -6,7 +6,9 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -30,11 +32,12 @@ class PhpcsGadget extends AbstractGadget
     }
 
     /**
-     * @param Workspace $workspace
+     * @param Workspace      $workspace
+     * @param AbstractLogger $logger
      * @return Result
      * @throws \Exception
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
@@ -63,7 +66,15 @@ class PhpcsGadget extends AbstractGadget
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
 
-        $process->run();
+        $logger->writeln('CMD > ' . $process->getCommandLine());
+        $logger->writeln();
+
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                $logger->write($buffer);
+            }
+        );
+
         $output = $process->getOutput();
 
         $rawIssues = $this->convertFromCsvToArray($output);
