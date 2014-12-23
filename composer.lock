@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "49f4b8b97d392000abdfbb89537020a9",
+    "hash": "33a3e09e458ff50386f751184d8c2ce7",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -60,6 +60,45 @@
                 "git"
             ],
             "time": "2014-12-09 15:53:03"
+        },
+        {
+            "name": "davidbadura/markdown-builder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DavidBadura/markdown-builder.git",
+                "reference": "394d7beaa191bbe79266d34151ea970d16afe9be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DavidBadura/markdown-builder/zipball/394d7beaa191bbe79266d34151ea970d16afe9be",
+                "reference": "394d7beaa191bbe79266d34151ea970d16afe9be",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DavidBadura\\MarkdownBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "DavidBadura",
+                    "email": "d.badura@gmx.de"
+                }
+            ],
+            "description": "Markdown Builder",
+            "time": "2014-12-23 22:24:36"
         },
         {
             "name": "doctrine/annotations",
@@ -3068,7 +3107,8 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "easybook/geshi": 20
+        "easybook/geshi": 20,
+        "davidbadura/markdown-builder": 20
     },
     "prefer-stable": false,
     "platform": {
