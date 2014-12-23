@@ -5,7 +5,9 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -31,15 +33,16 @@ class SecurityCheckerGadget extends AbstractGadget
 
     /**
      * @param Workspace $workspace
+     * @param AbstractLogger $logger
      * @return Result
-     * @throws \Exception
      */
-    public function run(Workspace $workspace)
+    public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
             (array)$workspace->config[self::NAME],
             [
                 'directory' => './',
+                'level'     => Issue::LEVEL_CRITICAL
             ]
         );
 
@@ -60,7 +63,12 @@ class SecurityCheckerGadget extends AbstractGadget
         }
 
         foreach ($data as $lib => $info) {
-            $result->merge($this->createIssues(rtrim($options['directory'], '/') . '/composer.json', $lib, $info));
+            $result->merge($this->createIssues(
+                rtrim($options['directory'], '/') . '/composer.json',
+                $lib,
+                $info,
+                $options['level']
+            ));
         }
 
         return $result;
@@ -78,27 +86,29 @@ class SecurityCheckerGadget extends AbstractGadget
      * @param string $composer
      * @param string $lib
      * @param array $info
+     * @param string $level
      * @return Result
      */
-    private function createIssues($composer, $lib, array $info)
+    private function createIssues($composer, $lib, array $info, $level)
     {
         $result = new Result();
 
         foreach ($info['advisories'] as $advisory) {
-            $result->addIssue($this->createIssue($composer, $lib, $info['version'], $advisory));
+            $result->addIssue($this->createIssue($composer, $lib, $info['version'], $advisory, $level));
         }
 
         return $result;
     }
 
     /**
-     * @param $composer
+     * @param string $composer
      * @param string $lib
-     * @param $version
+     * @param string $version
      * @param array $advisory
+     * @param string $level
      * @return Issue
      */
-    private function createIssue($composer, $lib, $version, array $advisory)
+    private function createIssue($composer, $lib, $version, array $advisory, $level)
     {
         $message = sprintf('package "%s" with the version "%s" have known vulnerabilities', $lib, $version);
 
@@ -113,7 +123,7 @@ class SecurityCheckerGadget extends AbstractGadget
         );
 
         $issue->setFile($composer);
-        $issue->setLevel(Issue::LEVEL_CRITICAL);
+        $issue->setLevel($level);
 
         $issue->setExtraInformation(
             [
@@ -129,11 +139,15 @@ class SecurityCheckerGadget extends AbstractGadget
 
     /**
      * @param string $title
+     * @param string $cve
      * @param string $link
      * @return string
      */
     private function createDescription($title, $cve, $link)
     {
-        sprintf("<a href='%s' target='_blank'>%s:</a> %s", $link, $cve, $title);
+        return (new MarkdownBuilder())
+            ->link($link, $cve . ':')
+            ->write($title)
+            ->getMarkdown();
     }
 }
