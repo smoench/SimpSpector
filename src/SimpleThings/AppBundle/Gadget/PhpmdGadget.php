@@ -71,11 +71,11 @@ class PhpmdGadget extends AbstractGadget
 
         $data = $this->convertFromXmlToArray($output);
 
-        if ( ! isset($data['file']) || ! is_array($data['file'])) {
-            return [];
-        }
-
         $result = new Result();
+
+        if ( ! isset($data['file']) || ! is_array($data['file'])) {
+            return $result;
+        }
 
         $files = (isset($data['file'][0])) ? $data['file'] : [$data['file']];
         foreach ($files as $file) {
