@@ -46,11 +46,14 @@ class SecurityCheckerGadget extends AbstractGadget
             ]
         );
 
-        $processBuilder = new ProcessBuilder([$this->bin, '--format=json', $options['directory']]);
+        $processBuilder = new ProcessBuilder([$this->bin, 'security:check', '--format=json', $options['directory']]);
         $processBuilder->setWorkingDirectory($workspace->path);
 
         $process = $processBuilder->getProcess();
         $process->setTimeout(3600);
+
+        $logger->writeln('CMD > ' . $process->getCommandLine());
+        $logger->writeln();
 
         $process->run();
         $output = $process->getOutput();
@@ -64,7 +67,7 @@ class SecurityCheckerGadget extends AbstractGadget
 
         foreach ($data as $lib => $info) {
             $result->merge($this->createIssues(
-                rtrim($options['directory'], '/') . '/composer.json',
+                trim(rtrim($options['directory'], '/') . '/composer.json', './'),
                 $lib,
                 $info,
                 $options['level']

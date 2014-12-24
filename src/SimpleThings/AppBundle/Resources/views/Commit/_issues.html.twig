@@ -36,6 +36,13 @@
                         {{ issue.codeSnippet|raw }}
                     </div>
                 {% endif %}
+
+
+                {% if issue.description is not empty %}
+                    <div class="ui attached segment">
+                        {{ issue.description|raw }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}

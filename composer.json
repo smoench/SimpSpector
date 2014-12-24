@@ -27,7 +27,8 @@
         "easybook/geshi": "dev-master",
         "timetoogo/pinq": "~3.0",
         "nikic/php-parser": "~1.0.2",
-        "davidbadura/markdown-builder": "dev-master"
+        "davidbadura/markdown-builder": "dev-master",
+        "gremo/ciconia-bundle": "~1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
