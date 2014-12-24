@@ -40,7 +40,7 @@
 
                 {% if issue.description is not empty %}
                     <div class="ui attached segment">
-                        {{ issue.description|raw }}
+                        {{ issue.description|markdown }}
                     </div>
                 {% endif %}
             {% endfor %}

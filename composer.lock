@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f9a848fb2b0da39b7e1a51086020014c",
+    "hash": "96c0201eea84ac495463cf866c8eb9af",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DavidBadura/markdown-builder.git",
-                "reference": "394d7beaa191bbe79266d34151ea970d16afe9be"
+                "reference": "defee6244ce6232f3012bf4b3f85c9423e1877b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DavidBadura/markdown-builder/zipball/394d7beaa191bbe79266d34151ea970d16afe9be",
-                "reference": "394d7beaa191bbe79266d34151ea970d16afe9be",
+                "url": "https://api.github.com/repos/DavidBadura/markdown-builder/zipball/defee6244ce6232f3012bf4b3f85c9423e1877b9",
+                "reference": "defee6244ce6232f3012bf4b3f85c9423e1877b9",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
                 }
             ],
             "description": "Markdown Builder",
-            "time": "2014-12-23 22:24:36"
+            "time": "2014-12-24 13:46:52"
         },
         {
             "name": "doctrine/annotations",
@@ -976,16 +976,16 @@
         },
         {
             "name": "gremo/ciconia-bundle",
-            "version": "v1.0.0",
+            "version": "dev-twig-extension",
             "source": {
                 "type": "git",
-                "url": "https://github.com/gremo/CiconiaBundle.git",
-                "reference": "3296f043e99ed431a2f1e8213e7e45228977a82d"
+                "url": "https://github.com/DavidBadura/CiconiaBundle.git",
+                "reference": "9d0f98f8e2179a414c885aa025f30fe4510f8fbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gremo/CiconiaBundle/zipball/3296f043e99ed431a2f1e8213e7e45228977a82d",
-                "reference": "3296f043e99ed431a2f1e8213e7e45228977a82d",
+                "url": "https://api.github.com/repos/DavidBadura/CiconiaBundle/zipball/9d0f98f8e2179a414c885aa025f30fe4510f8fbe",
+                "reference": "9d0f98f8e2179a414c885aa025f30fe4510f8fbe",
                 "shasum": ""
             },
             "require": {
@@ -993,13 +993,18 @@
                 "php": ">5.4.0",
                 "symfony/framework-bundle": "~2.3"
             },
+            "require-dev": {
+                "twig/twig": "~1.10"
+            },
+            "suggest": {
+                "twig/twig": ""
+            },
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Gremo\\CiconiaBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1015,7 +1020,10 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2014-10-08 08:17:45"
+            "support": {
+                "source": "https://github.com/DavidBadura/CiconiaBundle/tree/twig-extension"
+            },
+            "time": "2014-12-23 23:55:34"
         },
         {
             "name": "igorw/get-in",
@@ -3209,7 +3217,8 @@
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "easybook/geshi": 20,
-        "davidbadura/markdown-builder": 20
+        "davidbadura/markdown-builder": 20,
+        "gremo/ciconia-bundle": 20
     },
     "prefer-stable": false,
     "platform": {

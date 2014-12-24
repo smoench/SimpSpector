@@ -28,7 +28,7 @@
         "timetoogo/pinq": "~3.0",
         "nikic/php-parser": "~1.0.2",
         "davidbadura/markdown-builder": "dev-master",
-        "gremo/ciconia-bundle": "~1.0"
+        "gremo/ciconia-bundle": "dev-twig-extension"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -62,5 +62,9 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    }
+    },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/DavidBadura/CiconiaBundle"
+    }]
 }

@@ -55,7 +55,12 @@ class SecurityCheckerGadget extends AbstractGadget
         $logger->writeln('CMD > ' . $process->getCommandLine());
         $logger->writeln();
 
-        $process->run();
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                $logger->write($buffer);
+            }
+        );
+
         $output = $process->getOutput();
 
         $data   = json_decode($output, true);
@@ -148,9 +153,10 @@ class SecurityCheckerGadget extends AbstractGadget
      */
     private function createDescription($title, $cve, $link)
     {
-        return (new MarkdownBuilder())
-            ->link($link, $cve . ':')
-            ->write($title)
-            ->getMarkdown();
+        return sprintf(
+            '%s %s',
+            (new MarkdownBuilder())->inlineLink($link, $cve . ':'),
+            $title
+        );
     }
 }
