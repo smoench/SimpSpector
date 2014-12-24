@@ -22,6 +22,14 @@ function_blacklist:
     die: notice
     echo: notice
     var_dump: error
+comment_blacklist:
+  files: src/
+  blacklist:
+    todo: notice
+    "dont commit": error
+security-checker:
+  directory: ./
+  level: critical
 ```
 
 List of all SimpSpector Gadgets
@@ -30,5 +38,6 @@ List of all SimpSpector Gadgets
 * [PHP CodeSniffer (phpcs)](gadgets/phpcs.md)
 * [PHP Mess Detector (phpmd)](gadgets/phpmd.md)
 * [Function Blacklist (function_blacklist)](gadgets/function_blacklist.md)
+* [Security Checker (security-checker)](gadgets/security-checker.md)
 
 
