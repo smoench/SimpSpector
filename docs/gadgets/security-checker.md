@@ -6,10 +6,10 @@ This gadget checks your composer.lock if you have installed packages with securi
 **parameters**
 
 * directory
-    * which folder has the composer.lock, relative to the projects root folder.
+    * which folder contains the composer.lock, relative to the projects root folder.
     * defaults to './'
 * level
-    * which level have this issue
+    * error level assigned to issues created by this gadget
     * possible values: notice, warning, error or critical
     * default: critical
 
