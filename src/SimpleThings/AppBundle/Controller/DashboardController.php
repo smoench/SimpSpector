@@ -16,18 +16,13 @@ class DashboardController extends Controller
      */
     public function indexAction()
     {
-        $projectRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Project');
-        $commitRepository  = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
-
-        $projects = $projectRepository->findBy([], ['id' => 'DESC']);
-
-        $commits = $commitRepository->findGlobalCommits();
+        $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commits          = $commitRepository->findGlobalCommits(10);
 
         return $this->render(
             "SimpleThingsAppBundle:Dashboard:index.html.twig",
             [
-                'projects' => $projects,
-                'commits'  => $commits
+                'commits' => $commits
             ]
         );
     }

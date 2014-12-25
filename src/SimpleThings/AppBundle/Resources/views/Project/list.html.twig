@@ -1,0 +1,56 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', '') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+                    <a class="item" href="{{ path('homepage') }}">
+                        <i class="rss icon"></i> Newsstream
+                    </a>
+                    <a class="item active" href="{{ path('project_list') }}">
+                        <i class="cubes icon"></i> Projects
+                    </a>
+                </div>
+
+                <table class="ui table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Name</th>
+                        <th>Issues</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for project in projects %}
+                        <tr>
+                            <td>
+                                <a class="ui animated button" href="{{ path('project_show', {id: project.id}) }}">
+                                    <div class="hidden content">show</div>
+                                    <div class="visible content">
+                                        <i class="search icon"></i>
+                                    </div>
+                                </a>
+                            </td>
+                            <td>{{ project.name }}</td>
+                            <td>{{ _.levels((project.commits|last).issues) }}</td>
+                            <td>-</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

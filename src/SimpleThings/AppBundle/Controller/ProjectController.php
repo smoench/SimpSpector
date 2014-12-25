@@ -18,6 +18,23 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class ProjectController extends Controller
 {
+
+    /**
+     * @Route("s", name="project_list")
+     */
+    public function listAction()
+    {
+        $projectRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Project');
+        $projects          = $projectRepository->findBy([], ['name' => 'ASC']);
+
+        return $this->render(
+            "SimpleThingsAppBundle:Project:list.html.twig",
+            [
+                'projects' => $projects,
+            ]
+        );
+    }
+
     /**
      * @Route("/{id}/show", name="project_show")
      *
@@ -60,7 +77,7 @@ class ProjectController extends Controller
     public function masterAction(Project $project)
     {
         $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
-        $commits          = $commitRepository->findByMaster($project);
+        $commits          = $commitRepository->findByMaster($project, 10);
 
         $markdown = $this->get('simple_things_app.badge_generator')->getMarkdownForProject($project);
 

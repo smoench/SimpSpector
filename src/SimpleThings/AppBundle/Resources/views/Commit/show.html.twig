@@ -11,7 +11,7 @@
                 {% if commit.mergerequest %}
                     {{ _.step(commit.mergerequest.name, 'Merge Request', 'horizontally flipped share alternate icon', path('mergerequest_show', {id: commit.mergerequest.id })) }}
                 {% else %}
-                    {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', path('project_master', {id: commit.id })) }}
+                    {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', path('project_master', {id: commit.project.id })) }}
                 {% endif %}
 
                 {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
