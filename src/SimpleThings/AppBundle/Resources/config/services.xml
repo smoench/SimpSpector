@@ -12,7 +12,6 @@
 
     <services>
         <service id="simple_things_app.git_checkout" class="SimpleThings\AppBundle\GitCheckout">
-            <argument type="service" id="simple_things_app.git_wrapper"/>
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
@@ -42,16 +41,6 @@
         </service>
 
         <service id="simple_things_app.config_loader" class="SimpleThings\AppBundle\ConfigLoader" />
-
-        <service id="simple_things_app.git_wrapper" class="GitWrapper\GitWrapper">
-            <call method="addLoggerListener">
-                <argument type="service">
-                    <service class="GitWrapper\Event\GitLoggerListener">
-                        <argument type="service" id="logger" />
-                    </service>
-                </argument>
-            </call>
-        </service>
 
         <service id="simple_things_app.gadget_executor" class="SimpleThings\AppBundle\GadgetExecutor">
             <argument type="service" id="simple_things_app.gadget.repository"/>

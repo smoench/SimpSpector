@@ -2,8 +2,10 @@
 
 namespace SimpleThings\AppBundle;
 
-use GitWrapper\GitWrapper;
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Logger\NullLogger;
+use SimpleThings\AppBundle\Process\ProcessBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -17,41 +19,25 @@ class GitCheckout
     private $baseDir;
 
     /**
-     * @var GitWrapper
-     */
-    private $gitWrapper;
-
-    /**
-     * @param GitWrapper $gitWrapper
      * @param string $baseDir
      */
-    public function __construct(GitWrapper $gitWrapper, $baseDir = '/tmp')
+    public function __construct($baseDir = '/tmp')
     {
-        $this->gitWrapper = $gitWrapper;
-        $this->baseDir    = $baseDir;
+        $this->baseDir = $baseDir;
     }
 
     /**
      * @param Commit $commit
+     * @param AbstractLogger $logger
      * @return Workspace
-     * @throws \Exception
      */
-    public function create(Commit $commit)
+    public function create(Commit $commit, AbstractLogger $logger = null)
     {
-        $workspace           = new Workspace();
-        $workspace->revision = $commit->getRevision();
-        $workspace->path     = $this->baseDir . '/' . $commit->getUniqueId();
+        $logger = $logger ?: new NullLogger();
 
-        if (file_exists($workspace->path)) {
-            $this->remove($workspace);
-        }
-
-        $workingCopy = $this->gitWrapper->cloneRepository(
-            $commit->getProject()->getRepositoryUrl(),
-            $workspace->path
-        );
-
-        $workingCopy->checkout($workspace->revision);
+        $workspace = $this->createWorkspace($commit);
+        $this->gitClone($workspace, $logger);
+        $this->gitCheckout($workspace, $logger);
 
         $workspace->path = realpath($workspace->path);
 
@@ -65,5 +51,54 @@ class GitCheckout
     {
         $fs = new Filesystem();
         $fs->remove($workspace->path);
+    }
+
+    /**
+     * @param Commit $commit
+     * @return Workspace
+     */
+    private function createWorkspace(Commit $commit)
+    {
+        $workspace           = new Workspace();
+        $workspace->url      = $commit->getProject()->getRepositoryUrl();
+        $workspace->revision = $commit->getRevision();
+        $workspace->path     = $this->baseDir . '/' . $commit->getUniqueId();
+
+        if (file_exists($workspace->path)) {
+            $this->remove($workspace);
+        }
+
+        return $workspace;
+    }
+
+    /**
+     * @param Workspace $workspace
+     * @param AbstractLogger $logger
+     */
+    private function gitClone(Workspace $workspace, AbstractLogger $logger)
+    {
+        $processBuilder = new ProcessBuilder([
+            'git',
+            'clone',
+            $workspace->url,
+            basename($workspace->path)
+        ]);
+        $processBuilder->setWorkingDirectory(dirname($workspace->path));
+        $processBuilder->run($logger);
+    }
+
+    /**
+     * @param Workspace $workspace
+     * @param AbstractLogger $logger
+     */
+    private function gitCheckout(Workspace $workspace, AbstractLogger $logger)
+    {
+        $processBuilder = new ProcessBuilder([
+            'git',
+            'checkout',
+            $workspace->revision
+        ]);
+        $processBuilder->setWorkingDirectory($workspace->path);
+        $processBuilder->run($logger);
     }
 }
