@@ -32,7 +32,7 @@ class Generator
      */
     public function getMarkdownForMergeRequest(MergeRequest $mergeRequest)
     {
-        return $this->generateMarkdownBadget(
+        return $this->generateMarkdownBadge(
             $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
         );
@@ -44,7 +44,7 @@ class Generator
      */
     public function getMarkdownForProject(Project $project)
     {
-        return $this->generateMarkdownBadget(
+        return $this->generateMarkdownBadge(
             $this->router->generate('project_lastcommit', ['id' => $project->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('project_imagebadge', ['id' => $project->getId()], Router::ABSOLUTE_URL)
         );
@@ -55,7 +55,7 @@ class Generator
      * @param string $image
      * @return string
      */
-    private function generateMarkdownBadget($link, $image)
+    private function generateMarkdownBadge($link, $image)
     {
         $markdown = new MarkdownBuilder();
 
