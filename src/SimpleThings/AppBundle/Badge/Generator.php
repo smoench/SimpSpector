@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\Badge;
 
+use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -31,10 +32,9 @@ class Generator
      */
     public function getMarkdownForMergeRequest(MergeRequest $mergeRequest)
     {
-        return sprintf(
-            '[![SimpSpection Status](%s)](%s)',
-            $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
-            $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
+        return $this->generateMarkdownBadge(
+            $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
+            $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
         );
     }
 
@@ -44,10 +44,24 @@ class Generator
      */
     public function getMarkdownForProject(Project $project)
     {
-        return sprintf(
-            '[![Build Status](%s)](%s)',
-            $this->router->generate('project_imagebadge', ['id' => $project->getId()], Router::ABSOLUTE_URL),
-            $this->router->generate('project_lastcommit', ['id' => $project->getId()], Router::ABSOLUTE_URL)
+        return $this->generateMarkdownBadge(
+            $this->router->generate('project_lastcommit', ['id' => $project->getId()], Router::ABSOLUTE_URL),
+            $this->router->generate('project_imagebadge', ['id' => $project->getId()], Router::ABSOLUTE_URL)
+        );
+    }
+
+    /**
+     * @param string $link
+     * @param string $image
+     * @return string
+     */
+    private function generateMarkdownBadge($link, $image)
+    {
+        $markdown = new MarkdownBuilder();
+
+        return $markdown->inlineLink(
+            $link,
+            $markdown->inlineImg($image, 'SimpSpection Status')
         );
     }
 }
