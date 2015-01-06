@@ -39,7 +39,7 @@ class ProjectController extends Controller
      */
     public function showAction(Project $project)
     {
-        $mergeRequestRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\MergeRequest');
+        $mergeRequestRepository = $this->get('simpspector.app.repository.merge_request');
         $commitRepository       = $this->get('simpspector.app.repository.commit');
 
         $mergeRequests = $mergeRequestRepository->findBy(['project' => $project], [

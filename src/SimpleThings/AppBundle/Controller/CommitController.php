@@ -6,21 +6,23 @@
 namespace SimpleThings\AppBundle\Controller;
 
 use Pinq\Traversable;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * @Route("/commit")
+ * @Framework\Route("/commit")
  */
 class CommitController extends Controller
 {
     /**
-     * @Route("/{id}/show", name="commit_show")
+     * @Framework\Route("/{id}/show", name="commit_show")
+     * @Framework\Template()
      *
      * @param Commit $commit
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @return array
      */
     public function showAction(Commit $commit)
     {
@@ -29,14 +31,12 @@ class CommitController extends Controller
                 return $issue->getFile();
             });
 
-        return $this->render(
-            'SimpleThingsAppBundle:Commit:show.html.twig',
-            ['commit' => $commit, 'issues' => $issues]
-        );
+        return ['commit' => $commit, 'issues' => $issues];
     }
 
     /**
      * @param Commit $commit
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function logAction(Commit $commit)

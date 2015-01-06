@@ -12,6 +12,13 @@
             <argument>SimpleThings\AppBundle\Entity\Commit</argument>
         </service>
 
+        <service id="simpspector.app.repository.merge_request"
+                 class="SimpleThings\AppBundle\Repository\MergeRequestRepository"
+                 factory-service="doctrine"
+                 factory-method="getRepository">
+            <argument>SimpleThings\AppBundle\Entity\MergeRequest</argument>
+        </service>
+
         <service id="simpspector.app.repository.project"
                  class="SimpleThings\AppBundle\Repository\ProjectRepository"
                  factory-service="doctrine"

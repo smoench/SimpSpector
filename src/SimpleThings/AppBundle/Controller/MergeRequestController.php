@@ -5,70 +5,64 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
-use Doctrine\ORM\EntityRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Repository\CommitRepository;
-use SimpleThings\AppBundle\Repository\MergeRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * @Route("/merge-request")
+ * @Framework\Route("/merge-request")
  */
 class MergeRequestController extends Controller
 {
     /**
-     * @Route("/{id}/show", name="mergerequest_show")
+     * @Framework\Route("/{id}/show", name="mergerequest_show")
+     * @Framework\Template()
+     *
+     * @param MergeRequest $mergeRequest
+     *
+     * @return Response
      */
     public function showAction(MergeRequest $mergeRequest)
     {
-        /** @var EntityRepository $repository */
-        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
-        $commits    = $repository->findBy(['mergeRequest' => $mergeRequest], ['id' => 'DESC']);
+        $commits = $this->getCommitRepository()->findBy(['mergeRequest' => $mergeRequest], ['id' => 'DESC']);
 
-        return $this->render(
-            "SimpleThingsAppBundle:MergeRequest:show.html.twig",
-            [
-                'merge_request' => $mergeRequest,
-                'commits'       => $commits,
-            ]
-        );
+        return ['merge_request' => $mergeRequest, 'commits' => $commits];
     }
 
     /**
-     * @Route("/{id}/last-commit", name="mergerequest_lastcommit")
+     * @Framework\Route("/{id}/last-commit", name="mergerequest_lastcommit")
+     *
+     * @param MergeRequest $mergeRequest
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function lastCommitAction(MergeRequest $mergeRequest)
     {
-        /** @var CommitRepository */
-        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
-        $commit     = $repository->findLastForMergeRequest($mergeRequest);
+        $commit = $this->getCommitRepository()->findLastForMergeRequest($mergeRequest);
 
-        if ( ! $commit) {
-            throw new NotFoundHttpException();
+        if (! $commit) {
+            throw $this->createNotFoundException();
         }
 
         return $this->redirect($this->generateUrl('commit_show', ['id' => $commit->getId()]));
     }
 
     /**
-     * @Route("/{id}/badge", name="mergerequest_imagebadge")
+     * @Framework\Route("/{id}/badge", name="mergerequest_imagebadge")
      *
      * @param MergeRequest $mergeRequest
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @return Response
      */
     public function badgeAction(MergeRequest $mergeRequest)
     {
         /** @var ScoreCalculator $scoreCalculator */
         $scoreCalculator = $this->get('simple_things_app.badge.score_calculator');
 
-        /** @var CommitRepository $commitRepository */
-        $commitRepository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
-
-        $score = $scoreCalculator->get($commitRepository->findLastForMergeRequest($mergeRequest));
+        $score = $scoreCalculator->get($this->getCommitRepository()->findLastForMergeRequest($mergeRequest));
 
         $response = new Response($this->renderView("SimpleThingsAppBundle:Image:show.xml.twig", [
             'score' => $score->number,
@@ -81,5 +75,13 @@ class MergeRequestController extends Controller
         $response->setExpires(new \DateTime('-1 hour'));
 
         return $response;
+    }
+
+    /**
+     * @return CommitRepository
+     */
+    protected function getCommitRepository()
+    {
+        return $this->get('simpspector.app.repository.commit');
     }
 }
