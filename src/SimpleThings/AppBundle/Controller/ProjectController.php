@@ -5,102 +5,98 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route("/project")
+ * @Framework\Route("/projects")
  */
 class ProjectController extends Controller
 {
-
     /**
-     * @Route("s", name="project_list")
+     * @Framework\Route("/", name="project_list")
+     * @Framework\Template()
+     *
+     * @return array
      */
     public function listAction()
     {
-        $projectRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Project');
-        $projects          = $projectRepository->findBy([], ['name' => 'ASC']);
-
-        return $this->render(
-            "SimpleThingsAppBundle:Project:list.html.twig",
-            [
-                'projects' => $projects,
-            ]
-        );
+        return ['projects' => $this->get('simpspector.app.repository.project')->findAll()];
     }
 
     /**
-     * @Route("/{id}/show", name="project_show")
+     * @Framework\Route("/{id}/show", name="project_show")
+     * @Framework\Template()
      *
      * @param Project $project
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @return array
      */
     public function showAction(Project $project)
     {
         $mergeRequestRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\MergeRequest');
-        $commitRepository       = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commitRepository       = $this->get('simpspector.app.repository.commit');
 
         $mergeRequests = $mergeRequestRepository->findBy(['project' => $project], [
             'status' => 'DESC',
             'id'     => 'DESC'
         ]);
 
-        if (!$masterCommit = $commitRepository->findLastSuccessInMaster($project)) {
+        if (! ($masterCommit = $commitRepository->findLastSuccessInMaster($project))) {
             $masterCommit = $commitRepository->findLastInMaster($project);
         }
 
         $projectCommits = $commitRepository->findCommitsByProject($project);
 
-        return $this->render(
-            "SimpleThingsAppBundle:Project:show.html.twig",
-            [
-                'project'         => $project,
-                'merge_requests'  => $mergeRequests,
-                'master_commit'   => $masterCommit,
-                'project_commits' => $projectCommits
-            ]
-        );
+        return [
+            'project'         => $project,
+            'merge_requests'  => $mergeRequests,
+            'master_commit'   => $masterCommit,
+            'project_commits' => $projectCommits
+        ];
     }
 
     /**
-     * @Route("/{id}/master", name="project_master")
+     * @Framework\Route("/{id}/master", name="project_master")
+     * @Framework\Template()
      *
      * @param Project $project
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @return array
      */
     public function masterAction(Project $project)
     {
-        $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commitRepository = $this->get('simpspector.app.repository.commit');
         $commits          = $commitRepository->findByMaster($project, 10);
 
         $markdown = $this->get('simple_things_app.badge_generator')->getMarkdownForProject($project);
 
-        return $this->render(
-            "SimpleThingsAppBundle:Project:master.html.twig",
-            [
-                'project'  => $project,
-                'commits'  => $commits,
-                'markdown' => $markdown
-            ]
-        );
+        return [
+            'project'  => $project,
+            'commits'  => $commits,
+            'markdown' => $markdown
+        ];
     }
 
     /**
-     * @Route("/{id}/last-commit", name="project_lastcommit")
+     * @Framework\Route("/{id}/last-commit", name="project_lastcommit")
+     *
+     * @param Project $project
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function lastCommitAction(Project $project)
     {
         /** @var CommitRepository */
-        $repository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $repository = $this->get('simpspector.app.repository.commit');
         $commit     = $repository->findLastInMaster($project);
 
-        if (!$commit) {
+        if (! $commit) {
             throw new NotFoundHttpException();
         }
 
@@ -108,10 +104,11 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{id}/badge", name="project_imagebadge")
+     * @Framework\Route("/{id}/badge", name="project_imagebadge")
      *
      * @param Project $project
-     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @return Response
      */
     public function badgeAction(Project $project)
     {
@@ -119,7 +116,7 @@ class ProjectController extends Controller
         $scoreCalculator = $this->get('simple_things_app.badge.score_calculator');
 
         /** @var CommitRepository $commitRepository */
-        $commitRepository = $this->get('doctrine')->getRepository('SimpleThings\AppBundle\Entity\Commit');
+        $commitRepository = $this->get('simpspector.app.repository.commit');
 
         $score = $scoreCalculator->get($commitRepository->findLastInMaster($project));
 

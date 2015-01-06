@@ -5,25 +5,19 @@
 
 namespace SimpleThings\AppBundle\Controller;
 
-use Doctrine\ORM\EntityRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DashboardController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Framework\Route("/", name="homepage")
+     * @Framework\Template()
      */
     public function indexAction()
     {
-        $commitRepository = $this->getDoctrine()->getRepository('SimpleThings\AppBundle\Entity\Commit');
-        $commits          = $commitRepository->findGlobalCommits(10);
+        $commitRepository = $this->get('simpspector.app.repository.commit');
 
-        return $this->render(
-            "SimpleThingsAppBundle:Dashboard:index.html.twig",
-            [
-                'commits' => $commits
-            ]
-        );
+        return ['commits' => $commitRepository->findGlobalCommits(10)];
     }
 }

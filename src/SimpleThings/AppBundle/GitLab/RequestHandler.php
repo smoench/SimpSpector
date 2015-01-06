@@ -40,9 +40,9 @@ class RequestHandler
     private $client;
 
     /**
-     * @param EntityManager $em
-     * @param Client $client
-     * @param Notifier $notifier
+     * @param EntityManager   $em
+     * @param Client          $client
+     * @param Notifier        $notifier
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -59,6 +59,7 @@ class RequestHandler
 
     /**
      * @param Request $request
+     *
      * @throws \Exception
      */
     public function handle(Request $request)
@@ -67,7 +68,7 @@ class RequestHandler
 
         $event = json_decode($request->getContent(), true);
 
-        if (!is_array($event)) {
+        if (! is_array($event)) {
             throw new \Exception('missing data');
         }
 
@@ -124,13 +125,13 @@ class RequestHandler
         /** @var MergeRequestRepository $repository */
         $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
 
-        if(!$project = $this->findProject($projectId)) {
+        if (! $project = $this->findProject($projectId)) {
             $project = $this->createProject($projectId);
         }
 
         if ($branch == 'master') {
             $mergeRequest = null;
-        } elseif (!$mergeRequest = $repository->findLastMergeRequestByBranch($project, $branch)) {
+        } elseif (! $mergeRequest = $repository->findLastMergeRequestByBranch($project, $branch)) {
             return;
         }
 
@@ -147,6 +148,7 @@ class RequestHandler
     /**
      * @param string $projectId
      * @param string $branch
+     *
      * @return string
      */
     private function getLastRevisionFromBranch($projectId, $branch)
@@ -160,6 +162,7 @@ class RequestHandler
      * @param $projectId
      * @param $mergeRequestId
      * @param $branch
+     *
      * @return MergeRequest
      */
     private function createMergeRequest($projectId, $mergeRequestId, $branch)
@@ -168,7 +171,7 @@ class RequestHandler
         $mr->setRemoteId($mergeRequestId);
         $mr->setSourceBranch($branch);
 
-        if (!$project = $this->findProject($projectId)) {
+        if (! $project = $this->findProject($projectId)) {
             $project = $this->createProject($projectId);
         }
 
@@ -179,6 +182,7 @@ class RequestHandler
 
     /**
      * @param MergeRequest $mergeRequest
+     *
      * @throws \Exception
      */
     private function updateMergeRequest(MergeRequest $mergeRequest)
@@ -207,6 +211,7 @@ class RequestHandler
 
     /**
      * @param string $projectId
+     *
      * @return null|object
      */
     private function findProject($projectId)
@@ -220,6 +225,7 @@ class RequestHandler
 
     /**
      * @param string $projectId
+     *
      * @return Project
      */
     private function createProject($projectId)
@@ -237,6 +243,7 @@ class RequestHandler
 
     /**
      * @param string $ref
+     *
      * @return string
      */
     private function normalizeBranchName($ref)
