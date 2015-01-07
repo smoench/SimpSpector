@@ -3,7 +3,6 @@
 namespace SimpleThings\AppBundle\GitLab;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -11,6 +10,7 @@ use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 use SimpleThings\AppBundle\Entity\Project;
 use SimpleThings\AppBundle\Repository\MergeRequestRepository;
+use SimpleThings\AppBundle\Repository\ProjectRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -30,6 +30,16 @@ class RequestHandler
     private $logger;
 
     /**
+     * @var MergeRequestRepository
+     */
+    private $mergeRequestRepository;
+
+    /**
+     * @var ProjectRepository
+     */
+    private $projectRepository;
+
+    /**
      * @var EntityManager
      */
     private $em;
@@ -40,21 +50,27 @@ class RequestHandler
     private $client;
 
     /**
-     * @param EntityManager   $em
-     * @param Client          $client
-     * @param Notifier        $notifier
-     * @param LoggerInterface $logger
+     * @param EntityManager          $em
+     * @param MergeRequestRepository $mergeRequestRepository
+     * @param ProjectRepository      $projectRepository
+     * @param Client                 $client
+     * @param Notifier               $notifier
+     * @param LoggerInterface        $logger
      */
     public function __construct(
         EntityManager $em,
+        MergeRequestRepository $mergeRequestRepository,
+        ProjectRepository $projectRepository,
         Client $client,
         Notifier $notifier,
         LoggerInterface $logger = null
     ) {
-        $this->notifier = $notifier;
-        $this->em       = $em;
-        $this->client   = $client;
-        $this->logger   = $logger ?: new NullLogger();
+        $this->notifier               = $notifier;
+        $this->em                     = $em;
+        $this->mergeRequestRepository = $mergeRequestRepository;
+        $this->projectRepository      = $projectRepository;
+        $this->client                 = $client;
+        $this->logger                 = $logger ?: new NullLogger();
     }
 
     /**
@@ -88,10 +104,9 @@ class RequestHandler
         $mergeId   = $event['object_attributes']['id'];
         $branch    = $event['object_attributes']['source_branch'];
 
-        /** @var MergeRequestRepository $repository */
-        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
+        $mergeRequest = $this->mergeRequestRepository->findMergeRequestByRemote($projectId, $mergeId);
 
-        if ($mergeRequest = $repository->findMergeRequestByRemote($projectId, $mergeId)) {
+        if ($mergeRequest) {
             $this->updateMergeRequest($mergeRequest);
 
             return;
@@ -122,16 +137,13 @@ class RequestHandler
         $projectId = $event['project_id'];
         $revision  = $event['after'];
 
-        /** @var MergeRequestRepository $repository */
-        $repository = $this->em->getRepository('SimpleThingsAppBundle:MergeRequest');
-
-        if (! $project = $this->findProject($projectId)) {
+        if (! $project = $this->projectRepository->findByRemoteId($projectId)) {
             $project = $this->createProject($projectId);
         }
 
         if ($branch == 'master') {
             $mergeRequest = null;
-        } elseif (! $mergeRequest = $repository->findLastMergeRequestByBranch($project, $branch)) {
+        } elseif (! $mergeRequest = $this->mergeRequestRepository->findLastMergeRequestByBranch($project, $branch)) {
             return;
         }
 
@@ -159,20 +171,20 @@ class RequestHandler
     }
 
     /**
-     * @param $projectId
+     * @param $remoteProjectId
      * @param $mergeRequestId
      * @param $branch
      *
      * @return MergeRequest
      */
-    private function createMergeRequest($projectId, $mergeRequestId, $branch)
+    private function createMergeRequest($remoteProjectId, $mergeRequestId, $branch)
     {
         $mr = new MergeRequest();
         $mr->setRemoteId($mergeRequestId);
         $mr->setSourceBranch($branch);
 
-        if (! $project = $this->findProject($projectId)) {
-            $project = $this->createProject($projectId);
+        if (! $project = $this->projectRepository->findByRemoteId($remoteProjectId)) {
+            $project = $this->createProject($remoteProjectId);
         }
 
         $mr->setProject($project);
@@ -193,52 +205,45 @@ class RequestHandler
         );
 
         $mergeRequest->setName($data['title']);
-
-        switch ($data['state']) {
-            case "merged":
-                $mergeRequest->setStatus(MergeRequest::STATUS_MERGED);
-                break;
-            case "opened":
-                $mergeRequest->setStatus(MergeRequest::STATUS_OPEN);
-                break;
-            case "closed":
-                $mergeRequest->setStatus(MergeRequest::STATUS_CLOSED);
-                break;
-            default:
-                throw new \Exception();
-        }
+        $mergeRequest->setStatus($this->getMergeRequestStatus($data['state']));
     }
 
     /**
-     * @param string $projectId
-     *
-     * @return null|object
-     */
-    private function findProject($projectId)
-    {
-        /** @var EntityRepository $projectRepository */
-        $projectRepository = $this->em->getRepository('SimpleThings\AppBundle\Entity\Project');
-        $results           = $projectRepository->findBy(['remoteId' => $projectId]);
-
-        return count($results) === 1 ? $results[0] : null;
-    }
-
-    /**
-     * @param string $projectId
+     * @param string $remoteProjectId
      *
      * @return Project
      */
-    private function createProject($projectId)
+    private function createProject($remoteProjectId)
     {
-        $data = $this->client->api('projects')->show($projectId);
+        $data = $this->client->api('projects')->show($remoteProjectId);
 
         $project = new Project();
-        $project->setRemoteId($projectId);
+        $project->setRemoteId($remoteProjectId);
         $project->setName($data['name_with_namespace']);
         $project->setRepositoryUrl($data['ssh_url_to_repo']);
         $project->setWebUrl($data['web_url']);
 
         return $project;
+    }
+
+    /**
+     * @param $status
+     *
+     * @return mixed
+     */
+    private function getMergeRequestStatus($status)
+    {
+        $statuses = [
+            'merged' => MergeRequest::STATUS_MERGED,
+            'opened' => MergeRequest::STATUS_OPEN,
+            'closed' => MergeRequest::STATUS_CLOSED
+        ];
+
+        if (! isset($statuses[$status])) {
+            throw new \RuntimeException('Merge request status is not defined');
+        }
+
+        return $statuses[$status];
     }
 
     /**
