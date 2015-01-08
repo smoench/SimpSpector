@@ -39,5 +39,6 @@ List of all SimpSpector Gadgets
 * [PHP Mess Detector (phpmd)](gadgets/phpmd.md)
 * [Function Blacklist (function_blacklist)](gadgets/function_blacklist.md)
 * [Security Checker (security-checker)](gadgets/security-checker.md)
+* [Twig Syntax Checker (twig-ling)](gadgets/twig-lint.md)
 
 
