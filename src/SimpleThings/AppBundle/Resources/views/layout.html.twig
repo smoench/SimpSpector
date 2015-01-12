@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
-    <title></title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('css/all' ~ (app.environment == 'prod' ? '.min' : '') ~ '.css') }}" />
 
 </head>
