@@ -7,13 +7,15 @@
     <services>
 
         <service id="simple_things_app.gitlab.commit_factory" class="SimpleThings\AppBundle\GitLab\CommitFactory">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="gitlab_api"/>
         </service>
 
         <service id="simple_things_app.gitlab.request_handler" class="SimpleThings\AppBundle\GitLab\RequestHandler">
-            <argument type="service" id="doctrine.orm.default_entity_manager" />
-            <argument type="service" id="gitlab_api" />
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument type="service" id="simpspector.app.repository.merge_request"/>
+            <argument type="service" id="simpspector.app.repository.project"/>
+            <argument type="service" id="gitlab_api"/>
             <argument type="service" id="simple_things_app.gitlab.notifier"/>
             <argument type="service" id="logger"/>
         </service>

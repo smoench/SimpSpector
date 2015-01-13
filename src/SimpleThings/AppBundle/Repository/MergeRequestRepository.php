@@ -17,7 +17,7 @@ class MergeRequestRepository extends EntityRepository
     /**
      * @param int $projectId
      * @param int $mergeId
-     * @return bool
+     * @return MergeRequest|null
      */
     public function findMergeRequestByRemote($projectId, $mergeId)
     {
