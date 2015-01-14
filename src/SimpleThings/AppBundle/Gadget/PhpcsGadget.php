@@ -1,15 +1,11 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Process\ProcessBuilder;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -62,20 +58,7 @@ class PhpcsGadget extends AbstractGadget
         }
 
         $processBuilder->setWorkingDirectory($workspace->path);
-
-        $process = $processBuilder->getProcess();
-        $process->setTimeout(3600);
-
-        $logger->writeln('CMD > ' . $process->getCommandLine());
-        $logger->writeln();
-
-        $process->run(
-            function ($type, $buffer) use ($logger) {
-                $logger->write($buffer);
-            }
-        );
-
-        $output = $process->getOutput();
+        $output = $processBuilder->run($logger);
 
         $rawIssues = $this->convertFromCsvToArray($output);
 

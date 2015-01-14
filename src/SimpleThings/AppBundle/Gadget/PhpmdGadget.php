@@ -1,15 +1,11 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Process\ProcessBuilder;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
@@ -54,20 +50,7 @@ class PhpmdGadget extends AbstractGadget
         $processBuilder->add('xml');
         $processBuilder->add(implode(',', $options['rulesets']));
         $processBuilder->setWorkingDirectory($workspace->path);
-
-        $process = $processBuilder->getProcess();
-        $process->setTimeout(3600);
-
-        $logger->writeln('CMD > ' . $process->getCommandLine());
-        $logger->writeln();
-
-        $process->run(
-            function ($type, $buffer) use ($logger) {
-                $logger->write($buffer);
-            }
-        );
-
-        $output = $process->getOutput();
+        $output = $processBuilder->run($logger);
 
         $data = $this->convertFromXmlToArray($output);
 

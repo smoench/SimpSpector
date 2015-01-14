@@ -77,7 +77,7 @@ class CommitHandler
         try {
             $this->startProcess($commit);
 
-            $workspace = $this->gitCheckout->create($commit);
+            $workspace = $this->gitCheckout->create($commit, $logger);
 
             $workspace->config = $this->configLoader->load($workspace);
             $this->execute($commit, $workspace, $logger);

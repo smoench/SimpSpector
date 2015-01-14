@@ -18,6 +18,11 @@ class Workspace
     /**
      * @var string
      */
+    public $url;
+
+    /**
+     * @var string
+     */
     public $revision;
 
     /**
