@@ -11,7 +11,7 @@
         {% if foo %}
             <p>bar</p>
         {% else %}
-            <p>bar {{ baz }}</p>
+            <p>bar {{ baz|funnyNonStandardFilter }}</p>
         {% endif %}
     {% endblock %}
 </body>
