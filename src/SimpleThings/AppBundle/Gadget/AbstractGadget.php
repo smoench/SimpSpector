@@ -5,6 +5,9 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use DavidBadura\MarkdownBuilder\MarkdownBuilder;
+use SimpleThings\AppBundle\CodeSnipper;
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\OptionsResolver\Options;
@@ -85,5 +88,18 @@ abstract class AbstractGadget implements GadgetInterface
         $resolver->setNormalizers($normalizers);
 
         return $resolver->resolve($options);
+    }
+
+    /**
+     * @param Workspace $workspace
+     * @param Issue $issue
+     */
+    protected function addSimpleCodeSnippetInDescription(Workspace $workspace, Issue $issue)
+    {
+        $snippet = CodeSnipper::snip($workspace->path . '/' . $issue->getFile(), $issue->getLine());
+
+        $markdown = (new MarkdownBuilder())->code($snippet)->getMarkdown();
+
+        $issue->setDescription($markdown);
     }
 }

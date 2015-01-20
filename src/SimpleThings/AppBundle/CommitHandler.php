@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -33,11 +35,6 @@ class CommitHandler
     private $gadgetExecutor;
 
     /**
-     * @var SyntaxHighlighter
-     */
-    private $highlighter;
-
-    /**
      * @var LoggerFactory
      */
     private $loggerFactory;
@@ -47,7 +44,6 @@ class CommitHandler
      * @param GitCheckout $gitCheckout
      * @param ConfigLoader $loader
      * @param GadgetExecutor $gadgetExecutor
-     * @param SyntaxHighlighter $highlighter
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
@@ -55,14 +51,12 @@ class CommitHandler
         GitCheckout $gitCheckout,
         ConfigLoader $loader,
         GadgetExecutor $gadgetExecutor,
-        SyntaxHighlighter $highlighter,
         LoggerFactory $loggerFactory
     ) {
         $this->em             = $em;
         $this->gitCheckout    = $gitCheckout;
         $this->gadgetExecutor = $gadgetExecutor;
         $this->configLoader   = $loader;
-        $this->highlighter    = $highlighter;
         $this->loggerFactory  = $loggerFactory;
     }
 

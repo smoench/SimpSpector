@@ -2,6 +2,7 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
+use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Process\ProcessBuilder;
@@ -111,6 +112,8 @@ class PhpmdGadget extends AbstractGadget
                 'priority'        => $data['@priority']
             ]
         );
+
+        $this->addSimpleCodeSnippetInDescription($workspace, $issue);
 
         return $issue;
     }

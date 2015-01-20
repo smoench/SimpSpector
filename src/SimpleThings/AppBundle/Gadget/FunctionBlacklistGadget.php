@@ -56,6 +56,10 @@ class FunctionBlacklistGadget extends AbstractGadget
             }
         }
 
+        foreach ($result->getIssues() as $issue) {
+            $this->addSimpleCodeSnippetInDescription($workspace, $issue);
+        }
+
         return $result;
     }
 

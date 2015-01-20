@@ -75,13 +75,6 @@ class Issue
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $codeSnippet;
-
-    /**
      * @var array
      *
      * @ORM\Column(type="json_array")
@@ -194,22 +187,6 @@ class Issue
     public function setLine($line)
     {
         $this->line = $line;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCodeSnippet()
-    {
-        return $this->codeSnippet;
-    }
-
-    /**
-     * @param string $codeSnippet
-     */
-    public function setCodeSnippet($codeSnippet)
-    {
-        $this->codeSnippet = $codeSnippet;
     }
 
     /**

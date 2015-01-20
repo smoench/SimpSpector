@@ -128,6 +128,8 @@ class PhpcsGadget extends AbstractGadget
             ]
         );
 
+        $this->addSimpleCodeSnippetInDescription($workspace, $issue);
+
         return $issue;
     }
 }

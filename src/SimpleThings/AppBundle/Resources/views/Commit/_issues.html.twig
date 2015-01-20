@@ -15,6 +15,16 @@
         <div class="content">
             {% for issue in list %}
                 <div class="ui top attached {{ issue|level_color }} message">
+                    {% if issue.file and issue.line %}
+                    <div class="ui top right attached label">
+                        <a class="phpstorm"
+                           href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line }}">
+                            <i class="lightning inverted circular icon"></i>
+                        </a>
+                        Line {{ issue.line }}
+                    </div>
+                    {% endif %}
+
                     <h4>
                         <i class="{{ issue|level_icon }} icon"></i>
                         {{ issue.gadget|upper }}
@@ -23,20 +33,6 @@
 
                     <p>{{ issue.message }}</p>
                 </div>
-
-                {% if issue.codeSnippet is not empty %}
-                    <div class="ui attached segment">
-                        <div class="ui top right attached label">
-                            <a class="phpstorm"
-                               href="http://localhost:8091/?message={{ issue.file }}:{{ issue.line }}">
-                                <i class="lightning inverted circular icon"></i>
-                            </a>
-                            Line {{ issue.line }}
-                        </div>
-                        {{ issue.codeSnippet|raw }}
-                    </div>
-                {% endif %}
-
 
                 {% if issue.description is not empty %}
                     <div class="ui attached segment">
