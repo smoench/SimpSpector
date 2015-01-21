@@ -10,6 +10,7 @@
     "tests"
   ],
   "dependencies": {
-    "semantic": "~1.0.0"
+    "semantic": "~1.0.0",
+    "prism": "git@github.com:LeaVerou/prism.git#gh-pages"
   }
 }

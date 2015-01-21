@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle;
+namespace SimpleThings\AppBundle\Util;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>

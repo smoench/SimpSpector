@@ -79,3 +79,7 @@ zeichen32_git_lab_api:
             token: %gitlab_token%
             url: %gitlab_url%
             auth_method: url_token
+
+gremo_ciconia:
+    extensions:
+        fencedCodeBlock: ~

@@ -6,7 +6,7 @@
 namespace SimpleThings\AppBundle\Gadget;
 
 use DavidBadura\MarkdownBuilder\MarkdownBuilder;
-use SimpleThings\AppBundle\CodeSnipper;
+use SimpleThings\AppBundle\Util\CodeSnipper;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Finder\Finder;

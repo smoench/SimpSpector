@@ -105,21 +105,10 @@ class CommitHandler
     private function execute(Commit $commit, Workspace $workspace, AbstractLogger $logger)
     {
         $commit->setGadgets(array_keys($workspace->config));
-
         $result = $this->gadgetExecutor->run($workspace, $logger);
 
         foreach ($result->getIssues() as $issue) {
             $issue->setCommit($commit);
-
-            if ($issue->getFile() && $issue->getLine()) {
-                $snippet = $this->highlighter->highlightAroundLine(
-                    $workspace->path . '/' . $issue->getFile(),
-                    $issue->getLine()
-                );
-
-                $issue->setCodeSnippet($snippet);
-            }
-
             $commit->getIssues()->add($issue);
         }
     }
