@@ -5,9 +5,9 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
-use DavidBadura\MarkdownBuilder\MarkdownBuilder;
-use SimpleThings\AppBundle\Util\CodeSnipper;
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\MarkdownBuilder;
+use SimpleThings\AppBundle\Util\HighlightHelper;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\OptionsResolver\Options;
@@ -96,10 +96,22 @@ abstract class AbstractGadget implements GadgetInterface
      */
     protected function addSimpleCodeSnippetInDescription(Workspace $workspace, Issue $issue)
     {
-        $snippet = CodeSnipper::snip($workspace->path . '/' . $issue->getFile(), $issue->getLine());
+        $snippet = HighlightHelper::createSnippetByFile(
+            $workspace->path . '/' . $issue->getFile(),
+            $issue->getLine()
+        );
 
-        $markdown = (new MarkdownBuilder())->code($snippet)->getMarkdown();
+        $extension = pathinfo($issue->getFile(), PATHINFO_EXTENSION);
+        $offset    = max($issue->getLine() - 5, 1);
 
-        $issue->setDescription($markdown);
+        $options = [
+            'file'   => $issue->getFile(),
+            'line'   => $issue->getLine(),
+            'offset' => $offset
+        ];
+
+        $issue->setDescription(
+            (new MarkdownBuilder())->code($snippet, $extension, $options)->getMarkdown()
+        );
     }
 }

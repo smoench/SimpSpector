@@ -79,5 +79,10 @@
             <argument type="service" id="simple_things_app.badge.score_calculator"/>
             <tag name="twig.extension"/>
         </service>
+
+        <!-- Markdown -->
+        <service id="ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+            <tag name ="ciconia.extension" />
+        </service>
     </services>
 </container>
