@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\ProjectRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Project
+class Project implements TimestampableInterface
 {
     use Timestampable;
 

@@ -12,7 +12,7 @@ use SimpleThings\AppBundle\Gadget\Result;
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\CommitRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Commit
+class Commit implements TimestampableInterface
 {
     use Timestampable;
 

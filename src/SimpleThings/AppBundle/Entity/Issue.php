@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
-class Issue
+class Issue implements TimestampableInterface
 {
     use Timestampable;
 

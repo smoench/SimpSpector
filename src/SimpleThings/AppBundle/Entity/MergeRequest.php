@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\MergeRequestRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class MergeRequest
+class MergeRequest implements TimestampableInterface
 {
     use Timestampable;
 
