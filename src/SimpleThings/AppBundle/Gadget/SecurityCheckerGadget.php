@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Gadget;
 
@@ -16,6 +13,9 @@ use SimpleThings\AppBundle\Process\ProcessBuilder;
  */
 class SecurityCheckerGadget extends AbstractGadget
 {
+    /**
+     * @var string
+     */
     const NAME = 'security-checker';
 
     /**

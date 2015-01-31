@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle;
+namespace SimpleThings\AppBundle\Util;
 
 use DavidBadura\MarkdownBuilder\MarkdownBuilder as BaseMarkdownBuilder;
 

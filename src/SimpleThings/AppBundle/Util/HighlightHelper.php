@@ -2,40 +2,37 @@
 
 namespace SimpleThings\AppBundle\Util;
 
+use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Workspace;
+
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
 class HighlightHelper
 {
     /**
-     * @param string $source
-     * @param int $line
+     * @param Workspace $workspace
+     * @param Issue $issue
      * @param int $around
      * @return string
      */
-    public static function createSnippet($source, $line, $around = 5)
+    public static function createCodeSnippet(Workspace $workspace, Issue $issue, $around = 5)
     {
-        $rows = explode(PHP_EOL, $source);
+        $snippet = SnippetHelper::createSnippetByFile(
+            $workspace->path . '/' . $issue->getFile(),
+            $issue->getLine(),
+            $around
+        );
 
-        $offset = max($line - $around, 1) - 1;
-        $length = $around * 2 + 1;
-        if ($line + $length > count($rows)) {
-            $length = count($rows) - $offset;
-        }
+        $extension = pathinfo($issue->getFile(), PATHINFO_EXTENSION);
+        $offset    = max($issue->getLine() - $around, 1);
 
-        $slicedSource = array_slice($rows, $offset, $length);
+        $options = [
+            'file'   => $issue->getFile(),
+            'line'   => $issue->getLine(),
+            'offset' => $offset
+        ];
 
-        return implode(PHP_EOL, $slicedSource);
-    }
-
-    /**
-     * @param string $file
-     * @param int $line
-     * @param int $around
-     * @return string
-     */
-    public static function createSnippetByFile($file, $line, $around = 5)
-    {
-        return self::createSnippet(file_get_contents($file), $line, $around);
+        return (new MarkdownBuilder())->code($snippet, $extension, $options)->getMarkdown();
     }
 }

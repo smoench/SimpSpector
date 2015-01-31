@@ -38,6 +38,7 @@
             <argument type="service" id="simple_things_app.config_loader"/>
             <argument type="service" id="simple_things_app.gadget_executor"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <service id="simple_things_app.config_loader" class="SimpleThings\AppBundle\ConfigLoader" />
@@ -81,8 +82,13 @@
         </service>
 
         <!-- Markdown -->
-        <service id="ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+        <service id="simpspector.ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
             <tag name ="ciconia.extension" />
+        </service>
+
+        <!-- Events -->
+        <service id="simpspector.event_listener.highlight" class="SimpleThings\AppBundle\Event\Listener\SimpleHighlightListener">
+            <tag name="kernel.event_listener" event="simpspector.result" method="onGadgetResult"/>
         </service>
     </services>
 </container>

@@ -89,29 +89,4 @@ abstract class AbstractGadget implements GadgetInterface
 
         return $resolver->resolve($options);
     }
-
-    /**
-     * @param Workspace $workspace
-     * @param Issue $issue
-     */
-    protected function addSimpleCodeSnippetInDescription(Workspace $workspace, Issue $issue)
-    {
-        $snippet = HighlightHelper::createSnippetByFile(
-            $workspace->path . '/' . $issue->getFile(),
-            $issue->getLine()
-        );
-
-        $extension = pathinfo($issue->getFile(), PATHINFO_EXTENSION);
-        $offset    = max($issue->getLine() - 5, 1);
-
-        $options = [
-            'file'   => $issue->getFile(),
-            'line'   => $issue->getLine(),
-            'offset' => $offset
-        ];
-
-        $issue->setDescription(
-            (new MarkdownBuilder())->code($snippet, $extension, $options)->getMarkdown()
-        );
-    }
 }
