@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Tests\Gadget\SimpSpectorGadget;
+namespace SimpleThings\AppBundle\Tests\Gadget;
 
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Gadget\FunctionBlacklistGadget;
@@ -10,7 +10,7 @@ use SimpleThings\AppBundle\Workspace;
 /**
  * @author Tobias Olry <tobias.olry@gmail.com>
  */
-class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
+class FunctionBlacklistGadgetTest extends \PHPUnit_Framework_TestCase
 {
     private function createIssue($message, $line, $level)
     {
@@ -24,7 +24,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConfig()
     {
         $workspace         = new Workspace();
-        $workspace->path   = __DIR__ . '/_data';
+        $workspace->path   = __DIR__ . '/_data/function_blacklist';
         $workspace->config = [FunctionBlacklistGadget::NAME => []];
 
         $gadget = new FunctionBlacklistGadget();
@@ -45,7 +45,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     public function testExitDie()
     {
         $workspace         = new Workspace();
-        $workspace->path   = __DIR__ . '/_data';
+        $workspace->path   = __DIR__ . '/_data/function_blacklist';
         $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['die' => 'critical']]];
 
         $gadget = new FunctionBlacklistGadget();
@@ -73,7 +73,7 @@ class SimpSpectorGadgetTest extends \PHPUnit_Framework_TestCase
     public function testNormalFunction()
     {
         $workspace         = new Workspace();
-        $workspace->path   = __DIR__ . '/_data';
+        $workspace->path   = __DIR__ . '/_data/function_blacklist';
         $workspace->config = [FunctionBlacklistGadget::NAME => ['blacklist' => ['extra_var_dump' => 'warning']]];
 
         $gadget = new FunctionBlacklistGadget();
