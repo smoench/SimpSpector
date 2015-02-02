@@ -12,7 +12,7 @@ use SimpleThings\AppBundle\Gadget\Result;
  * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\CommitRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Commit
+class Commit implements TimestampableInterface
 {
     use Timestampable;
 
@@ -149,11 +149,7 @@ class Commit
      */
     public function getProject()
     {
-        if ($this->project) {
-            return $this->project;
-        }
-
-        return $this->getMergeRequest()->getProject(); // todo remove
+        return $this->project;
     }
 
     /**

@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Gadget;
 
@@ -9,13 +6,16 @@ use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
-use Symfony\Component\Process\ProcessBuilder;
+use SimpleThings\AppBundle\Process\ProcessBuilder;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
 class SecurityCheckerGadget extends AbstractGadget
 {
+    /**
+     * @var string
+     */
     const NAME = 'security-checker';
 
     /**
@@ -48,20 +48,7 @@ class SecurityCheckerGadget extends AbstractGadget
 
         $processBuilder = new ProcessBuilder([$this->bin, 'security:check', '--format=json', $options['directory']]);
         $processBuilder->setWorkingDirectory($workspace->path);
-
-        $process = $processBuilder->getProcess();
-        $process->setTimeout(3600);
-
-        $logger->writeln('CMD > ' . $process->getCommandLine());
-        $logger->writeln();
-
-        $process->run(
-            function ($type, $buffer) use ($logger) {
-                $logger->write($buffer);
-            }
-        );
-
-        $output = $process->getOutput();
+        $output = $processBuilder->run($logger);
 
         $data   = json_decode($output, true);
         $result = new Result();

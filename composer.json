@@ -23,10 +23,9 @@
         "igorw/get-in": "~1.0",
         "phpmd/phpmd": "~2.1",
         "squizlabs/php_codesniffer": "~2.0",
-        "easybook/geshi": "dev-master",
         "timetoogo/pinq": "~3.0",
         "nikic/php-parser": "~1.0.2",
-        "davidbadura/markdown-builder": "dev-master",
+        "davidbadura/markdown-builder": "~1.0",
         "gremo/ciconia-bundle": "dev-twig-extension"
     },
     "require-dev": {

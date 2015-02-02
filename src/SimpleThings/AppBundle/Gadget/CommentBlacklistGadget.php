@@ -35,7 +35,7 @@ class CommentBlacklistGadget extends AbstractGadget
         $result = new Result();
 
         foreach ($this->findFiles($workspace->path, $options['files']) as $filename) {
-            $result->merge($this->processFile($filename, $options));
+            $result->merge($this->processFile($workspace, $filename, $options));
         }
 
         return $result;
@@ -50,17 +50,18 @@ class CommentBlacklistGadget extends AbstractGadget
     }
 
     /**
+     * @param Workspace $workspace
      * @param string $filename
      * @param array $options
      * @return Result
      */
-    private function processFile($filename, array $options)
+    private function processFile(Workspace $workspace, $filename, array $options)
     {
         $comments = $this->extract($filename);
 
         $result = new Result();
         foreach ($comments as $comment) {
-            $result->merge($this->processComment($filename, $options, $comment));
+            $result->merge($this->processComment($workspace, $filename, $options, $comment));
         }
 
         return $result;
@@ -95,12 +96,13 @@ class CommentBlacklistGadget extends AbstractGadget
     }
 
     /**
+     * @param Workspace $workspace
      * @param string $filename
      * @param array $options
      * @param string $comment
      * @return Result
      */
-    private function processComment($filename, array $options, $comment)
+    private function processComment(Workspace $workspace, $filename, array $options, $comment)
     {
         $result = new Result();
 
@@ -112,7 +114,7 @@ class CommentBlacklistGadget extends AbstractGadget
                 }
 
                 $issue = new Issue(sprintf('found "%s" in a comment', $blacklistedWord), $this->getName(), $errorLevel);
-                $issue->setFile($filename);
+                $issue->setFile($this->cleanupFilePath($workspace, $filename));
                 $issue->setLine($comment['line'] + $lineOffset);
 
                 $result->addIssue($issue);

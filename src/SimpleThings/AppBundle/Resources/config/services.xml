@@ -37,8 +37,8 @@
             <argument type="service" id="simple_things_app.git_checkout"/>
             <argument type="service" id="simple_things_app.config_loader"/>
             <argument type="service" id="simple_things_app.gadget_executor"/>
-            <argument type="service" id="simple_things_app.syntax_highlighter"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <service id="simple_things_app.config_loader" class="SimpleThings\AppBundle\ConfigLoader" />
@@ -50,8 +50,6 @@
         <service id="simple_things_app.gadget.repository" class="SimpleThings\AppBundle\Gadget\Repository"/>
 
         <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
-
-        <service id="simple_things_app.syntax_highlighter" class="SimpleThings\AppBundle\SyntaxHighlighter"/>
 
         <!-- GADGETS -->
         <service id="simple_things_app.gadget.phpcs" class="SimpleThings\AppBundle\Gadget\PhpcsGadget">
@@ -78,13 +76,19 @@
         </service>
 
         <!-- TWIG -->
-        <service id="simple_things_app.twig.extension.highlight" class="SimpleThings\AppBundle\Twig\HighlightExtension">
-            <argument type="service" id="simple_things_app.syntax_highlighter"/>
-            <tag name="twig.extension"/>
-        </service>
         <service id="simple_things_app.twig.extension.util" class="SimpleThings\AppBundle\Twig\UtilExtension">
             <argument type="service" id="simple_things_app.badge.score_calculator"/>
             <tag name="twig.extension"/>
+        </service>
+
+        <!-- Markdown -->
+        <service id="simpspector.ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+            <tag name ="ciconia.extension" />
+        </service>
+
+        <!-- Events -->
+        <service id="simpspector.event_listener.highlight" class="SimpleThings\AppBundle\Event\Listener\SimpleHighlightListener">
+            <tag name="kernel.event_listener" event="simpspector.result" method="onGadgetResult"/>
         </service>
     </services>
 </container>

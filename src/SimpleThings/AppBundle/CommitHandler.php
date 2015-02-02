@@ -4,8 +4,12 @@ namespace SimpleThings\AppBundle;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Event\GadgetEvent;
+use SimpleThings\AppBundle\Event\GadgetResultEvent;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -33,37 +37,37 @@ class CommitHandler
     private $gadgetExecutor;
 
     /**
-     * @var SyntaxHighlighter
-     */
-    private $highlighter;
-
-    /**
      * @var LoggerFactory
      */
     private $loggerFactory;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * @param EntityManager $em
      * @param GitCheckout $gitCheckout
      * @param ConfigLoader $loader
      * @param GadgetExecutor $gadgetExecutor
-     * @param SyntaxHighlighter $highlighter
      * @param LoggerFactory $loggerFactory
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EntityManager $em,
         GitCheckout $gitCheckout,
         ConfigLoader $loader,
         GadgetExecutor $gadgetExecutor,
-        SyntaxHighlighter $highlighter,
-        LoggerFactory $loggerFactory
+        LoggerFactory $loggerFactory,
+        EventDispatcherInterface $eventDispatcher = null
     ) {
-        $this->em             = $em;
-        $this->gitCheckout    = $gitCheckout;
-        $this->gadgetExecutor = $gadgetExecutor;
-        $this->configLoader   = $loader;
-        $this->highlighter    = $highlighter;
-        $this->loggerFactory  = $loggerFactory;
+        $this->em              = $em;
+        $this->gitCheckout     = $gitCheckout;
+        $this->gadgetExecutor  = $gadgetExecutor;
+        $this->configLoader    = $loader;
+        $this->loggerFactory   = $loggerFactory;
+        $this->eventDispatcher = $eventDispatcher ?: new EventDispatcher();
     }
 
     /**
@@ -112,20 +116,16 @@ class CommitHandler
     {
         $commit->setGadgets(array_keys($workspace->config));
 
+        $event = new GadgetEvent($workspace, $logger);
+        $this->eventDispatcher->dispatch(Events::BEGIN, $event);
+
         $result = $this->gadgetExecutor->run($workspace, $logger);
+
+        $event = new GadgetResultEvent($workspace, $logger, $result);
+        $this->eventDispatcher->dispatch(Events::RESULT, $event);
 
         foreach ($result->getIssues() as $issue) {
             $issue->setCommit($commit);
-
-            if ($issue->getFile() && $issue->getLine()) {
-                $snippet = $this->highlighter->highlightAroundLine(
-                    $workspace->path . '/' . $issue->getFile(),
-                    $issue->getLine()
-                );
-
-                $issue->setCodeSnippet($snippet);
-            }
-
             $commit->getIssues()->add($issue);
         }
     }
@@ -144,4 +144,4 @@ class CommitHandler
 
         $this->em->flush($commit);
     }
-} 
+}

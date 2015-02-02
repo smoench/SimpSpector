@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
-class Issue
+class Issue implements TimestampableInterface
 {
     use Timestampable;
 
@@ -73,13 +73,6 @@ class Issue
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $codeSnippet;
 
     /**
      * @var array
@@ -194,22 +187,6 @@ class Issue
     public function setLine($line)
     {
         $this->line = $line;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCodeSnippet()
-    {
-        return $this->codeSnippet;
-    }
-
-    /**
-     * @param string $codeSnippet
-     */
-    public function setCodeSnippet($codeSnippet)
-    {
-        $this->codeSnippet = $codeSnippet;
     }
 
     /**
