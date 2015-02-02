@@ -2,7 +2,6 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
-use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Process\ProcessBuilder;

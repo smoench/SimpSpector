@@ -5,9 +5,6 @@
 
 namespace SimpleThings\AppBundle\Gadget;
 
-use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\MarkdownBuilder;
-use SimpleThings\AppBundle\Util\HighlightHelper;
 use SimpleThings\AppBundle\Workspace;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\OptionsResolver\Options;
