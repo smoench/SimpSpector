@@ -49,3 +49,7 @@ gitlab:
 redis:
   image: sameersbn/redis:latest
 ```
+GitLab standard Login
+
+Username: root
+Password: 5iveL!fe
