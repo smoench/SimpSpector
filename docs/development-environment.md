@@ -27,3 +27,25 @@ $ npm install
 $ gulp styles js
 ```
 
+fig config
+
+```yaml
+postgresql:
+  image: sameersbn/postgresql:9.1-1
+  environment:
+    - DB_USER=gitlab
+    - DB_PASS=secretpassword
+    - DB_NAME=gitlabhq_production
+gitlab:
+  image: sameersbn/gitlab:7.4.3
+  links:
+   - redis:redisio
+   - postgresql:postgresql
+  ports:
+   - "64001:80"
+   - "64000:22"
+  environment:
+   - GITLAB_HOST=gitlab
+redis:
+  image: sameersbn/redis:latest
+```
