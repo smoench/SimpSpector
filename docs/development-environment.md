@@ -51,5 +51,15 @@ redis:
 ```
 GitLab standard Login
 
-Username: root
-Password: 5iveL!fe
+* Username: root 
+* Password: 5iveL!fe
+
+SSH config
+
+~/.ssh/config
+
+```
+Host gitlab
+        HostName 127.0.0.1
+        Port 64000
+```
