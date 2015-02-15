@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b1f0047ae6e8cd6758c5c582badb104f",
+    "hash": "621b0295b7d8855ae3e397364fdb2c6f",
     "packages": [
         {
             "name": "asm89/twig-lint",
@@ -60,72 +60,17 @@
             "time": "2015-02-08 12:37:36"
         },
         {
-            "name": "cpliakas/git-wrapper",
-            "version": "1.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cpliakas/git-wrapper.git",
-                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
-                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/event-dispatcher": ">=2.3",
-                "symfony/process": ">=2.3"
-            },
-            "require-dev": {
-                "pdepend/pdepend": "~1.0",
-                "phploc/phploc": "~2.0",
-                "phpmd/phpmd": "~1.0",
-                "phpunit/phpunit": "~3.0",
-                "psr/log": "~1.0",
-                "scrutinizer/ocular": "~1.0",
-                "sebastian/phpcpd": "~2.0",
-                "symfony/filesystem": "~2.0"
-            },
-            "suggest": {
-                "monolog/monolog": "Enables logging of executed git commands"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "GitWrapper": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Pliakas",
-                    "email": "opensource@chrispliakas.com"
-                }
-            ],
-            "description": "A PHP wrapper around the Git command line utility.",
-            "homepage": "https://github.com/cpliakas/git-wrapper",
-            "keywords": [
-                "git"
-            ],
-            "time": "2014-12-09 15:53:03"
-        },
-        {
             "name": "davidbadura/markdown-builder",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DavidBadura/markdown-builder.git",
-                "reference": "defee6244ce6232f3012bf4b3f85c9423e1877b9"
+                "reference": "26886672060538083510cb3a0a26461a2bbf15a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DavidBadura/markdown-builder/zipball/defee6244ce6232f3012bf4b3f85c9423e1877b9",
-                "reference": "defee6244ce6232f3012bf4b3f85c9423e1877b9",
+                "url": "https://api.github.com/repos/DavidBadura/markdown-builder/zipball/26886672060538083510cb3a0a26461a2bbf15a1",
+                "reference": "26886672060538083510cb3a0a26461a2bbf15a1",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +96,7 @@
                 }
             ],
             "description": "Markdown Builder",
-            "time": "2014-12-24 13:46:52"
+            "time": "2014-12-24 20:53:46"
         },
         {
             "name": "doctrine/annotations",
@@ -978,54 +923,6 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
-        },
-        {
-            "name": "easybook/geshi",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/easybook/geshi.git",
-                "reference": "223c3ac0964472ef19027a064eef23ab0689c602"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/easybook/geshi/zipball/223c3ac0964472ef19027a064eef23ab0689c602",
-                "reference": "223c3ac0964472ef19027a064eef23ab0689c602",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">4.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "./"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Benny Baumann",
-                    "email": "BenBE@geshi.org",
-                    "homepage": "http://blog.benny-baumann.de/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Nigel McNie",
-                    "email": "nigel@geshi.org"
-                }
-            ],
-            "description": "GeSHi - Generic Syntax Highlighter. This is an unmodified port of GeSHi project code found on SourceForge.",
-            "homepage": "http://qbnz.com/highlighter",
-            "keywords": [
-                "highlight",
-                "highlighter",
-                "syntax"
-            ],
-            "time": "2014-05-11 07:59:00"
         },
         {
             "name": "gremo/ciconia-bundle",
@@ -2472,6 +2369,61 @@
     ],
     "packages-dev": [
         {
+            "name": "cpliakas/git-wrapper",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cpliakas/git-wrapper.git",
+                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
+                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/event-dispatcher": ">=2.3",
+                "symfony/process": ">=2.3"
+            },
+            "require-dev": {
+                "pdepend/pdepend": "~1.0",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "~3.0",
+                "psr/log": "~1.0",
+                "scrutinizer/ocular": "~1.0",
+                "sebastian/phpcpd": "~2.0",
+                "symfony/filesystem": "~2.0"
+            },
+            "suggest": {
+                "monolog/monolog": "Enables logging of executed git commands"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GitWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Pliakas",
+                    "email": "opensource@chrispliakas.com"
+                }
+            ],
+            "description": "A PHP wrapper around the Git command line utility.",
+            "homepage": "https://github.com/cpliakas/git-wrapper",
+            "keywords": [
+                "git"
+            ],
+            "time": "2014-12-09 15:53:03"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.0.4",
             "source": {
@@ -3269,8 +3221,6 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "easybook/geshi": 20,
-        "davidbadura/markdown-builder": 20,
         "gremo/ciconia-bundle": 20,
         "asm89/twig-lint": 20
     },
