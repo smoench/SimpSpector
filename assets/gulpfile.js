@@ -36,6 +36,7 @@ gulp.task('js', function () {
         'bower_components/semantic/dist/semantic.js',
         'bower_components/prism/components/prism-core.js',
         'bower_components/prism/components/prism-markup.js',
+        'bower_components/prism/components/prism-twig.js',
         'bower_components/prism/components/prism-clike.js',
         'bower_components/prism/components/prism-php.js',
         'bower_components/prism/plugins/line-highlight/prism-line-highlight.js',

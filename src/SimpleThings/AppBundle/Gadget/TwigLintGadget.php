@@ -29,7 +29,7 @@ class TwigLintGadget extends AbstractGadget
     public function run(Workspace $workspace, AbstractLogger $logger)
     {
         $options = $this->prepareOptions(
-            $workspace->config[self::NAME],
+            (array) $workspace->config[self::NAME],
             [
                 'files'       => ['.'],
                 'error_level' => 'error',
