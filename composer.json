@@ -27,7 +27,7 @@
         "nikic/php-parser": "~1.0.2",
         "davidbadura/markdown-builder": "~1.0",
         "gremo/ciconia-bundle": "dev-twig-extension",
-        "asm89/twig-lint": "@stable"
+        "asm89/twig-lint": "dev-fix/twig-gt-1.16.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -62,8 +62,8 @@
             "file": "app/config/parameters.yml"
         }
     },
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/DavidBadura/CiconiaBundle"
-    }]
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/DavidBadura/CiconiaBundle" },
+        { "type": "vcs", "url": "https://github.com/tolry/twig-lint.git" }
+    ]
 }

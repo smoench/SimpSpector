@@ -4,45 +4,48 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c9c6535ce20e6cefbf64145ecd552659",
+    "hash": "b1f0047ae6e8cd6758c5c582badb104f",
     "packages": [
         {
             "name": "asm89/twig-lint",
-            "version": "1.0.1",
+            "version": "dev-fix/twig-gt-1.16.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/asm89/twig-lint.git",
-                "reference": "0d7b47bc9e044c6dc768b725258a9e5dfb8a9f16"
+                "url": "https://github.com/tolry/twig-lint.git",
+                "reference": "6e967cc16b242b4781ff69ccfc1adbb7dba87872"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/asm89/twig-lint/zipball/0d7b47bc9e044c6dc768b725258a9e5dfb8a9f16",
-                "reference": "0d7b47bc9e044c6dc768b725258a9e5dfb8a9f16",
+                "url": "https://api.github.com/repos/tolry/twig-lint/zipball/6e967cc16b242b4781ff69ccfc1adbb7dba87872",
+                "reference": "6e967cc16b242b4781ff69ccfc1adbb7dba87872",
                 "shasum": ""
             },
             "require": {
                 "symfony/console": "~2.1",
                 "symfony/finder": "~2.1",
-                "twig/twig": "~1.12"
+                "twig/twig": ">=1.16.2,<2.0"
             },
             "bin": [
                 "bin/twig-lint"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Asm89\\Twig\\Lint\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "Alexander",
-                    "email": "iam.asm89@gmail.com",
-                    "homepage": "http://asm89.github.io/"
+                    "email": "iam.asm89@gmail.com"
                 }
             ],
             "description": "Standalone twig linter.",
@@ -51,7 +54,10 @@
                 "lint",
                 "twig"
             ],
-            "time": "2014-05-31 13:18:21"
+            "support": {
+                "source": "https://github.com/tolry/twig-lint/tree/fix/twig-gt-1.16.2"
+            },
+            "time": "2015-02-08 12:37:36"
         },
         {
             "name": "cpliakas/git-wrapper",
@@ -3266,7 +3272,7 @@
         "easybook/geshi": 20,
         "davidbadura/markdown-builder": 20,
         "gremo/ciconia-bundle": 20,
-        "asm89/twig-lint": 0
+        "asm89/twig-lint": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
