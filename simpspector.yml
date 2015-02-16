@@ -17,3 +17,5 @@ comment_blacklist:
 security-checker:
   directory: ./
   level: critical
+twig_lint:
+  files: src/
