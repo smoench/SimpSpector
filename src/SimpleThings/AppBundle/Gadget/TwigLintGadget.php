@@ -37,16 +37,16 @@ class TwigLintGadget extends AbstractGadget
             ['files']
         );
 
-        $result    = new Result();
-
-        $files = $this->findFiles($workspace->path, $options['files'], '*.twig');
+        $result = new Result();
+        $files  = $this->findFiles($workspace->path, $options['files'], '*.twig');
 
         foreach ($files as $file) {
             try {
                 $this->twig->parse($this->twig->tokenize(file_get_contents($file), $file));
             } catch (\Twig_Error $e) {
                 $cleanedUpFile = $this->cleanupFilePath($workspace, $file);
-                $message = get_class($e) . ': ' . $e->getRawMessage();
+                $message       = get_class($e) . ': ' . $e->getRawMessage();
+
                 $issue = new Issue($message, self::NAME, $options['error_level']);
                 $issue->setFile($cleanedUpFile);
                 $issue->setLine($e->getTemplateLine());
