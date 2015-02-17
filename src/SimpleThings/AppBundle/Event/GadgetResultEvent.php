@@ -2,9 +2,9 @@
 
 namespace SimpleThings\AppBundle\Event;
 
-use SimpleThings\AppBundle\Gadget\Result;
-use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
+use SimpSpector\Analyser\Logger\AbstractLogger;
+use SimpSpector\Analyser\Result;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>

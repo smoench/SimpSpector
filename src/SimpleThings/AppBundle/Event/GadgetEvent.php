@@ -2,8 +2,8 @@
 
 namespace SimpleThings\AppBundle\Event;
 
-use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Workspace;
+use SimpSpector\Analyser\Logger\AbstractLogger;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

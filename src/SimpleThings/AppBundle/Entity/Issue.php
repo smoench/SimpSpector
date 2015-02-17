@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SimpSpector\Analyser\Issue as AnalyserIssue;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -235,5 +236,20 @@ class Issue implements TimestampableInterface
     public function setCommit(Commit $commit)
     {
         $this->commit = $commit;
+    }
+
+    /**
+     * @param AnalyserIssue $issue
+     * @return Issue
+     */
+    public static function createFromAnalyser(AnalyserIssue $issue)
+    {
+        $obj = new self($issue->getMessage(), $issue->getGadget(), $issue->getLevel());
+        $obj->setDescription($issue->getDescription());
+        $obj->setFile($issue->getFile());
+        $obj->setLine($issue->getLine());
+        $obj->setExtraInformation($issue->getExtraInformation());
+
+        return $obj;
     }
 }

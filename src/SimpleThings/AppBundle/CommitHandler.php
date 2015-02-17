@@ -4,10 +4,13 @@ namespace SimpleThings\AppBundle;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Event\GadgetEvent;
 use SimpleThings\AppBundle\Event\GadgetResultEvent;
-use SimpleThings\AppBundle\Logger\AbstractLogger;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
+use SimpSpector\Analyser\Executor\ExecutorInterface;
+use SimpSpector\Analyser\Loader\LoaderInterface;
+use SimpSpector\Analyser\Logger\AbstractLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -27,12 +30,12 @@ class CommitHandler
     private $gitCheckout;
 
     /**
-     * @var ConfigLoader
+     * @var LoaderInterface
      */
     private $configLoader;
 
     /**
-     * @var GadgetExecutor
+     * @var ExecutorInterface
      */
     private $gadgetExecutor;
 
@@ -49,16 +52,16 @@ class CommitHandler
     /**
      * @param EntityManager $em
      * @param GitCheckout $gitCheckout
-     * @param ConfigLoader $loader
-     * @param GadgetExecutor $gadgetExecutor
+     * @param LoaderInterface $loader
+     * @param ExecutorInterface $gadgetExecutor
      * @param LoggerFactory $loggerFactory
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EntityManager $em,
         GitCheckout $gitCheckout,
-        ConfigLoader $loader,
-        GadgetExecutor $gadgetExecutor,
+        LoaderInterface $loader,
+        ExecutorInterface $gadgetExecutor,
         LoggerFactory $loggerFactory,
         EventDispatcherInterface $eventDispatcher = null
     ) {
@@ -83,7 +86,7 @@ class CommitHandler
 
             $workspace = $this->gitCheckout->create($commit, $logger);
 
-            $workspace->config = $this->configLoader->load($workspace);
+            $workspace->config = $this->configLoader->load($workspace->path . '/simpspector.yml');
             $this->execute($commit, $workspace, $logger);
 
             $commit->setStatus(Commit::STATUS_SUCCESS);
@@ -125,8 +128,11 @@ class CommitHandler
         $this->eventDispatcher->dispatch(Events::RESULT, $event);
 
         foreach ($result->getIssues() as $issue) {
-            $issue->setCommit($commit);
-            $commit->getIssues()->add($issue);
+
+            $entity = Issue::createFromAnalyser($issue);
+
+            $entity->setCommit($commit);
+            $commit->getIssues()->add($entity);
         }
     }
 

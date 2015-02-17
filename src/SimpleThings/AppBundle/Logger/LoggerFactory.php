@@ -6,6 +6,7 @@
 namespace SimpleThings\AppBundle\Logger;
 
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpSpector\Analyser\Logger\FileLogger;
 
 /**
  * @author David Badura <badura@simplethings.de>

@@ -1,7 +1,7 @@
 {
-    "name": "simplethings/symfony-standard-edition",
+    "name": "simplethings/simpspector",
     "type": "project",
-    "description": "SimpleThings Symfony Standard Edition",
+    "description": "SimpSpector",
     "autoload": {
         "psr-0": {"": "src/"}
     },
@@ -21,10 +21,8 @@
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "zeichen32/gitlabapibundle": "~2.0",
         "igorw/get-in": "~1.0",
-        "phpmd/phpmd": "~2.1",
-        "squizlabs/php_codesniffer": "~2.0",
         "timetoogo/pinq": "~3.0",
-        "nikic/php-parser": "~1.0.2",
+        "simpspector/analyser": "dev-master",
         "davidbadura/markdown-builder": "~1.0",
         "gremo/ciconia-bundle": "dev-twig-extension",
         "asm89/twig-lint": "dev-fix/twig-gt-1.16.2"
