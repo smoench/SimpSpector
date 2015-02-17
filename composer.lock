@@ -1768,15 +1768,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplethings/simpspector-analyser.git",
-                "reference": "a44057e253343cdad209490bc8c35001bd6f22c8"
+                "reference": "a8b5fdf0c463336f605d42d468e8f4a1189b03a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplethings/simpspector-analyser/zipball/a44057e253343cdad209490bc8c35001bd6f22c8",
-                "reference": "a44057e253343cdad209490bc8c35001bd6f22c8",
+                "url": "https://api.github.com/repos/simplethings/simpspector-analyser/zipball/a8b5fdf0c463336f605d42d468e8f4a1189b03a3",
+                "reference": "a8b5fdf0c463336f605d42d468e8f4a1189b03a3",
                 "shasum": ""
             },
             "require": {
+                "asm89/twig-lint": "dev-fix/twig-gt-1.16.2",
                 "davidbadura/markdown-builder": "~1.0",
                 "nikic/php-parser": "~1.0.2",
                 "php": ">=5.4",
@@ -1800,7 +1801,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-02-17 20:44:17"
+            "time": "2015-02-17 21:45:20"
         },
         {
             "name": "squizlabs/php_codesniffer",

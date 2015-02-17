@@ -70,6 +70,10 @@
             <tag name="simpspector.gadget"/>
         </service>
 
+        <service id="simple_things_app.gadget.twig_lint" class="SimpSpector\Analyser\Gadget\TwigLintGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
         <service id="simple_things_app.gadget.security_checker" class="SimpSpector\Analyser\Gadget\SecurityCheckerGadget">
             <argument type="string">%security_checker_bin%</argument>
             <tag name="simpspector.gadget"/>
