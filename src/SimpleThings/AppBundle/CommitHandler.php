@@ -74,7 +74,7 @@ class CommitHandler
 
             $workspace = $this->gitCheckout->create($commit, $logger);
 
-            $workspace->config = $this->configLoader->load($workspace->path . '/simpspector.yml');
+            $workspace->config = $this->configLoader->load($workspace->path . '/.simpspector.yml');
             $this->execute($commit, $workspace, $logger);
 
             $commit->setStatus(Commit::STATUS_SUCCESS);
