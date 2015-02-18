@@ -6,9 +6,6 @@
 
     <parameters>
         <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
-        <parameter key="phpmd_bin">%kernel.root_dir%/../bin/phpmd</parameter>
-        <parameter key="phpcs_bin">%kernel.root_dir%/../bin/phpcs</parameter>
-        <parameter key="security_checker_bin">%kernel.root_dir%/../bin/security-checker</parameter>
     </parameters>
 
     <services>
@@ -35,49 +32,12 @@
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument type="service" id="simple_things_app.git_checkout"/>
-            <argument type="service" id="simple_things_app.config_loader"/>
-            <argument type="service" id="simple_things_app.gadget_executor"/>
+            <argument type="service" id="simpspector.analyser.loader"/>
+            <argument type="service" id="simpspector.analyser.executor"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
-            <argument type="service" id="event_dispatcher"/>
         </service>
-
-        <service id="simple_things_app.config_loader" class="SimpSpector\Analyser\Loader\YamlLoader" />
-
-        <service id="simple_things_app.gadget_executor" class="SimpSpector\Analyser\Executor\Executor">
-            <argument type="service" id="simple_things_app.gadget.repository"/>
-        </service>
-
-        <service id="simple_things_app.gadget.repository" class="SimpSpector\Analyser\Repository\Repository"/>
 
         <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
-
-        <!-- GADGETS -->
-        <service id="simple_things_app.gadget.phpcs" class="SimpSpector\Analyser\Gadget\PhpcsGadget">
-            <argument type="string">%phpcs_bin%</argument>
-            <tag name="simpspector.gadget"/>
-        </service>
-
-        <service id="simple_things_app.gadget.phpmd" class="SimpSpector\Analyser\Gadget\PhpmdGadget">
-            <argument type="string">%phpmd_bin%</argument>
-            <tag name="simpspector.gadget"/>
-        </service>
-
-        <service id="simple_things_app.gadget.comment_blacklist" class="SimpSpector\Analyser\Gadget\CommentBlacklistGadget">
-            <tag name="simpspector.gadget"/>
-        </service>
-
-        <service id="simple_things_app.gadget.function_blacklist" class="SimpSpector\Analyser\Gadget\FunctionBlacklistGadget">
-            <tag name="simpspector.gadget"/>
-        </service>
-
-        <service id="simple_things_app.gadget.twig_lint" class="SimpSpector\Analyser\Gadget\TwigLintGadget">
-            <tag name="simpspector.gadget"/>
-        </service>
-
-        <service id="simple_things_app.gadget.security_checker" class="SimpSpector\Analyser\Gadget\SecurityCheckerGadget">
-            <argument type="string">%security_checker_bin%</argument>
-            <tag name="simpspector.gadget"/>
-        </service>
 
         <!-- TWIG -->
         <service id="simple_things_app.twig.extension.util" class="SimpleThings\AppBundle\Twig\UtilExtension">
@@ -88,11 +48,6 @@
         <!-- Markdown -->
         <service id="simpspector.ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
             <tag name ="ciconia.extension" />
-        </service>
-
-        <!-- Events -->
-        <service id="simpspector.event_listener.highlight" class="SimpleThings\AppBundle\Event\Listener\SimpleHighlightListener">
-            <tag name="kernel.event_listener" event="simpspector.result" method="onGadgetResult"/>
         </service>
     </services>
 </container>

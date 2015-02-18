@@ -5,14 +5,10 @@ namespace SimpleThings\AppBundle;
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
-use SimpleThings\AppBundle\Event\GadgetEvent;
-use SimpleThings\AppBundle\Event\GadgetResultEvent;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
 use SimpSpector\Analyser\Executor\ExecutorInterface;
 use SimpSpector\Analyser\Loader\LoaderInterface;
 use SimpSpector\Analyser\Logger\AbstractLogger;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -45,32 +41,24 @@ class CommitHandler
     private $loggerFactory;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @param EntityManager $em
      * @param GitCheckout $gitCheckout
      * @param LoaderInterface $loader
      * @param ExecutorInterface $gadgetExecutor
      * @param LoggerFactory $loggerFactory
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EntityManager $em,
         GitCheckout $gitCheckout,
         LoaderInterface $loader,
         ExecutorInterface $gadgetExecutor,
-        LoggerFactory $loggerFactory,
-        EventDispatcherInterface $eventDispatcher = null
+        LoggerFactory $loggerFactory
     ) {
         $this->em              = $em;
         $this->gitCheckout     = $gitCheckout;
         $this->gadgetExecutor  = $gadgetExecutor;
         $this->configLoader    = $loader;
         $this->loggerFactory   = $loggerFactory;
-        $this->eventDispatcher = $eventDispatcher ?: new EventDispatcher();
     }
 
     /**
@@ -119,13 +107,7 @@ class CommitHandler
     {
         $commit->setGadgets(array_keys($workspace->config));
 
-        $event = new GadgetEvent($workspace, $logger);
-        $this->eventDispatcher->dispatch(Events::BEGIN, $event);
-
-        $result = $this->gadgetExecutor->run($workspace, $logger);
-
-        $event = new GadgetResultEvent($workspace, $logger, $result);
-        $this->eventDispatcher->dispatch(Events::RESULT, $event);
+        $result = $this->gadgetExecutor->run($workspace->path, $workspace->config, $logger);
 
         foreach ($result->getIssues() as $issue) {
 

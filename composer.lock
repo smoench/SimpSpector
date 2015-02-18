@@ -1768,12 +1768,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplethings/simpspector-analyser.git",
-                "reference": "a8b5fdf0c463336f605d42d468e8f4a1189b03a3"
+                "reference": "99010fac60b01c72e5c4e3b8979490aa890169ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplethings/simpspector-analyser/zipball/a8b5fdf0c463336f605d42d468e8f4a1189b03a3",
-                "reference": "a8b5fdf0c463336f605d42d468e8f4a1189b03a3",
+                "url": "https://api.github.com/repos/simplethings/simpspector-analyser/zipball/99010fac60b01c72e5c4e3b8979490aa890169ec",
+                "reference": "99010fac60b01c72e5c4e3b8979490aa890169ec",
                 "shasum": ""
             },
             "require": {
@@ -1784,6 +1784,7 @@
                 "phpmd/phpmd": "~2.1",
                 "squizlabs/php_codesniffer": "~2.0",
                 "symfony/console": "~2.6",
+                "symfony/event-dispatcher": "~2.6",
                 "symfony/finder": "~2.6",
                 "symfony/options-resolver": "~2.6",
                 "symfony/process": "~2.6",
@@ -1801,7 +1802,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-02-17 21:45:20"
+            "time": "2015-02-18 21:28:31"
         },
         {
             "name": "squizlabs/php_codesniffer",
