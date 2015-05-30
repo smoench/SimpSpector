@@ -24,7 +24,7 @@
         "timetoogo/pinq": "~3.0",
         "simpspector/analyser": "dev-master",
         "davidbadura/markdown-builder": "~1.0",
-        "gremo/ciconia-bundle": "dev-twig-extension",
+        "gremo/ciconia-bundle": "~1.0.1",
         "asm89/twig-lint": "dev-fix/twig-gt-1.16.2"
     },
     "require-dev": {
@@ -61,7 +61,6 @@
         }
     },
     "repositories": [
-        { "type": "vcs", "url": "https://github.com/DavidBadura/CiconiaBundle" },
         { "type": "vcs", "url": "https://github.com/tolry/twig-lint.git" }
     ]
 }
