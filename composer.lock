@@ -1841,12 +1841,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simpspector/analyser.git",
-                "reference": "20d5026f46b69b31962a1eb82718ff50e34f71d6"
+                "reference": "9d020287ca2f1a151cdc9d1180ae6a4e97c03a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simpspector/analyser/zipball/20d5026f46b69b31962a1eb82718ff50e34f71d6",
-                "reference": "20d5026f46b69b31962a1eb82718ff50e34f71d6",
+                "url": "https://api.github.com/repos/simpspector/analyser/zipball/9d020287ca2f1a151cdc9d1180ae6a4e97c03a56",
+                "reference": "9d020287ca2f1a151cdc9d1180ae6a4e97c03a56",
                 "shasum": ""
             },
             "require": {
@@ -1880,7 +1880,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-03-30 11:44:09"
+            "time": "2015-05-30 12:10:04"
         },
         {
             "name": "squizlabs/php_codesniffer",
