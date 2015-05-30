@@ -38,7 +38,7 @@ class Issue implements TimestampableInterface
      *
      * @ORM\Column(type="string")
      */
-    private $message;
+    private $title;
 
     /**
      * @var string
@@ -90,13 +90,13 @@ class Issue implements TimestampableInterface
     private $commit;
 
     /**
-     * @param string $message
+     * @param string $title
      * @param string $gadget
      * @param string $level
      */
-    public function __construct($message, $gadget = 'simpspector', $level = self::LEVEL_NOTICE)
+    public function __construct($title, $gadget = 'simpspector', $level = self::LEVEL_NOTICE)
     {
-        $this->message          = $message;
+        $this->title            = $title;
         $this->gadget           = $gadget;
         $this->level            = $level;
         $this->extraInformation = [];
@@ -113,17 +113,17 @@ class Issue implements TimestampableInterface
     /**
      * @return string
      */
-    public function getMessage()
+    public function getTitle()
     {
-        return $this->message;
+        return $this->title;
     }
 
     /**
-     * @param string $message
+     * @param string $title
      */
-    public function setMessage($message)
+    public function setTitle($title)
     {
-        $this->message = $message;
+        $this->title = $title;
     }
 
     /**
@@ -244,7 +244,7 @@ class Issue implements TimestampableInterface
      */
     public static function createFromAnalyser(AnalyserIssue $issue)
     {
-        $obj = new self($issue->getMessage(), $issue->getGadget(), $issue->getLevel());
+        $obj = new self($issue->getTitle(), $issue->getGadget(), $issue->getLevel());
         $obj->setDescription($issue->getDescription());
         $obj->setFile($issue->getFile());
         $obj->setLine($issue->getLine());

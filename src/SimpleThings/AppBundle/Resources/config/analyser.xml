@@ -66,5 +66,9 @@
         <service id="simpspector.analyser.subscriber.logger" class="SimpSpector\Analyser\Event\Subscriber\LoggerSubscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
+
+        <service id="simpspector.analyser.subscriber.metrics_collector" class="SimpSpector\Analyser\Event\Subscriber\MetricsCollectorSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
     </services>
 </container>

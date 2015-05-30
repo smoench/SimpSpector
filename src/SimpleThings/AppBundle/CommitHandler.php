@@ -5,6 +5,7 @@ namespace SimpleThings\AppBundle;
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Entity\Metric;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
 use SimpSpector\Analyser\Executor\ExecutorInterface;
 use SimpSpector\Analyser\Loader\LoaderInterface;
@@ -116,6 +117,14 @@ class CommitHandler
             $entity->setCommit($commit);
             $commit->getIssues()->add($entity);
         }
+
+        foreach ($result->getMetrics() as $metric) {
+
+            $entity = Metric::createFromAnalyser($metric);
+
+            $entity->setCommit($commit);
+            $commit->getMetrics()->add($entity);
+        }
     }
 
     /**
@@ -128,6 +137,7 @@ class CommitHandler
         }
 
         $commit->getIssues()->clear();
+        $commit->getMetrics()->clear();
         $commit->setStatus(Commit::STATUS_RUN);
 
         $this->em->flush($commit);
