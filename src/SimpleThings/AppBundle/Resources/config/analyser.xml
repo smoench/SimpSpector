@@ -11,10 +11,16 @@
     </parameters>
 
     <services>
-        <service id="simpspector.analyser.loader" class="SimpSpector\Analyser\Loader\YamlLoader" />
+        <service id="simpspector.analyser.loader" class="SimpSpector\Analyser\Loader\ConfigLoader">
+            <argument type="service">
+                <service class="SimpSpector\Analyser\Loader\YamlLoader">
+                </service>
+            </argument>
+            <argument type="service" id="simpspector.analyser.repository"/>
+        </service>
 
         <service id="simpspector.analyser.executor" class="SimpSpector\Analyser\Executor\Executor">
-            <argument type="service" id="simple_things_app.gadget.repository"/>
+            <argument type="service" id="simpspector.analyser.repository"/>
             <argument type="service" id="event_dispatcher"/>
         </service>
 

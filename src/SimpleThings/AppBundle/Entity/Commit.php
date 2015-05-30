@@ -73,6 +73,13 @@ class Commit implements TimestampableInterface
     private $issues;
 
     /**
+     * @var Metric[]
+     *
+     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Metric", mappedBy="commit", cascade={"all"})
+     */
+    private $metric;
+
+    /**
      *
      */
     public function __construct()
