@@ -106,8 +106,13 @@ class FencedCodeBlockExtension implements ExtensionInterface, RendererAwareInter
         $options = [];
 
         foreach ($parts as $part) {
-            list($key, $value) = explode(':', $part);
-            $options[$key] = $value;
+            $params = explode(':', $part);
+
+            if (count($params) != 2) {
+                continue;
+            }
+
+            $options[$params[0]] = $params[1];
         }
 
         return $options;

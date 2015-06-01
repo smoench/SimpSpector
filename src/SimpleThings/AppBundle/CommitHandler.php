@@ -4,12 +4,12 @@ namespace SimpleThings\AppBundle;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Event\GadgetEvent;
-use SimpleThings\AppBundle\Event\GadgetResultEvent;
-use SimpleThings\AppBundle\Logger\AbstractLogger;
+use SimpleThings\AppBundle\Entity\Issue;
+use SimpleThings\AppBundle\Entity\Metric;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use SimpSpector\Analyser\Executor\ExecutorInterface;
+use SimpSpector\Analyser\Loader\LoaderInterface;
+use SimpSpector\Analyser\Logger\AbstractLogger;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -27,12 +27,12 @@ class CommitHandler
     private $gitCheckout;
 
     /**
-     * @var ConfigLoader
+     * @var LoaderInterface
      */
     private $configLoader;
 
     /**
-     * @var GadgetExecutor
+     * @var ExecutorInterface
      */
     private $gadgetExecutor;
 
@@ -42,32 +42,24 @@ class CommitHandler
     private $loggerFactory;
 
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * @param EntityManager $em
      * @param GitCheckout $gitCheckout
-     * @param ConfigLoader $loader
-     * @param GadgetExecutor $gadgetExecutor
+     * @param LoaderInterface $loader
+     * @param ExecutorInterface $gadgetExecutor
      * @param LoggerFactory $loggerFactory
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         EntityManager $em,
         GitCheckout $gitCheckout,
-        ConfigLoader $loader,
-        GadgetExecutor $gadgetExecutor,
-        LoggerFactory $loggerFactory,
-        EventDispatcherInterface $eventDispatcher = null
+        LoaderInterface $loader,
+        ExecutorInterface $gadgetExecutor,
+        LoggerFactory $loggerFactory
     ) {
         $this->em              = $em;
         $this->gitCheckout     = $gitCheckout;
         $this->gadgetExecutor  = $gadgetExecutor;
         $this->configLoader    = $loader;
         $this->loggerFactory   = $loggerFactory;
-        $this->eventDispatcher = $eventDispatcher ?: new EventDispatcher();
     }
 
     /**
@@ -83,7 +75,7 @@ class CommitHandler
 
             $workspace = $this->gitCheckout->create($commit, $logger);
 
-            $workspace->config = $this->configLoader->load($workspace);
+            $workspace->config = $this->configLoader->load($workspace->path . '/.simpspector.yml');
             $this->execute($commit, $workspace, $logger);
 
             $commit->setStatus(Commit::STATUS_SUCCESS);
@@ -116,17 +108,22 @@ class CommitHandler
     {
         $commit->setGadgets(array_keys($workspace->config));
 
-        $event = new GadgetEvent($workspace, $logger);
-        $this->eventDispatcher->dispatch(Events::BEGIN, $event);
-
-        $result = $this->gadgetExecutor->run($workspace, $logger);
-
-        $event = new GadgetResultEvent($workspace, $logger, $result);
-        $this->eventDispatcher->dispatch(Events::RESULT, $event);
+        $result = $this->gadgetExecutor->run($workspace->path, $workspace->config, $logger);
 
         foreach ($result->getIssues() as $issue) {
-            $issue->setCommit($commit);
-            $commit->getIssues()->add($issue);
+
+            $entity = Issue::createFromAnalyser($issue);
+
+            $entity->setCommit($commit);
+            $commit->getIssues()->add($entity);
+        }
+
+        foreach ($result->getMetrics() as $metric) {
+
+            $entity = Metric::createFromAnalyser($metric);
+
+            $entity->setCommit($commit);
+            $commit->getMetrics()->add($entity);
         }
     }
 
@@ -140,6 +137,7 @@ class CommitHandler
         }
 
         $commit->getIssues()->clear();
+        $commit->getMetrics()->clear();
         $commit->setStatus(Commit::STATUS_RUN);
 
         $this->em->flush($commit);

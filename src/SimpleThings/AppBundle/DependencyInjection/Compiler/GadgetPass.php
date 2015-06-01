@@ -23,12 +23,12 @@ class GadgetPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('simple_things_app.gadget.repository')) {
+        if (!$container->hasDefinition('simpspector.analyser.repository')) {
             return;
         }
 
         foreach ($container->findTaggedServiceIds('simpspector.gadget') as $id => $attributes) {
-            $container->getDefinition('simple_things_app.gadget.repository')->addMethodCall(
+            $container->getDefinition('simpspector.analyser.repository')->addMethodCall(
                 'add',
                 [new Reference($id)]
             );

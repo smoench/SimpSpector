@@ -66,11 +66,23 @@ class Commit implements TimestampableInterface
     private $status;
 
     /**
-     * @var Issue[]
+     * @var Issue[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
      */
     private $issues;
+
+    /**
+     * @var Metric[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Metric", mappedBy="commit", cascade={"all"})
+     */
+    private $metrics;
+
+    /**
+     * @var Metric[]
+     */
+    private $indexedMetrics;
 
     /**
      *
@@ -78,6 +90,7 @@ class Commit implements TimestampableInterface
     public function __construct()
     {
         $this->issues  = new ArrayCollection();
+        $this->metrics = new ArrayCollection();
         $this->status  = self::STATUS_NEW;
         $this->gadgets = [];
     }
@@ -185,11 +198,49 @@ class Commit implements TimestampableInterface
     }
 
     /**
-     * @return Result
+     * @return Metric[]|ArrayCollection
      */
-    public function getResult()
+    public function getMetrics()
     {
-        return new Result($this->issues->toArray());
+        return $this->metrics;
+    }
+
+    /**
+     * @return Metric[]
+     */
+    public function getIndexedMetrics()
+    {
+        if (!$this->indexedMetrics) {
+            $this->indexedMetrics = [];
+
+            foreach ($this->metrics as $metric) {
+                $this->indexedMetrics[$metric->getCode()] = $metric;
+            }
+        }
+
+        return $this->indexedMetrics;
+    }
+
+    /**
+     * @param string $code
+     * @return Metric|null
+     */
+    public function getMetric($code)
+    {
+        $metrics = $this->getIndexedMetrics();
+
+        return isset($metrics[$code]) ? $metrics[$code] : null;
+    }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function hasMetric($code)
+    {
+        $metrics = $this->getIndexedMetrics();
+
+        return isset($metrics[$code]);
     }
 
     /**

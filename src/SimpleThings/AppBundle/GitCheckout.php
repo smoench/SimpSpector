@@ -3,9 +3,9 @@
 namespace SimpleThings\AppBundle;
 
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Logger\AbstractLogger;
-use SimpleThings\AppBundle\Logger\NullLogger;
-use SimpleThings\AppBundle\Process\ProcessBuilder;
+use SimpSpector\Analyser\Logger\AbstractLogger;
+use SimpSpector\Analyser\Logger\NullLogger;
+use SimpSpector\Analyser\Process\ProcessBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

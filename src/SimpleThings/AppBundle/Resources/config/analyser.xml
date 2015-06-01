@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="phpmd_bin">%kernel.root_dir%/../bin/phpmd</parameter>
+        <parameter key="phpcs_bin">%kernel.root_dir%/../bin/phpcs</parameter>
+        <parameter key="security_checker_bin">%kernel.root_dir%/../bin/security-checker</parameter>
+    </parameters>
+
+    <services>
+        <service id="simpspector.analyser.loader" class="SimpSpector\Analyser\Loader\ConfigLoader">
+            <argument type="service">
+                <service class="SimpSpector\Analyser\Loader\YamlLoader">
+                </service>
+            </argument>
+            <argument type="service" id="simpspector.analyser.repository"/>
+        </service>
+
+        <service id="simpspector.analyser.executor" class="SimpSpector\Analyser\Executor\Executor">
+            <argument type="service" id="simpspector.analyser.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="simpspector.analyser.repository" class="SimpSpector\Analyser\Repository\Repository"/>
+
+        <!-- GADGETS -->
+        <service id="simpspector.analyser.gadget.phpcs" class="SimpSpector\Analyser\Gadget\PhpcsGadget">
+            <argument type="string">%phpcs_bin%</argument>
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simpspector.analyser.gadget.phpmd" class="SimpSpector\Analyser\Gadget\PhpmdGadget">
+            <argument type="string">%phpmd_bin%</argument>
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simpspector.analyser.gadget.comment_blacklist" class="SimpSpector\Analyser\Gadget\CommentBlacklistGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simpspector.analyser.gadget.function_blacklist" class="SimpSpector\Analyser\Gadget\FunctionBlacklistGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simpspector.analyser.gadget.twig_lint" class="SimpSpector\Analyser\Gadget\TwigLintGadget">
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <service id="simpspector.analyser.gadget.security_checker" class="SimpSpector\Analyser\Gadget\SecurityCheckerGadget">
+            <argument type="string">%security_checker_bin%</argument>
+            <tag name="simpspector.gadget"/>
+        </service>
+
+        <!-- Events -->
+        <service id="simpspector.analyser.listener.simple_highlight" class="SimpSpector\Analyser\Event\Listener\SimpleHighlightListener">
+            <tag name="kernel.event_listener" event="simpspector.analyser.post_gadget" method="onGadgetResult"/>
+        </service>
+
+        <service id="simpspector.analyser.listener.clean_path" class="SimpSpector\Analyser\Event\Listener\CleanPathListener">
+            <tag name="kernel.event_listener" event="simpspector.analyser.post_gadget" method="onGadgetResult" priority="100"/>
+        </service>
+
+        <service id="simpspector.analyser.subscriber.logger" class="SimpSpector\Analyser\Event\Subscriber\LoggerSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="simpspector.analyser.subscriber.metrics_collector" class="SimpSpector\Analyser\Event\Subscriber\MetricsCollectorSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
+</container>
