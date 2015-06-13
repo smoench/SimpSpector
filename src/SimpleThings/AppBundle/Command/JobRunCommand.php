@@ -32,15 +32,17 @@ class JobRunCommand extends ContainerAwareCommand
         $commitHandler    = $this->getContainer()->get('simple_things_app.commit_handler');
         $commitRepository = $this->getContainer()->get('simpspector.app.repository.commit');
 
+        $commits = [];
+
         if ($id = $input->getArgument('id')) {
-            $commit = $commitRepository->find($id);
+            $commits[] = $commitRepository->find($id);
+        } else {
+            $commits = $commitRepository->findNewCommits();
+        }
+
+        foreach ($commits as $commit) {
             $output->writeln('job id ' . $commit->getId());
             $commitHandler->handle($commit);
-        } else {
-            foreach ($commitRepository->findNewCommits() as $commit) {
-                $output->writeln('job id ' . $commit->getId());
-                $commitHandler->handle($commit);
-            }
         }
 
     }
