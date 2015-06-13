@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
+        <parameter key="job_logs">%kernel.root_dir%/../var/logs/job</parameter>
     </parameters>
 
     <services>
@@ -18,7 +19,7 @@
         </service>
 
         <service id="simple_things_app.logger.file_locator" class="SimpleThings\AppBundle\Logger\FileLocator">
-            <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
+            <argument type="string">%job_logs%</argument>
         </service>
 
         <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
