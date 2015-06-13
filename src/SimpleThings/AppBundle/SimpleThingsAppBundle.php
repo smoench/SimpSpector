@@ -2,7 +2,7 @@
 
 namespace SimpleThings\AppBundle;
 
-use SimpleThings\AppBundle\DependencyInjection\Compiler\GadgetPass;
+use SimpSpector\Analyser\DependencyInjection\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -17,6 +17,7 @@ class SimpleThingsAppBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new GadgetPass());
+        $container->setParameter('simpspector.analyser.bin', __DIR__ . '/../../../bin/');
+        (new ContainerConfigurator())->prepare($container);
     }
 }

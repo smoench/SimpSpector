@@ -7,8 +7,7 @@ use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Entity\Issue;
 use SimpleThings\AppBundle\Entity\Metric;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
-use SimpSpector\Analyser\Executor\ExecutorInterface;
-use SimpSpector\Analyser\Loader\LoaderInterface;
+use SimpSpector\Analyser\Analyser;
 use SimpSpector\Analyser\Logger\AbstractLogger;
 
 /**
@@ -22,19 +21,14 @@ class CommitHandler
     private $em;
 
     /**
-     * @var GitCheckout
+     * @var WorkspaceManager
      */
-    private $gitCheckout;
+    private $workspaceManager;
 
     /**
-     * @var LoaderInterface
+     * @var Analyser
      */
-    private $configLoader;
-
-    /**
-     * @var ExecutorInterface
-     */
-    private $gadgetExecutor;
+    private $analyser;
 
     /**
      * @var LoggerFactory
@@ -43,23 +37,20 @@ class CommitHandler
 
     /**
      * @param EntityManager $em
-     * @param GitCheckout $gitCheckout
-     * @param LoaderInterface $loader
-     * @param ExecutorInterface $gadgetExecutor
+     * @param WorkspaceManager $workspaceManager
+     * @param Analyser $analyser
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
         EntityManager $em,
-        GitCheckout $gitCheckout,
-        LoaderInterface $loader,
-        ExecutorInterface $gadgetExecutor,
+        WorkspaceManager $workspaceManager,
+        Analyser $analyser,
         LoggerFactory $loggerFactory
     ) {
-        $this->em              = $em;
-        $this->gitCheckout     = $gitCheckout;
-        $this->gadgetExecutor  = $gadgetExecutor;
-        $this->configLoader    = $loader;
-        $this->loggerFactory   = $loggerFactory;
+        $this->em               = $em;
+        $this->workspaceManager = $workspaceManager;
+        $this->analyser         = $analyser;
+        $this->loggerFactory    = $loggerFactory;
     }
 
     /**
@@ -73,14 +64,13 @@ class CommitHandler
         try {
             $this->startProcess($commit);
 
-            $workspace = $this->gitCheckout->create($commit, $logger);
+            $path = $this->workspaceManager->create($commit, $logger);
 
-            $workspace->config = $this->configLoader->load($workspace->path . '/.simpspector.yml');
-            $this->execute($commit, $workspace, $logger);
+            $this->execute($commit, $path, $logger);
 
             $commit->setStatus(Commit::STATUS_SUCCESS);
             $this->em->flush($commit);
-            $this->gitCheckout->remove($workspace);
+            $this->workspaceManager->cleanUp($path);
 
             $logger->writeln("");
             $logger->writeln("finish :)");
@@ -101,14 +91,12 @@ class CommitHandler
 
     /**
      * @param Commit $commit
-     * @param Workspace $workspace
+     * @param string $path
      * @param AbstractLogger $logger
      */
-    private function execute(Commit $commit, Workspace $workspace, AbstractLogger $logger)
+    private function execute(Commit $commit, $path, AbstractLogger $logger)
     {
-        $commit->setGadgets(array_keys($workspace->config));
-
-        $result = $this->gadgetExecutor->run($workspace->path, $workspace->config, $logger);
+        $result = $this->analyser->analyse($path, null, $logger);
 
         foreach ($result->getIssues() as $issue) {
 
