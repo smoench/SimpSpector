@@ -6,10 +6,11 @@
 
     <parameters>
         <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
+        <parameter key="job_logs">%kernel.root_dir%/../var/logs/job</parameter>
     </parameters>
 
     <services>
-        <service id="simple_things_app.git_checkout" class="SimpleThings\AppBundle\GitCheckout">
+        <service id="simple_things_app.workspace_manager" class="SimpleThings\AppBundle\WorkspaceManager">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
@@ -18,7 +19,7 @@
         </service>
 
         <service id="simple_things_app.logger.file_locator" class="SimpleThings\AppBundle\Logger\FileLocator">
-            <argument type="string">%kernel.root_dir%/../var/job_logs</argument>
+            <argument type="string">%job_logs%</argument>
         </service>
 
         <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
@@ -31,9 +32,8 @@
 
         <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument type="service" id="simple_things_app.git_checkout"/>
-            <argument type="service" id="simpspector.analyser.loader"/>
-            <argument type="service" id="simpspector.analyser.executor"/>
+            <argument type="service" id="simple_things_app.workspace_manager"/>
+            <argument type="service" id="simpspector.analyser"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
         </service>
 

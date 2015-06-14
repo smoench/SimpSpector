@@ -3,6 +3,7 @@
 namespace SimpleThings\AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,11 +17,12 @@ class JobRunCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('simpspector:job:run');
+        $this->setName('simpspector:job:run')
+            ->addArgument('id', InputArgument::OPTIONAL, 'job id', null);
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null|void
@@ -30,9 +32,18 @@ class JobRunCommand extends ContainerAwareCommand
         $commitHandler    = $this->getContainer()->get('simple_things_app.commit_handler');
         $commitRepository = $this->getContainer()->get('simpspector.app.repository.commit');
 
-        foreach ($commitRepository->findNewCommits() as $commit) {
+        $commits = [];
+
+        if ($id = $input->getArgument('id')) {
+            $commits[] = $commitRepository->find($id);
+        } else {
+            $commits = $commitRepository->findNewCommits();
+        }
+
+        foreach ($commits as $commit) {
             $output->writeln('job id ' . $commit->getId());
             $commitHandler->handle($commit);
         }
+
     }
 }
