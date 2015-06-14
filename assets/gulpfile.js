@@ -14,10 +14,10 @@ gulp.task('sass', function () {
 
 gulp.task('styles', ['sass'], function () {
     var files = [
-        'bower_components/semantic/dist/semantic.css',
-        'bower_components/prism/themes/prism.css',
-        'bower_components/prism/plugins/line-highlight/prism-line-highlight.css',
-        'bower_components/prism/plugins/line-numbers/prism-line-numbers.css',
+        'node_modules/semantic-ui-css/semantic.css',
+        'node_modules/prismjs/themes/prism.css',
+        'node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css',
+        'node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css',
         '.cache/css/*.css'
     ];
 
@@ -32,15 +32,15 @@ gulp.task('styles', ['sass'], function () {
 
 gulp.task('js', function () {
     var files = [
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/semantic/dist/semantic.js',
-        'bower_components/prism/components/prism-core.js',
-        'bower_components/prism/components/prism-markup.js',
-        'bower_components/prism/components/prism-twig.js',
-        'bower_components/prism/components/prism-clike.js',
-        'bower_components/prism/components/prism-php.js',
-        'bower_components/prism/plugins/line-highlight/prism-line-highlight.js',
-        'bower_components/prism/plugins/line-numbers/prism-line-numbers.js',
+        'node_modules/jquery/dist/jquery.js',
+        'node_modules/semantic-ui-css/semantic.js',
+        'node_modules/prismjs/components/prism-core.js',
+        'node_modules/prismjs/components/prism-markup.js',
+        'node_modules/prismjs/components/prism-twig.js',
+        'node_modules/prismjs/components/prism-clike.js',
+        'node_modules/prismjs/components/prism-php.js',
+        'node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js',
+        'node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js',
         'js/main.js'
     ];
 
