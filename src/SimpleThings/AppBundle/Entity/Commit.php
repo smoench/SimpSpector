@@ -4,7 +4,8 @@ namespace SimpleThings\AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use SimpleThings\AppBundle\Gadget\Result;
+use SimpSpector\Analyser\Issue;
+use SimpSpector\Analyser\Metric;
 
 /**
  *
@@ -66,23 +67,11 @@ class Commit implements TimestampableInterface
     private $status;
 
     /**
-     * @var Issue[]|ArrayCollection
+     * @var Result
      *
-     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Issue", mappedBy="commit", cascade={"all"})
+     * @ORM\Embedded(class="SimpleThings\AppBundle\Entity\Result", columnPrefix="result_")
      */
-    private $issues;
-
-    /**
-     * @var Metric[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="SimpleThings\AppBundle\Entity\Metric", mappedBy="commit", cascade={"all"})
-     */
-    private $metrics;
-
-    /**
-     * @var Metric[]
-     */
-    private $indexedMetrics;
+    private $result;
 
     /**
      *
@@ -190,35 +179,36 @@ class Commit implements TimestampableInterface
     }
 
     /**
-     * @return Issue[]|ArrayCollection
+     * @param Result $result
      */
-    public function getIssues()
+    public function setResult(Result $result = null)
     {
-        return $this->issues;
+        $this->result = $result;
     }
 
     /**
-     * @return Metric[]|ArrayCollection
+     * @return Issue[]
      */
-    public function getMetrics()
+    public function getIssues()
     {
-        return $this->metrics;
+        return $this->result->getIssues();
     }
 
     /**
      * @return Metric[]
      */
+    public function getMetrics()
+    {
+        return $this->result->getMetrics();
+    }
+
+    /**
+     * @return Metric[]
+     * @deprecated
+     */
     public function getIndexedMetrics()
     {
-        if (!$this->indexedMetrics) {
-            $this->indexedMetrics = [];
-
-            foreach ($this->metrics as $metric) {
-                $this->indexedMetrics[$metric->getCode()] = $metric;
-            }
-        }
-
-        return $this->indexedMetrics;
+        return $this->getMetrics();
     }
 
     /**
@@ -227,7 +217,7 @@ class Commit implements TimestampableInterface
      */
     public function getMetric($code)
     {
-        $metrics = $this->getIndexedMetrics();
+        $metrics = $this->getMetrics();
 
         return isset($metrics[$code]) ? $metrics[$code] : null;
     }
@@ -238,7 +228,7 @@ class Commit implements TimestampableInterface
      */
     public function hasMetric($code)
     {
-        $metrics = $this->getIndexedMetrics();
+        $metrics = $this->getMetrics();
 
         return isset($metrics[$code]);
     }
