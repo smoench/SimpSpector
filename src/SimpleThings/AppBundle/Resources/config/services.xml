@@ -15,7 +15,7 @@
         </service>
 
         <service id="simple_things_app.badge_generator" class="SimpleThings\AppBundle\Badge\Generator">
-            <argument type="service" id="router" />
+            <argument type="service" id="router"/>
         </service>
 
         <service id="simple_things_app.logger.file_locator" class="SimpleThings\AppBundle\Logger\FileLocator">
@@ -35,6 +35,7 @@
             <argument type="service" id="simple_things_app.workspace_manager"/>
             <argument type="service" id="simpspector.analyser"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
+            <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
         <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
@@ -46,8 +47,16 @@
         </service>
 
         <!-- Markdown -->
-        <service id="simpspector.ciconia.extension.fenced_code_block" class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
-            <tag name ="ciconia.extension" />
+        <service id="simpspector.ciconia.extension.fenced_code_block"
+                 class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+            <tag name="ciconia.extension"/>
         </service>
+
+        <!-- Events -->
+        <service id="simpspector.event.subscriber.logger"
+                 class="SimpleThings\AppBundle\Event\Subscriber\LoggerSubscriber">
+            <tag name="simpspector.analyser.subscriber"/>
+        </service>
+
     </services>
 </container>

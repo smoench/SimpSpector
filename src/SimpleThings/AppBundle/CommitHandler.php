@@ -12,6 +12,7 @@ use SimpleThings\AppBundle\Event\CommitResultEvent;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
 use SimpSpector\Analyser\Analyser;
 use SimpSpector\Analyser\Logger\AbstractLogger;
+use SimpSpector\Analyser\Result;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -57,13 +58,13 @@ class CommitHandler
         WorkspaceManager $workspaceManager,
         Analyser $analyser,
         LoggerFactory $loggerFactory,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->em               = $em;
         $this->workspaceManager = $workspaceManager;
         $this->analyser         = $analyser;
         $this->loggerFactory    = $loggerFactory;
-        $this->eventDispatcher  = ($this->eventDispatcher) ?: new EventDispatcher();
+        $this->eventDispatcher  = ($eventDispatcher) ?: new EventDispatcher();
     }
 
     /**
@@ -76,9 +77,17 @@ class CommitHandler
         $this->startProcess($commit);
 
         try {
+            $event = new CommitEvent($commit, $logger);
+            $this->eventDispatcher->dispatch(Events::BEGIN, $event);
+
             $path = $this->workspaceManager->create($commit, $logger);
-            $this->execute($commit, $path, $logger);
+
+            $result = $this->execute($commit, $path, $logger);
+
             $this->workspaceManager->cleanUp($commit);
+
+            $event = new CommitResultEvent($commit, $logger, $result);
+            $this->eventDispatcher->dispatch(Events::RESULT, $event);
         } catch (\Exception $e) {
             $event = new CommitExceptionEvent($commit, $logger, $e);
             $this->eventDispatcher->dispatch(Events::EXCEPTION, $event);
@@ -92,22 +101,13 @@ class CommitHandler
      * @param Commit $commit
      * @param string $path
      * @param AbstractLogger $logger
+     * @return Result
      */
     private function execute(Commit $commit, $path, AbstractLogger $logger)
     {
-        $event = new CommitEvent($commit, $logger);
-        $this->eventDispatcher->dispatch(Events::BEGIN, $event);
-
         $result = $this->analyser->analyse($path, null, $logger);
 
-        $commit->setStatus(Commit::STATUS_SUCCESS);
-        $this->em->flush($commit);
-
-        $event = new CommitResultEvent($commit, $logger, $result);
-        $this->eventDispatcher->dispatch(Events::RESULT, $event);
-
         foreach ($result->getIssues() as $issue) {
-
             $entity = Issue::createFromAnalyser($issue);
 
             $entity->setCommit($commit);
@@ -115,12 +115,16 @@ class CommitHandler
         }
 
         foreach ($result->getMetrics() as $metric) {
-
             $entity = Metric::createFromAnalyser($metric);
 
             $entity->setCommit($commit);
             $commit->getMetrics()->add($entity);
         }
+
+        $commit->setStatus(Commit::STATUS_SUCCESS);
+        $this->em->flush($commit);
+
+        return $result;
     }
 
     /**

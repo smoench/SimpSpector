@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpSpector\Analyser\Event\Subscriber;
+namespace SimpleThings\AppBundle\Event\Subscriber;
 
 use SimpleThings\AppBundle\Event\CommitEvent;
 use SimpleThings\AppBundle\Event\CommitExceptionEvent;
@@ -33,7 +33,7 @@ class LoggerSubscriber implements EventSubscriberInterface
         $logger = $event->getLogger();
 
         $logger->writeln();
-        $logger->writeln("Go go gadgets!");
+        $logger->writeln("create workspace...");
         $logger->writeln();
     }
 
