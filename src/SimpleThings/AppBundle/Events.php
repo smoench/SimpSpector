@@ -19,4 +19,9 @@ final class Events
      * @var string
      */
     const RESULT = 'simpspector.result';
+
+    /**
+     * @var string
+     */
+    const EXCEPTION = 'simpspector.exception';
 }

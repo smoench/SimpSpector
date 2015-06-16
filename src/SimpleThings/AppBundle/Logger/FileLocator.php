@@ -1,11 +1,9 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Logger;
 
 use SimpleThings\AppBundle\Entity\Commit;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -22,7 +20,10 @@ class FileLocator
      */
     public function __construct($path = '/tmp')
     {
-        $this->path = $path;
+        $this->path = rtrim($path, '/');
+
+        $fs = new Filesystem();
+        $fs->mkdir($this->path, 0770);
     }
 
     /**

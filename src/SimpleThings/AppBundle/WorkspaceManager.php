@@ -28,6 +28,15 @@ class WorkspaceManager
 
     /**
      * @param Commit $commit
+     * @return string
+     */
+    public function path(Commit $commit)
+    {
+        return $this->baseDir . '/' . $commit->getUniqueId();
+    }
+
+    /**
+     * @param Commit $commit
      * @param AbstractLogger $logger
      * @return string
      */
@@ -35,11 +44,11 @@ class WorkspaceManager
     {
         $logger = $logger ?: new NullLogger();
 
-        $path     = $this->baseDir . '/' . $commit->getUniqueId();
+        $this->cleanUp($commit);
+
+        $path     = $this->path($commit);
         $url      = $commit->getProject()->getRepositoryUrl();
         $revision = $commit->getRevision();
-
-        $this->cleanUp($path);
 
         $this->gitClone($path, $url, $logger);
         $this->gitCheckout($path, $revision, $logger);
@@ -48,11 +57,12 @@ class WorkspaceManager
     }
 
     /**
-     * @param string $path
+     * @param Commit $commit
      */
-    public function cleanUp($path)
+    public function cleanUp(Commit $commit)
     {
-        $fs = new Filesystem();
+        $path = $this->path($commit);
+        $fs   = new Filesystem();
 
         if ($fs->exists($path)) {
             $fs->remove($path);
