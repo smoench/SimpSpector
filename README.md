@@ -11,20 +11,36 @@ SimpSpector
 ![Image](docs/img/commit.png?raw=true)
 ![Image](docs/img/commit2.png?raw=true)
 
+Requirements
+------------
+
+* composer
+* npm
+* sass
+
 Installation
 ------------
 
-TODO
+It's very easy (now) :-)
+
+```bash
+bin/update
+```
+
+Development
+-----------
+
+```bash
+npm start #short cut for: node_modules/.bin/gulp watch
+```
 
 phpStorm integration
 --------------------
 * download latest version from https://github.com/zolotov/RemoteCall/downloads and place it in phpStorm plugins directory
 * open a project and test if `http://localhost:8091/?message=composer.json:11` works
 
-
 Documentation
 -------------
 
 * [configuring projects to use SimpSpector](docs/simpspector.yml.md)
 * [Development Environment Installation](docs/development-environment.md)
-
