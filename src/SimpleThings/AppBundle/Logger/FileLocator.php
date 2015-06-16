@@ -23,7 +23,7 @@ class FileLocator
         $this->path = rtrim($path, '/');
 
         $fs = new Filesystem();
-        $fs->mkdir($this->path);
+        $fs->mkdir($this->path, 0770);
     }
 
     /**
