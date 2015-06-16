@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+chmod -Rf ug+w var
+rm -r var/cache/*
+composer install
+npm install
+bin/console doctrine:migrations:migrate -n
+bin/console cache:clear -n --env=prod
