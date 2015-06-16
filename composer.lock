@@ -1,64 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c3ff7d57026c25f43c6b6c66b8137707",
+    "hash": "e564fa0b18a8d31676c12b3ed2489e80",
     "packages": [
-        {
-            "name": "asm89/twig-lint",
-            "version": "dev-fix/twig-gt-1.16.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tolry/twig-lint.git",
-                "reference": "6e967cc16b242b4781ff69ccfc1adbb7dba87872"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tolry/twig-lint/zipball/6e967cc16b242b4781ff69ccfc1adbb7dba87872",
-                "reference": "6e967cc16b242b4781ff69ccfc1adbb7dba87872",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/console": "~2.1",
-                "symfony/finder": "~2.1",
-                "twig/twig": ">=1.16.2,<2.0"
-            },
-            "bin": [
-                "bin/twig-lint"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Asm89\\Twig\\Lint\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexander",
-                    "email": "iam.asm89@gmail.com"
-                }
-            ],
-            "description": "Standalone twig linter.",
-            "homepage": "https://github.com/asm89/twig-lint",
-            "keywords": [
-                "lint",
-                "twig"
-            ],
-            "support": {
-                "source": "https://github.com/tolry/twig-lint/tree/fix/twig-gt-1.16.2"
-            },
-            "time": "2015-02-08 12:37:36"
-        },
         {
             "name": "davidbadura/markdown-builder",
             "version": "1.0.3",
@@ -621,12 +568,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "eaa9eb5ea101dc494d7f57d1a86905e56a211d49"
+                "reference": "e33e07137c43a492589e89d79d36807cbfcf28e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/eaa9eb5ea101dc494d7f57d1a86905e56a211d49",
-                "reference": "eaa9eb5ea101dc494d7f57d1a86905e56a211d49",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/e33e07137c43a492589e89d79d36807cbfcf28e0",
+                "reference": "e33e07137c43a492589e89d79d36807cbfcf28e0",
                 "shasum": ""
             },
             "require": {
@@ -671,7 +618,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2015-05-31 17:38:23"
+            "time": "2015-06-15 17:47:52"
         },
         {
             "name": "doctrine/inflector",
@@ -742,16 +689,16 @@
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +709,7 @@
                 "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "2.0.*@ALPHA"
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -771,8 +718,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Instantiator\\": "src"
+                "psr-4": {
+                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -792,7 +739,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-10-13 12:58:55"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "doctrine/lexer",
@@ -2096,16 +2043,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simpspector/analyser.git",
-                "reference": "7052f72eb740feaefb3927a984e633b889d77e8e"
+                "reference": "90e97afe52602a2cdefe9e008428e5a4c8815341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simpspector/analyser/zipball/7052f72eb740feaefb3927a984e633b889d77e8e",
-                "reference": "7052f72eb740feaefb3927a984e633b889d77e8e",
+                "url": "https://api.github.com/repos/simpspector/analyser/zipball/90e97afe52602a2cdefe9e008428e5a4c8815341",
+                "reference": "90e97afe52602a2cdefe9e008428e5a4c8815341",
                 "shasum": ""
             },
             "require": {
-                "asm89/twig-lint": "dev-fix/twig-gt-1.16.2",
                 "davidbadura/markdown-builder": "~1.0.3",
                 "jms/serializer": "0.16.*",
                 "nikic/php-parser": "~1.2.0",
@@ -2113,6 +2059,7 @@
                 "php": ">=5.4",
                 "phpmd/phpmd": "~2.1",
                 "sensiolabs/security-checker": "~2.0",
+                "simpspector/twig-lint": "~1.1",
                 "squizlabs/php_codesniffer": "~2.0",
                 "symfony/config": "~2.6",
                 "symfony/console": "~2.6",
@@ -2138,7 +2085,58 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-06-12 07:45:02"
+            "time": "2015-06-15 17:11:30"
+        },
+        {
+            "name": "simpspector/twig-lint",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simpspector/twig-lint.git",
+                "reference": "e07c1a02bb4b5e85b593bd319ab8bd223107d291"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simpspector/twig-lint/zipball/e07c1a02bb4b5e85b593bd319ab8bd223107d291",
+                "reference": "e07c1a02bb4b5e85b593bd319ab8bd223107d291",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/console": "~2.1",
+                "symfony/finder": "~2.1",
+                "twig/twig": ">=1.16.2,<2.0"
+            },
+            "bin": [
+                "bin/twig-lint"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Asm89\\Twig\\Lint\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander",
+                    "email": "iam.asm89@gmail.com"
+                }
+            ],
+            "description": "Standalone twig linter.",
+            "homepage": "https://github.com/asm89/twig-lint",
+            "keywords": [
+                "lint",
+                "twig"
+            ],
+            "time": "2015-06-16 07:34:01"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3685,8 +3683,7 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "simpspector/analyser": 20,
-        "asm89/twig-lint": 20
+        "simpspector/analyser": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

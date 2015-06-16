@@ -24,8 +24,7 @@
         "timetoogo/pinq": "~3.0",
         "simpspector/analyser": "dev-master",
         "davidbadura/markdown-builder": "~1.0",
-        "gremo/ciconia-bundle": "~1.0.1",
-        "asm89/twig-lint": "dev-fix/twig-gt-1.16.2"
+        "gremo/ciconia-bundle": "~1.0.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
@@ -59,8 +58,5 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    },
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/tolry/twig-lint.git" }
-    ]
+    }
 }
