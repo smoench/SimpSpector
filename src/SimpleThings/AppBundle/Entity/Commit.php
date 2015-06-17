@@ -185,6 +185,14 @@ class Commit implements TimestampableInterface
     }
 
     /**
+     * @return Result
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
      * @return Issue[]
      */
     public function getIssues()
