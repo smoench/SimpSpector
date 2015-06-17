@@ -215,9 +215,7 @@ class Commit implements TimestampableInterface
      */
     public function getMetric($code)
     {
-        $metrics = $this->getMetrics();
-
-        return isset($metrics[$code]) ? $metrics[$code] : null;
+        return $this->result->getMetric($code);
     }
 
     /**
@@ -226,9 +224,7 @@ class Commit implements TimestampableInterface
      */
     public function hasMetric($code)
     {
-        $metrics = $this->getMetrics();
-
-        return isset($metrics[$code]);
+        return $this->result->hasMetric($code);
     }
 
     /**

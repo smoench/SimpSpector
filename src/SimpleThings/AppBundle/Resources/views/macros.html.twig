@@ -1,4 +1,37 @@
-{% macro levels(issues) %}
+{% macro levels(commit) %}
+
+    {% if commit.getMetric('count.notice').value|default(0) %}
+        <span class="ui label blue tooltip" title="notice">
+                <i class="info icon"></i>
+            {{ commit.getMetric('count.notice').value }}
+            </span>
+    {% endif %}
+
+    {% if commit.getMetric('count.warning').value|default(0) %}
+        <span class="ui label yellow tooltip" title="notice">
+                <i class="warning icon"></i>
+            {{ commit.getMetric('count.warning').value }}
+            </span>
+    {% endif %}
+
+    {% if commit.getMetric('count.error').value|default(0) %}
+        <span class="ui label orange tooltip" title="notice">
+                <i class="bug icon"></i>
+            {{ commit.getMetric('count.error').value }}
+            </span>
+    {% endif %}
+
+    {% if commit.getMetric('count.critical').value|default(0) %}
+        <span class="ui label red tooltip" title="notice">
+                <i class="fire icon"></i>
+            {{ commit.getMetric('count.critical').value }}
+            </span>
+    {% endif %}
+
+{% endmacro %}
+
+{% macro levels_by_issues(issues) %}
+
     {% set groups = group_issues(issues) %}
 
     {% if groups.level is defined %}
@@ -22,10 +55,10 @@
 {% endmacro %}
 
 {% macro step(title, description, icon, url) %}
-<a class="step tooltip{{ url == '' ? ' active' : '' }}" href="{{ url }}" title="{{ title }}">
-    <div class="content">
-        <div class="title ellipsis"> <i class="{{ icon }}"></i> {{ title|raw }}</div>
-        <div class="description ellipsis">{{ description|raw }}</div>
-    </div>
-</a>
+    <a class="step tooltip{{ url == '' ? ' active' : '' }}" href="{{ url }}" title="{{ title }}">
+        <div class="content">
+            <div class="title ellipsis"><i class="{{ icon }}"></i> {{ title|raw }}</div>
+            <div class="description ellipsis">{{ description|raw }}</div>
+        </div>
+    </a>
 {% endmacro %}

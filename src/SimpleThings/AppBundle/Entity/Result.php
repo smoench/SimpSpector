@@ -69,6 +69,27 @@ class Result extends BaseResult
         return $this->metrics;
     }
 
+    /**
+     * @param string $code
+     * @return null|Metric
+     */
+    public function getMetric($code)
+    {
+        $metrics = $this->getMetrics();
+
+        return isset($metrics[$code]) ? $metrics[$code] : null;
+    }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function hasMetric($code)
+    {
+        $metrics = $this->getMetrics();
+
+        return isset($metrics[$code]);
+    }
 
     /**
      * @param Issue $issue
