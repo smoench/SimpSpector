@@ -1,0 +1,18 @@
+<table class="ui celled striped table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for metric in commit.metrics %}
+            <tr>
+                <td>{{ metric.title }}</td>
+                <td>{{ metric.description }}</td>
+                <td>{{ metric.value }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -96,6 +96,9 @@
                         <a class="item active" data-tab="issues">
                             <i class="bug icon"></i> Issues
                         </a>
+                        <a class="item" data-tab="metrics">
+                            <i class="dashboard icon"></i> Metrics
+                        </a>
                     {% endif %}
 
                     <a class="item {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
@@ -109,6 +112,11 @@
                         {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' %}
                     </div>
                 {% endif %}
+
+                <div class="ui tab"
+                     data-tab="metrics">
+                    {% include 'SimpleThingsAppBundle:Commit:metrics.html.twig' %}
+                </div>
 
                 <div class="ui tab {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
                      data-tab="logs">
