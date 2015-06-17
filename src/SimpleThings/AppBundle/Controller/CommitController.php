@@ -8,7 +8,7 @@ namespace SimpleThings\AppBundle\Controller;
 use Pinq\Traversable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Entity\Issue;
+use SimpSpector\Analyser\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**

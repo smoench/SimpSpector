@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e564fa0b18a8d31676c12b3ed2489e80",
+    "hash": "13588b9e289b120ae4caf5a4419bd1ba",
     "packages": [
         {
             "name": "davidbadura/markdown-builder",
@@ -53,16 +53,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.2.4",
+            "version": "v1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "b5202eb9e83f8db52e0e58867e0a46e63be8332e"
+                "reference": "f4a91702ca3cd2e568c3736aa031ed00c3752af4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/b5202eb9e83f8db52e0e58867e0a46e63be8332e",
-                "reference": "b5202eb9e83f8db52e0e58867e0a46e63be8332e",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/f4a91702ca3cd2e568c3736aa031ed00c3752af4",
+                "reference": "f4a91702ca3cd2e568c3736aa031ed00c3752af4",
                 "shasum": ""
             },
             "require": {
@@ -117,7 +117,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2014-12-23 22:40:37"
+            "time": "2015-06-17 12:21:22"
         },
         {
             "name": "doctrine/cache",
@@ -936,6 +936,54 @@
                 "orm"
             ],
             "time": "2015-04-02 20:40:18"
+        },
+        {
+            "name": "ebidtech/compress",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ebidtech/compress.git",
+                "reference": "7eba7c42b25419ebb0464a6eccfd5d8533c0dbb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ebidtech/compress/zipball/7eba7c42b25419ebb0464a6eccfd5d8533c0dbb4",
+                "reference": "7eba7c42b25419ebb0464a6eccfd5d8533c0dbb4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "EBT\\Compress": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ebidtech",
+                    "email": "developers@ebidtech.com"
+                }
+            ],
+            "description": "Compress library",
+            "homepage": "http://github.com/ebidtech/compress",
+            "keywords": [
+                "compress",
+                "gzencode",
+                "gzip",
+                "library",
+                "php"
+            ],
+            "time": "2013-11-28 13:07:42"
         },
         {
             "name": "gremo/ciconia-bundle",
@@ -2043,12 +2091,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simpspector/analyser.git",
-                "reference": "90e97afe52602a2cdefe9e008428e5a4c8815341"
+                "reference": "238f3355599882c0f59d23957ae3ef9cae883d56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simpspector/analyser/zipball/90e97afe52602a2cdefe9e008428e5a4c8815341",
-                "reference": "90e97afe52602a2cdefe9e008428e5a4c8815341",
+                "url": "https://api.github.com/repos/simpspector/analyser/zipball/238f3355599882c0f59d23957ae3ef9cae883d56",
+                "reference": "238f3355599882c0f59d23957ae3ef9cae883d56",
                 "shasum": ""
             },
             "require": {
@@ -2085,7 +2133,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-06-15 17:11:30"
+            "time": "2015-06-17 06:19:41"
         },
         {
             "name": "simpspector/twig-lint",

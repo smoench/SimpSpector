@@ -2,6 +2,8 @@
 
 namespace SimpleThings\AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use EBT\Compress\GzcompressCompressor as Compressor;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 use SimpSpector\Analyser\Issue;
@@ -9,10 +11,26 @@ use SimpSpector\Analyser\Metric;
 use SimpSpector\Analyser\Result as BaseResult;
 
 /**
+ * @ORM\Embeddable()
+ *
  * @author David Badura <d.a.badura@gmail.com>
  */
 class Result extends BaseResult
 {
+    /**
+     * @var string|resource
+     *
+     * @ORM\Column(type="blob", name="issues")
+     */
+    protected $serializedIssues;
+
+    /**
+     * @var string|resource
+     *
+     * @ORM\Column(type="blob", name="metrics")
+     */
+    protected $serializedMetrics;
+
     /**
      * @param BaseResult $result
      */
@@ -22,7 +40,35 @@ class Result extends BaseResult
         $metrics = $this->prepareMetrics($result->getMetrics());
 
         parent::__construct($issues, $metrics);
+
+        $this->serializedIssues  = $this->serialize($issues);
+        $this->serializedMetrics = $this->serialize($metrics);
     }
+
+    /**
+     * @return Issue[]
+     */
+    public function getIssues()
+    {
+        if ($this->issues === null) {
+            $this->issues = $this->deserialize($this->serializedIssues, 'SimpSpector\Analyser\Issue');
+        }
+
+        return $this->issues;
+    }
+
+    /**
+     * @return Metric[]
+     */
+    public function getMetrics()
+    {
+        if ($this->metrics === null) {
+            $this->metrics = $this->deserialize($this->serializedMetrics, 'SimpSpector\Analyser\Metric');
+        }
+
+        return $this->metrics;
+    }
+
 
     /**
      * @param Issue $issue
@@ -66,24 +112,38 @@ class Result extends BaseResult
         return $return;
     }
 
-    private function serializeMetrics()
+    /**
+     * @param array $data
+     * @return string
+     */
+    private function serialize($data)
     {
-        return $this->getSerializer()->serialize($this->getIssues(), 'json');
+        $json = $this->getSerializer()->serialize($data, 'json');
+
+        return $this->getCompressor()->compress($json);
     }
 
-    private function deserializeMetrics()
+    /**
+     * @param resource $data
+     * @param string $class
+     * @return array
+     */
+    private function deserialize($data, $class)
     {
+        if (!is_resource($data)) {
+            return [];
+        }
 
-    }
+        $compressedData = stream_get_contents($data);
 
-    private function serializeIssues()
-    {
+        if (!$compressedData) {
+            return [];
+        }
 
-    }
+        $json = $this->getCompressor()->uncompress($compressedData);
 
-    private function deserializeIssues()
-    {
-
+        return (array)$this->getSerializer()
+            ->deserialize($json, "array<string,$class>", 'json');
     }
 
     /**
@@ -92,5 +152,13 @@ class Result extends BaseResult
     private function getSerializer()
     {
         return SerializerBuilder::create()->build();
+    }
+
+    /**
+     * @return Compressor
+     */
+    private function getCompressor()
+    {
+        return new Compressor();
     }
 }

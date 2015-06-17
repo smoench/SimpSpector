@@ -78,8 +78,6 @@ class Commit implements TimestampableInterface
      */
     public function __construct()
     {
-        $this->issues  = new ArrayCollection();
-        $this->metrics = new ArrayCollection();
         $this->status  = self::STATUS_NEW;
         $this->gadgets = [];
     }
