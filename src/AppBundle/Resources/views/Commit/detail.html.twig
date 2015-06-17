@@ -1,0 +1,53 @@
+{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
+{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+
+    {% include 'SimpleThingsAppBundle:Commit:_header.html.twig' %}
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+
+                    {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                        <a class="item active" data-tab="issues">
+                            <i class="bug icon"></i> Issues
+                        </a>
+                        <a class="item" data-tab="metrics">
+                            <i class="dashboard icon"></i> Metrics
+                        </a>
+                    {% endif %}
+
+                    <a class="item {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                       data-tab="logs">
+                        <i class="file text icon"></i> Logs
+                    </a>
+                </div>
+
+                {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                    <div class="ui tab active" data-tab="issues">
+
+                        {{ _.levels(commit) }}
+
+                        <br><br>
+
+                        {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' %}
+                    </div>
+                {% endif %}
+
+                <div class="ui tab"
+                     data-tab="metrics">
+                    {% include 'SimpleThingsAppBundle:Commit:metrics.html.twig' %}
+                </div>
+
+                <div class="ui tab {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                     data-tab="logs">
+                    {{ render(controller('SimpleThingsAppBundle:Commit:log', {commit: commit})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
