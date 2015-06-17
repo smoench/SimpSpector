@@ -2091,12 +2091,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/simpspector/analyser.git",
-                "reference": "238f3355599882c0f59d23957ae3ef9cae883d56"
+                "reference": "da9196fe9365f23ccc8a621fe8e0094262f1f200"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simpspector/analyser/zipball/238f3355599882c0f59d23957ae3ef9cae883d56",
-                "reference": "238f3355599882c0f59d23957ae3ef9cae883d56",
+                "url": "https://api.github.com/repos/simpspector/analyser/zipball/da9196fe9365f23ccc8a621fe8e0094262f1f200",
+                "reference": "da9196fe9365f23ccc8a621fe8e0094262f1f200",
                 "shasum": ""
             },
             "require": {
@@ -2133,7 +2133,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "SimpSpector Analyser",
-            "time": "2015-06-17 06:19:41"
+            "time": "2015-06-17 17:33:03"
         },
         {
             "name": "simpspector/twig-lint",
