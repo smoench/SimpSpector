@@ -1,7 +1,4 @@
 <?php
-/*
- * @author Tobias Olry <tobias.olry@gmail.com>
- */
 
 namespace SimpleThings\AppBundle\Controller;
 
@@ -13,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @Framework\Route("/commit")
+ *
+ * @author Tobias Olry <tobias.olry@gmail.com>
  */
 class CommitController extends Controller
 {
