@@ -20,14 +20,14 @@ class Result extends BaseResult
     /**
      * @var string|resource
      *
-     * @ORM\Column(type="blob", name="issues")
+     * @ORM\Column(type="blob", name="issues", nullable=true)
      */
     protected $serializedIssues;
 
     /**
      * @var string|resource
      *
-     * @ORM\Column(type="blob", name="metrics")
+     * @ORM\Column(type="blob", name="metrics", nullable=true)
      */
     protected $serializedMetrics;
 
