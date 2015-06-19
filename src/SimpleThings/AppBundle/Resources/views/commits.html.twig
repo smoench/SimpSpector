@@ -21,7 +21,7 @@
                 </a>
             </td>
             <td>{{ commit.revision }}</td>
-            <td>{{ _.levels(commit.issues) }}</td>
+            <td>{{ _.levels(commit) }}</td>
             <td>
                 {% if commit.status == constant('STATUS_NEW', commit) %}
                     <span class="ui label">New</span>

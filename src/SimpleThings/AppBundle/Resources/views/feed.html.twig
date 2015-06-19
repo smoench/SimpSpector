@@ -30,7 +30,7 @@
 
                 {% if commit.issues|length > 0 %}
                     <div class="extra text">
-                        {{ _.levels(commit.issues) }}
+                        {{ _.levels(commit) }}
                     </div>
                     <div class="meta">
                         {% set groups = group_issues(commit.issues) %}

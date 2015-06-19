@@ -8,7 +8,7 @@ namespace SimpleThings\AppBundle\Twig;
 use SimpleThings\AppBundle\Badge\Score;
 use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Entity\Issue;
+use SimpSpector\Analyser\Issue;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
