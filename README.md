@@ -1,7 +1,7 @@
 SimpSpector
 ===========
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/simplethings/SimpSpector?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/simpspector/simpspector?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/simpspector/simpspector.svg?branch=master)](https://travis-ci.org/simpspector/simpspector)
 
 **ALPHA** SimpSpector integrates with gitlab (and in the future possible github and other providers) and inspects your code, using SimpSpector Gadgets (get it?)
