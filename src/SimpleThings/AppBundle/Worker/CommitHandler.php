@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle;
+namespace SimpleThings\AppBundle\Worker;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;
@@ -8,6 +8,7 @@ use SimpleThings\AppBundle\Entity\Result;
 use SimpleThings\AppBundle\Event\CommitEvent;
 use SimpleThings\AppBundle\Event\CommitExceptionEvent;
 use SimpleThings\AppBundle\Event\CommitResultEvent;
+use SimpleThings\AppBundle\Events;
 use SimpleThings\AppBundle\Logger\LoggerFactory;
 use SimpSpector\Analyser\Analyser;
 use SimpSpector\Analyser\Logger\AbstractLogger;

@@ -29,7 +29,7 @@ class JobRunCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $commitHandler    = $this->getContainer()->get('simple_things_app.commit_handler');
+        $commitHandler    = $this->getContainer()->get('simple_things_app.worker.commit_handler');
         $commitRepository = $this->getContainer()->get('simpspector.app.repository.commit');
 
         $commits = [];
@@ -45,5 +45,7 @@ class JobRunCommand extends ContainerAwareCommand
             $commitHandler->handle($commit);
         }
 
+        $garbageCollector = $this->getContainer()->get('simpspector.app.worker.garbage_collector');
+        $garbageCollector->run();
     }
 }
