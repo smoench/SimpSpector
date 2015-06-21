@@ -1,13 +1,9 @@
 <?php
-/**
- *
- */
 
 namespace SimpleThings\AppBundle\Twig;
 
-use SimpleThings\AppBundle\Badge\Score;
-use SimpleThings\AppBundle\Badge\ScoreCalculator;
 use SimpleThings\AppBundle\Entity\Commit;
+use SimpleThings\AppBundle\Score\CalculatorInterface;
 use SimpSpector\Analyser\Issue;
 
 /**
@@ -16,14 +12,14 @@ use SimpSpector\Analyser\Issue;
 class UtilExtension extends \Twig_Extension
 {
     /**
-     * @var ScoreCalculator
+     * @var CalculatorInterface
      */
     private $calculator;
 
     /**
-     * @param ScoreCalculator $calculator
+     * @param CalculatorInterface $calculator
      */
-    public function __construct(ScoreCalculator $calculator)
+    public function __construct(CalculatorInterface $calculator)
     {
         $this->calculator = $calculator;
     }
@@ -35,7 +31,8 @@ class UtilExtension extends \Twig_Extension
     {
         return [
             'group_issues' => new \Twig_SimpleFunction('group_issues', [$this, 'groupIssues']),
-            'score'        => new \Twig_SimpleFunction('score', [$this, 'score'])
+            'score'        => new \Twig_SimpleFunction('score', [$this, 'score']),
+            'score_color'  => new \Twig_SimpleFunction('score_color', [$this, 'scoreColor'])
         ];
     }
 
@@ -119,11 +116,40 @@ class UtilExtension extends \Twig_Extension
 
     /**
      * @param Commit $commit
-     * @return Score
+     * @return array
      */
     public function score(Commit $commit)
     {
-        return $this->calculator->get($commit);
+        switch ($commit->getStatus()) {
+            case Commit::STATUS_SUCCESS:
+                $number = $this->calculator->calculate($commit->getResult());
+                $score  = ['number' => $number, 'color' => $this->scoreColor($number)];
+                break;
+            case Commit::STATUS_ERROR:
+                $score = ['number' => '-', 'color' => 'FF0000'];
+                break;
+            case Commit::STATUS_NEW:
+            case Commit::STATUS_RUN:
+            default:
+                $score = ['number' => '...', 'color' => 'CCCCCC'];
+                break;
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param int $number
+     * @return string
+     */
+    public function scoreColor($number)
+    {
+        $number = 100 - $number;
+        $r      = (255 * $number) / 100;
+        $g      = (255 * (100 - $number)) / 100;
+        $b      = 0;
+
+        return sprintf('%02X%02X%02X', $r, $g, $b);
     }
 
     /**
