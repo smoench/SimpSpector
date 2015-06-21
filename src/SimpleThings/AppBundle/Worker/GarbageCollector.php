@@ -30,7 +30,6 @@ class GarbageCollector
     {
         $finder = (new Finder())
             ->in($this->baseDir)
-            ->date('since 7 days')
             ->directories()
             ->depth('== 0');
 
