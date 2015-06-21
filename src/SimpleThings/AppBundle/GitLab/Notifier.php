@@ -6,7 +6,7 @@ use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\Badge\Generator;
+use SimpleThings\AppBundle\Badge\MarkdownGeneratorInterface;
 use SimpleThings\AppBundle\Entity\MergeRequest;
 
 /**
@@ -20,7 +20,7 @@ class Notifier
     private $client;
 
     /**
-     * @var Generator
+     * @var MarkdownGeneratorInterface
      */
     private $generator;
 
@@ -31,10 +31,10 @@ class Notifier
 
     /**
      * @param Client $client
-     * @param Generator $generator
+     * @param MarkdownGeneratorInterface $generator
      * @param LoggerInterface $logger
      */
-    public function __construct(Client $client, Generator $generator, LoggerInterface $logger = null)
+    public function __construct(Client $client, MarkdownGeneratorInterface $generator, LoggerInterface $logger = null)
     {
         $this->client    = $client;
         $this->generator = $generator;
@@ -52,7 +52,7 @@ class Notifier
         $response = $mergeRequestApi->addComment(
             $mergeRequest->getProject()->getRemoteId(),
             $mergeRequest->getRemoteId(),
-            $this->generator->getMarkdownForMergeRequest($mergeRequest)
+            $this->generator->generateForMergeRequest($mergeRequest)
         );
 
         $this->logger->info('notify gitlab', $response);

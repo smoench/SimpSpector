@@ -22,7 +22,7 @@
 
         <service id="simple_things_app.gitlab.notifier" class="SimpleThings\AppBundle\GitLab\Notifier">
             <argument type="service" id="gitlab_api"/>
-            <argument type="service" id="simple_things_app.badge_generator"/>
+            <argument type="service" id="simple_things_app.badge.markdown_generator"/>
             <argument type="service" id="logger"/>
         </service>
 
