@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="simple_things_app.workspace_manager" class="SimpleThings\AppBundle\WorkspaceManager">
+        <service id="simple_things_app.worker.workspace_manager" class="SimpleThings\AppBundle\Worker\WorkspaceManager">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
@@ -30,15 +30,19 @@
             <argument type="service" id="simple_things_app.logger.file_locator"/>
         </service>
 
-        <service id="simple_things_app.commit_handler" class="SimpleThings\AppBundle\CommitHandler">
+        <service id="simple_things_app.worker.commit_handler" class="SimpleThings\AppBundle\Worker\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument type="service" id="simple_things_app.workspace_manager"/>
+            <argument type="service" id="simple_things_app.worker.workspace_manager"/>
             <argument type="service" id="simpspector.analyser"/>
             <argument type="service" id="simple_things_app.logger.factory"/>
             <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
         <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
+
+        <service id="simpspector.app.worker.garbage_collector" class="SimpleThings\AppBundle\Worker\GarbageCollector">
+            <argument type="string">%git_repository_tmp_dir%</argument>
+        </service>
 
         <!-- TWIG -->
         <service id="simple_things_app.twig.extension.util" class="SimpleThings\AppBundle\Twig\UtilExtension">
