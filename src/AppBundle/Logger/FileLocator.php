@@ -2,7 +2,7 @@
 
 namespace AppBundle\Logger;
 
-use SimpleThings\AppBundle\Entity\Commit;
+use AppBundle\Entity\Commit;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

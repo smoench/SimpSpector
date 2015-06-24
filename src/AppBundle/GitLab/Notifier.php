@@ -6,8 +6,8 @@ use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\Badge\MarkdownGeneratorInterface;
-use SimpleThings\AppBundle\Entity\MergeRequest;
+use AppBundle\Badge\MarkdownGeneratorInterface;
+use AppBundle\Entity\MergeRequest;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>

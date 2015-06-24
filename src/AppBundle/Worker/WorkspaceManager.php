@@ -2,7 +2,7 @@
 
 namespace AppBundle\Worker;
 
-use SimpleThings\AppBundle\Entity\Commit;
+use AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Logger\AbstractLogger;
 use SimpSpector\Analyser\Logger\NullLogger;
 use SimpSpector\Analyser\Process\ProcessBuilder;

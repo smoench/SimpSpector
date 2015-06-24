@@ -3,8 +3,8 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
-use SimpleThings\AppBundle\Entity\MergeRequest;
-use SimpleThings\AppBundle\Entity\Project;
+use AppBundle\Entity\MergeRequest;
+use AppBundle\Entity\Project;
 use SimpSpector\Analyser\Result;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;

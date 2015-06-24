@@ -3,8 +3,8 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
-use SimpleThings\AppBundle\Entity\MergeRequest;
-use SimpleThings\AppBundle\Repository\CommitRepository;
+use AppBundle\Entity\MergeRequest;
+use AppBundle\Repository\CommitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 

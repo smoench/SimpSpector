@@ -2,8 +2,8 @@
 
 namespace AppBundle\Twig;
 
-use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Score\CalculatorInterface;
+use AppBundle\Entity\Commit;
+use AppBundle\Score\CalculatorInterface;
 use SimpSpector\Analyser\Issue;
 
 /**

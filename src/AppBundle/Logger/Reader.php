@@ -5,7 +5,7 @@
 
 namespace AppBundle\Logger;
 
-use SimpleThings\AppBundle\Entity\Commit;
+use AppBundle\Entity\Commit;
 
 /**
  * @author David Badura <badura@simplethings.de>

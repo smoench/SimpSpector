@@ -3,8 +3,8 @@
 namespace AppBundle\Badge;
 
 use DavidBadura\MarkdownBuilder\MarkdownBuilder;
-use SimpleThings\AppBundle\Entity\Project;
-use SimpleThings\AppBundle\Entity\MergeRequest;
+use AppBundle\Entity\Project;
+use AppBundle\Entity\MergeRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 /**

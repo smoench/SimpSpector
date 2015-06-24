@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Pinq\Traversable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
-use SimpleThings\AppBundle\Entity\Commit;
+use AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

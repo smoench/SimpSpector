@@ -2,10 +2,10 @@
 
 namespace SimpleThings\AppBundle\Event\Subscriber;
 
-use SimpleThings\AppBundle\Event\CommitEvent;
-use SimpleThings\AppBundle\Event\CommitExceptionEvent;
-use SimpleThings\AppBundle\Event\CommitResultEvent;
-use SimpleThings\AppBundle\Events;
+use AppBundle\Event\CommitEvent;
+use AppBundle\Event\CommitExceptionEvent;
+use AppBundle\Event\CommitResultEvent;
+use AppBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

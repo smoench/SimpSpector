@@ -6,11 +6,11 @@ use Doctrine\ORM\EntityManager;
 use Gitlab\Client;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleThings\AppBundle\Entity\Commit;
-use SimpleThings\AppBundle\Entity\MergeRequest;
-use SimpleThings\AppBundle\Entity\Project;
-use SimpleThings\AppBundle\Repository\MergeRequestRepository;
-use SimpleThings\AppBundle\Repository\ProjectRepository;
+use AppBundle\Entity\Commit;
+use AppBundle\Entity\MergeRequest;
+use AppBundle\Entity\Project;
+use AppBundle\Repository\MergeRequestRepository;
+use AppBundle\Repository\ProjectRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

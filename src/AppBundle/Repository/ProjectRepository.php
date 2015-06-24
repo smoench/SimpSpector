@@ -3,7 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use SimpleThings\AppBundle\Entity\Project;
+use AppBundle\Entity\Project;
 
 /**
  *
