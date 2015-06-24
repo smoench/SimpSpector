@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\MergeRequestRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\MergeRequestRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class MergeRequest implements TimestampableInterface

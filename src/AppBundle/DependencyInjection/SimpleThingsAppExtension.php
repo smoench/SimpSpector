@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class SimpleThingsAppExtension extends Extension
+class AppExtension extends Extension
 {
     /**
      * {@inheritdoc}

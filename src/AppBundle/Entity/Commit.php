@@ -10,7 +10,7 @@ use SimpSpector\Analyser\Metric;
 /**
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\CommitRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CommitRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Commit implements TimestampableInterface
@@ -69,7 +69,7 @@ class Commit implements TimestampableInterface
     /**
      * @var Result
      *
-     * @ORM\Embedded(class="SimpleThings\AppBundle\Entity\Result", columnPrefix="result_")
+     * @ORM\Embedded(class="AppBundle\Entity\Result", columnPrefix="result_")
      */
     private $result;
 

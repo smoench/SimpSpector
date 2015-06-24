@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="SimpleThings\AppBundle\Repository\ProjectRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ProjectRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Project implements TimestampableInterface
