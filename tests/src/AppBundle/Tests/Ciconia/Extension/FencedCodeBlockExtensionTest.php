@@ -1,10 +1,10 @@
 <?php
 
-namespace SimpleThings\AppBundle\Tests\Ciconia\Extension;
+namespace AppBundle\Tests\Ciconia\Extension;
 
 use Ciconia\Common\Text;
 use Ciconia\Renderer\HtmlRenderer;
-use SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension;
+use AppBundle\Ciconia\Extension\FencedCodeBlockExtension;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
