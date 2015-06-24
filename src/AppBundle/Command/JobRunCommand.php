@@ -38,7 +38,7 @@ class JobRunCommand extends ContainerAwareCommand
             return;
         }
 
-        $commitHandler    = $this->getContainer()->get('simple_things_app.worker.commit_handler');
+        $commitHandler    = $this->getContainer()->get('simpspector.app.worker.commit_handler');
         $commitRepository = $this->getContainer()->get('simpspector.app.repository.commit');
 
         $commits = [];

@@ -71,7 +71,7 @@ class ProjectController extends Controller
         $commitRepository = $this->get('simpspector.app.repository.commit');
         $commits          = $commitRepository->findByMaster($project, 10);
 
-        $markdown = $this->get('simple_things_app.badge.markdown_generator')->generateForProject($project);
+        $markdown = $this->get('simpspector.app.badge.markdown_generator')->generateForProject($project);
 
         return [
             'project'  => $project,

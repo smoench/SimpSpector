@@ -10,43 +10,43 @@
     </parameters>
 
     <services>
-        <service id="simple_things_app.worker.workspace_manager" class="AppBundle\Worker\WorkspaceManager">
+        <service id="simpspector.app.worker.workspace_manager" class="AppBundle\Worker\WorkspaceManager">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
-        <service id="simple_things_app.badge.markdown_generator" class="AppBundle\Badge\MarkdownGenerator">
+        <service id="simpspector.app.badge.markdown_generator" class="AppBundle\Badge\MarkdownGenerator">
             <argument type="service" id="router"/>
         </service>
 
-        <service id="simple_things_app.logger.file_locator" class="AppBundle\Logger\FileLocator">
+        <service id="simpspector.app.logger.file_locator" class="AppBundle\Logger\FileLocator">
             <argument type="string">%job_logs%</argument>
         </service>
 
-        <service id="simple_things_app.logger.factory" class="AppBundle\Logger\LoggerFactory">
-            <argument type="service" id="simple_things_app.logger.file_locator"/>
+        <service id="simpspector.app.logger.factory" class="AppBundle\Logger\LoggerFactory">
+            <argument type="service" id="simpspector.app.logger.file_locator"/>
         </service>
 
-        <service id="simple_things_app.logger.reader" class="AppBundle\Logger\Reader">
-            <argument type="service" id="simple_things_app.logger.file_locator"/>
+        <service id="simpspector.app.logger.reader" class="AppBundle\Logger\Reader">
+            <argument type="service" id="simpspector.app.logger.file_locator"/>
         </service>
 
-        <service id="simple_things_app.worker.commit_handler" class="AppBundle\Worker\CommitHandler">
+        <service id="simpspector.app.worker.commit_handler" class="AppBundle\Worker\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument type="service" id="simple_things_app.worker.workspace_manager"/>
+            <argument type="service" id="simpspector.app.worker.workspace_manager"/>
             <argument type="service" id="simpspector.analyser"/>
-            <argument type="service" id="simple_things_app.logger.factory"/>
+            <argument type="service" id="simpspector.app.logger.factory"/>
             <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
-        <service id="simple_things_app.score.calculator" class="AppBundle\Score\Calculator"/>
+        <service id="simpspector.app.score.calculator" class="AppBundle\Score\Calculator"/>
 
         <service id="simpspector.app.worker.garbage_collector" class="AppBundle\Worker\GarbageCollector">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
         <!-- TWIG -->
-        <service id="simple_things_app.twig.extension.util" class="AppBundle\Twig\UtilExtension">
-            <argument type="service" id="simple_things_app.score.calculator"/>
+        <service id="simpspector.app.twig.extension.util" class="AppBundle\Twig\UtilExtension">
+            <argument type="service" id="simpspector.app.score.calculator"/>
             <tag name="twig.extension"/>
         </service>
 

@@ -40,7 +40,7 @@ class CommitController extends Controller
      */
     public function logAction(Commit $commit)
     {
-        $reader = $this->get('simple_things_app.logger.reader');
+        $reader = $this->get('simpspector.app.logger.reader');
         $log    = $reader->getContent($commit);
 
         return $this->render(

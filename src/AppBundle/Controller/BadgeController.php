@@ -48,7 +48,7 @@ class BadgeController extends Controller
      */
     private function generateBadge(Result $result)
     {
-        $scoreCalculator = $this->get('simple_things_app.score.calculator');
+        $scoreCalculator = $this->get('simpspector.app.score.calculator');
         $score           = $scoreCalculator->calculate($result);
 
         $response = new Response($this->renderView("SimpleThingsAppBundle:Badge:badge.xml.twig", [

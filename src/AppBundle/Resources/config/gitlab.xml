@@ -6,23 +6,23 @@
 
     <services>
 
-        <service id="simple_things_app.gitlab.commit_factory" class="AppBundle\GitLab\CommitFactory">
+        <service id="simpspector.app.gitlab.commit_factory" class="AppBundle\GitLab\CommitFactory">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="gitlab_api"/>
         </service>
 
-        <service id="simple_things_app.gitlab.request_handler" class="AppBundle\GitLab\RequestHandler">
+        <service id="simpspector.app.gitlab.request_handler" class="AppBundle\GitLab\RequestHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument type="service" id="simpspector.app.repository.merge_request"/>
             <argument type="service" id="simpspector.app.repository.project"/>
             <argument type="service" id="gitlab_api"/>
-            <argument type="service" id="simple_things_app.gitlab.notifier"/>
+            <argument type="service" id="simpspector.app.gitlab.notifier"/>
             <argument type="service" id="logger"/>
         </service>
 
-        <service id="simple_things_app.gitlab.notifier" class="AppBundle\GitLab\Notifier">
+        <service id="simpspector.app.gitlab.notifier" class="AppBundle\GitLab\Notifier">
             <argument type="service" id="gitlab_api"/>
-            <argument type="service" id="simple_things_app.badge.markdown_generator"/>
+            <argument type="service" id="simpspector.app.badge.markdown_generator"/>
             <argument type="service" id="logger"/>
         </service>
 

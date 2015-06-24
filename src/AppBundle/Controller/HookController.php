@@ -17,7 +17,7 @@ class HookController extends Controller
      */
     public function gitlabAction(Request $request)
     {
-        $this->get('simple_things_app.gitlab.request_handler')->handle($request);
+        $this->get('simpspector.app.gitlab.request_handler')->handle($request);
 
         return new Response();
     }
