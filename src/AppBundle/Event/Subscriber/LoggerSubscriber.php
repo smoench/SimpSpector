@@ -1,6 +1,6 @@
 <?php
 
-use AppBundle\Event\Subscriber;
+namespace AppBundle\Event\Subscriber;
 
 use AppBundle\Event\CommitEvent;
 use AppBundle\Event\CommitExceptionEvent;

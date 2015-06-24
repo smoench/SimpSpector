@@ -1,6 +1,6 @@
 <?php
 
-use AppBundle\Ciconia\Extension;
+namespace AppBundle\Ciconia\Extension;
 
 use Ciconia\Common\Text;
 use Ciconia\Extension\ExtensionInterface;
