@@ -1,4 +1,4 @@
-simple_things_app:
+app:
     resource: "@AppBundle/Controller/"
     type:     annotation
     prefix:   /
