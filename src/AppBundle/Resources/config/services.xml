@@ -10,27 +10,27 @@
     </parameters>
 
     <services>
-        <service id="simple_things_app.worker.workspace_manager" class="SimpleThings\AppBundle\Worker\WorkspaceManager">
+        <service id="simple_things_app.worker.workspace_manager" class="AppBundle\Worker\WorkspaceManager">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
-        <service id="simple_things_app.badge.markdown_generator" class="SimpleThings\AppBundle\Badge\MarkdownGenerator">
+        <service id="simple_things_app.badge.markdown_generator" class="AppBundle\Badge\MarkdownGenerator">
             <argument type="service" id="router"/>
         </service>
 
-        <service id="simple_things_app.logger.file_locator" class="SimpleThings\AppBundle\Logger\FileLocator">
+        <service id="simple_things_app.logger.file_locator" class="AppBundle\Logger\FileLocator">
             <argument type="string">%job_logs%</argument>
         </service>
 
-        <service id="simple_things_app.logger.factory" class="SimpleThings\AppBundle\Logger\LoggerFactory">
+        <service id="simple_things_app.logger.factory" class="AppBundle\Logger\LoggerFactory">
             <argument type="service" id="simple_things_app.logger.file_locator"/>
         </service>
 
-        <service id="simple_things_app.logger.reader" class="SimpleThings\AppBundle\Logger\Reader">
+        <service id="simple_things_app.logger.reader" class="AppBundle\Logger\Reader">
             <argument type="service" id="simple_things_app.logger.file_locator"/>
         </service>
 
-        <service id="simple_things_app.worker.commit_handler" class="SimpleThings\AppBundle\Worker\CommitHandler">
+        <service id="simple_things_app.worker.commit_handler" class="AppBundle\Worker\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument type="service" id="simple_things_app.worker.workspace_manager"/>
             <argument type="service" id="simpspector.analyser"/>
@@ -38,27 +38,27 @@
             <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
-        <service id="simple_things_app.score.calculator" class="SimpleThings\AppBundle\Score\Calculator"/>
+        <service id="simple_things_app.score.calculator" class="AppBundle\Score\Calculator"/>
 
-        <service id="simpspector.app.worker.garbage_collector" class="SimpleThings\AppBundle\Worker\GarbageCollector">
+        <service id="simpspector.app.worker.garbage_collector" class="AppBundle\Worker\GarbageCollector">
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
         <!-- TWIG -->
-        <service id="simple_things_app.twig.extension.util" class="SimpleThings\AppBundle\Twig\UtilExtension">
+        <service id="simple_things_app.twig.extension.util" class="AppBundle\Twig\UtilExtension">
             <argument type="service" id="simple_things_app.score.calculator"/>
             <tag name="twig.extension"/>
         </service>
 
         <!-- Markdown -->
         <service id="simpspector.ciconia.extension.fenced_code_block"
-                 class="SimpleThings\AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+                 class="AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
             <tag name="ciconia.extension"/>
         </service>
 
         <!-- Events -->
         <service id="simpspector.event.subscriber.logger"
-                 class="SimpleThings\AppBundle\Event\Subscriber\LoggerSubscriber">
+                 class="AppBundle\Event\Subscriber\LoggerSubscriber">
             <tag name="simpspector.analyser.subscriber"/>
         </service>
 

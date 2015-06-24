@@ -6,24 +6,24 @@
     <services>
 
         <service id="simpspector.app.repository.commit"
-                 class="SimpleThings\AppBundle\Repository\CommitRepository"
+                 class="AppBundle\Repository\CommitRepository"
                  factory-service="doctrine"
                  factory-method="getRepository">
-            <argument>SimpleThings\AppBundle\Entity\Commit</argument>
+            <argument>AppBundle\Entity\Commit</argument>
         </service>
 
         <service id="simpspector.app.repository.merge_request"
-                 class="SimpleThings\AppBundle\Repository\MergeRequestRepository"
+                 class="AppBundle\Repository\MergeRequestRepository"
                  factory-service="doctrine"
                  factory-method="getRepository">
-            <argument>SimpleThings\AppBundle\Entity\MergeRequest</argument>
+            <argument>AppBundle\Entity\MergeRequest</argument>
         </service>
 
         <service id="simpspector.app.repository.project"
-                 class="SimpleThings\AppBundle\Repository\ProjectRepository"
+                 class="AppBundle\Repository\ProjectRepository"
                  factory-service="doctrine"
                  factory-method="getRepository">
-            <argument>SimpleThings\AppBundle\Entity\Project</argument>
+            <argument>AppBundle\Entity\Project</argument>
         </service>
 
     </services>
