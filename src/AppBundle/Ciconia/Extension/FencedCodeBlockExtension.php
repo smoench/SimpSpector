@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Ciconia\Extension;
+use AppBundle\Ciconia\Extension;
 
 use Ciconia\Common\Text;
 use Ciconia\Extension\ExtensionInterface;
