@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
  * @author David Badura <d.a.badura@gmail.com>
  * @author Lars Wallenborn <lars@wallenborn.net>
  */
-class Generator
+class MarkdownGenerator implements MarkdownGeneratorInterface
 {
     /**
      * @var Router
@@ -30,9 +30,9 @@ class Generator
      * @param MergeRequest $mergeRequest
      * @return string
      */
-    public function getMarkdownForMergeRequest(MergeRequest $mergeRequest)
+    public function generateForMergeRequest(MergeRequest $mergeRequest)
     {
-        return $this->generateMarkdownBadge(
+        return $this->generateBadge(
             $this->router->generate('mergerequest_lastcommit', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('mergerequest_imagebadge', ['id' => $mergeRequest->getId()], Router::ABSOLUTE_URL)
         );
@@ -42,9 +42,9 @@ class Generator
      * @param Project $project
      * @return string
      */
-    public function getMarkdownForProject(Project $project)
+    public function generateForProject(Project $project)
     {
-        return $this->generateMarkdownBadge(
+        return $this->generateBadge(
             $this->router->generate('project_lastcommit', ['id' => $project->getId()], Router::ABSOLUTE_URL),
             $this->router->generate('project_imagebadge', ['id' => $project->getId()], Router::ABSOLUTE_URL)
         );
@@ -55,7 +55,7 @@ class Generator
      * @param string $image
      * @return string
      */
-    private function generateMarkdownBadge($link, $image)
+    private function generateBadge($link, $image)
     {
         $markdown = new MarkdownBuilder();
 

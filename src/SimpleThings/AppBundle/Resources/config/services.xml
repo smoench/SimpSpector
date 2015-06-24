@@ -14,7 +14,7 @@
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
-        <service id="simple_things_app.badge_generator" class="SimpleThings\AppBundle\Badge\Generator">
+        <service id="simple_things_app.badge.markdown_generator" class="SimpleThings\AppBundle\Badge\MarkdownGenerator">
             <argument type="service" id="router"/>
         </service>
 
@@ -38,7 +38,7 @@
             <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
-        <service id="simple_things_app.badge.score_calculator" class="SimpleThings\AppBundle\Badge\ScoreCalculator"/>
+        <service id="simple_things_app.score.calculator" class="SimpleThings\AppBundle\Score\Calculator"/>
 
         <service id="simpspector.app.worker.garbage_collector" class="SimpleThings\AppBundle\Worker\GarbageCollector">
             <argument type="string">%git_repository_tmp_dir%</argument>
@@ -46,7 +46,7 @@
 
         <!-- TWIG -->
         <service id="simple_things_app.twig.extension.util" class="SimpleThings\AppBundle\Twig\UtilExtension">
-            <argument type="service" id="simple_things_app.badge.score_calculator"/>
+            <argument type="service" id="simple_things_app.score.calculator"/>
             <tag name="twig.extension"/>
         </service>
 
