@@ -44,7 +44,7 @@ class CommitController extends Controller
         $log    = $reader->getContent($commit);
 
         return $this->render(
-            'SimpleThingsAppBundle:Commit:log.html.twig',
+            'AppBundle:Commit:log.html.twig',
             [
                 'commit' => $commit,
                 'log'    => $log

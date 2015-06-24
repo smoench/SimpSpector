@@ -51,7 +51,7 @@ class BadgeController extends Controller
         $scoreCalculator = $this->get('simpspector.app.score.calculator');
         $score           = $scoreCalculator->calculate($result);
 
-        $response = new Response($this->renderView("SimpleThingsAppBundle:Badge:badge.xml.twig", [
+        $response = new Response($this->renderView("AppBundle:Badge:badge.xml.twig", [
             'score' => $score,
         ]), 200, [
             'Content-Type'        => 'image/svg+xml',

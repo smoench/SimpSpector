@@ -1,5 +1,5 @@
-{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
-{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -23,7 +23,7 @@
                     </a>
                 </div>
 
-                {% include 'SimpleThingsAppBundle::feed.html.twig' with {commits: commits} %}
+                {% include 'AppBundle::feed.html.twig' with {commits: commits} %}
             </div>
         </div>
     </div>

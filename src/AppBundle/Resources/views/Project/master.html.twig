@@ -1,5 +1,5 @@
-{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
-{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -18,7 +18,7 @@
                 <h3 class="ui header">
                     <i class="icon text file inverted circular"></i> Commits
                 </h3>
-                {% include 'SimpleThingsAppBundle::commits.html.twig' %}
+                {% include 'AppBundle::commits.html.twig' %}
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class SimpleThingsAppBundle extends Bundle
+class AppBundle extends Bundle
 {
     /**
      * @param ContainerBuilder $container

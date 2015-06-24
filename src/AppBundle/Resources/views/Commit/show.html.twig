@@ -1,5 +1,5 @@
-{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
-{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
 
 {% block content %}
     <div class="row">
@@ -109,18 +109,18 @@
 
                 {% if commit.status == constant('STATUS_SUCCESS', commit) %}
                     <div class="ui tab active" data-tab="issues">
-                        {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' %}
+                        {% include 'AppBundle:Commit:_issues.html.twig' %}
                     </div>
                 {% endif %}
 
                 <div class="ui tab"
                      data-tab="metrics">
-                    {% include 'SimpleThingsAppBundle:Commit:metrics.html.twig' %}
+                    {% include 'AppBundle:Commit:metrics.html.twig' %}
                 </div>
 
                 <div class="ui tab {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
                      data-tab="logs">
-                    {{ render(controller('SimpleThingsAppBundle:Commit:log', {commit: commit})) }}
+                    {{ render(controller('AppBundle:Commit:log', {commit: commit})) }}
                 </div>
             </div>
         </div>
