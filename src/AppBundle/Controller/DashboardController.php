@@ -3,7 +3,7 @@
  * @author Tobias Olry <tobias.olry@gmail.com>
  */
 
-namespace SimpleThings\AppBundle\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

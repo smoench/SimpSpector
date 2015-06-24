@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Twig;
+namespace AppBundle\Twig;
 
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpleThings\AppBundle\Score\CalculatorInterface;

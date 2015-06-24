@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Worker;
+namespace AppBundle\Worker;
 
 use Doctrine\ORM\EntityManager;
 use SimpleThings\AppBundle\Entity\Commit;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Logger;
+namespace AppBundle\Logger;
 
 use SimpleThings\AppBundle\Entity\Commit;
 use Symfony\Component\Filesystem\Filesystem;

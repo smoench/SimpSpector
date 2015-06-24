@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Repository;
+namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use SimpleThings\AppBundle\Entity\Project;

@@ -3,7 +3,7 @@
  *
  */
 
-namespace SimpleThings\AppBundle;
+namespace AppBundle;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>

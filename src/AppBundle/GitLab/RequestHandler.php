@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\GitLab;
+namespace AppBundle\GitLab;
 
 use Doctrine\ORM\EntityManager;
 use Gitlab\Client;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Badge;
+namespace AppBundle\Badge;
 
 use DavidBadura\MarkdownBuilder\MarkdownBuilder;
 use SimpleThings\AppBundle\Entity\Project;

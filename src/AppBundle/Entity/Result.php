@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Entity;
+namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EBT\Compress\GzcompressCompressor as Compressor;

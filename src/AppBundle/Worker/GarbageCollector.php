@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Worker;
+namespace AppBundle\Worker;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;

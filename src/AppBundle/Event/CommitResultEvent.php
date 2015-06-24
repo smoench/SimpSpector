@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Event;
+namespace AppBundle\Event;
 
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Logger\AbstractLogger;

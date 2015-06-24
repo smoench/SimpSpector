@@ -3,7 +3,7 @@
  * (c) SimpleThings GmbH
  */
 
-namespace SimpleThings\AppBundle\Logger;
+namespace AppBundle\Logger;
 
 use SimpleThings\AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Logger\FileLogger;

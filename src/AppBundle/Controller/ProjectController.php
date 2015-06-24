@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
 use SimpleThings\AppBundle\Entity\Project;

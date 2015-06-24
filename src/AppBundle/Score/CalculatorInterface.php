@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle\Score;
+namespace AppBundle\Score;
 
 use SimpSpector\Analyser\Result;
 

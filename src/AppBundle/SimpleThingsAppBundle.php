@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleThings\AppBundle;
+namespace AppBundle;
 
 use SimpSpector\Analyser\DependencyInjection\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
