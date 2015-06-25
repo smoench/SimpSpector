@@ -17,7 +17,7 @@ class AppBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->setParameter('simpspector.analyser.bin', __DIR__ . '/../../../bin/');
+        $container->setParameter('simpspector.analyser.bin', __DIR__ . '/../../bin/');
         (new ContainerConfigurator())->prepare($container);
     }
 }
