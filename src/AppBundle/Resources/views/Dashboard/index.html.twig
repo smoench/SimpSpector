@@ -1,0 +1,30 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', '') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+                    <a class="item active" href="{{ path('homepage') }}">
+                        <i class="rss icon"></i> Newsstream
+                    </a>
+                    <a class="item" href="{{ path('project_list') }}">
+                        <i class="cubes icon"></i> Projects
+                    </a>
+                </div>
+
+                {% include 'AppBundle::feed.html.twig' with {commits: commits} %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

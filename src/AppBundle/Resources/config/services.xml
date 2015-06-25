@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="git_repository_tmp_dir">%kernel.root_dir%/../var/checkouts</parameter>
+        <parameter key="job_logs">%kernel.root_dir%/../var/logs/job</parameter>
+    </parameters>
+
+    <services>
+        <service id="simpspector.app.worker.workspace_manager" class="AppBundle\Worker\WorkspaceManager">
+            <argument type="string">%git_repository_tmp_dir%</argument>
+        </service>
+
+        <service id="simpspector.app.badge.markdown_generator" class="AppBundle\Badge\MarkdownGenerator">
+            <argument type="service" id="router"/>
+        </service>
+
+        <service id="simpspector.app.logger.file_locator" class="AppBundle\Logger\FileLocator">
+            <argument type="string">%job_logs%</argument>
+        </service>
+
+        <service id="simpspector.app.logger.factory" class="AppBundle\Logger\LoggerFactory">
+            <argument type="service" id="simpspector.app.logger.file_locator"/>
+        </service>
+
+        <service id="simpspector.app.logger.reader" class="AppBundle\Logger\Reader">
+            <argument type="service" id="simpspector.app.logger.file_locator"/>
+        </service>
+
+        <service id="simpspector.app.worker.commit_handler" class="AppBundle\Worker\CommitHandler">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument type="service" id="simpspector.app.worker.workspace_manager"/>
+            <argument type="service" id="simpspector.analyser"/>
+            <argument type="service" id="simpspector.app.logger.factory"/>
+            <argument type="service" id="simpspector.analyser.event_dispatcher"/>
+        </service>
+
+        <service id="simpspector.app.score.calculator" class="AppBundle\Score\Calculator"/>
+
+        <service id="simpspector.app.worker.garbage_collector" class="AppBundle\Worker\GarbageCollector">
+            <argument type="string">%git_repository_tmp_dir%</argument>
+        </service>
+
+        <!-- TWIG -->
+        <service id="simpspector.app.twig.extension.util" class="AppBundle\Twig\UtilExtension">
+            <argument type="service" id="simpspector.app.score.calculator"/>
+            <tag name="twig.extension"/>
+        </service>
+
+        <!-- Markdown -->
+        <service id="simpspector.ciconia.extension.fenced_code_block"
+                 class="AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
+            <tag name="ciconia.extension"/>
+        </service>
+
+        <!-- Events -->
+        <service id="simpspector.event.subscriber.logger"
+                 class="AppBundle\Event\Subscriber\LoggerSubscriber">
+            <tag name="simpspector.analyser.subscriber"/>
+        </service>
+
+    </services>
+</container>

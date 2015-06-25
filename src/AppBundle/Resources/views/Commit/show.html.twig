@@ -1,0 +1,129 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
+                {{ _.step(commit.project.name, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
+
+                {% if commit.mergerequest %}
+                    {{ _.step(commit.mergerequest.name, 'Merge Request', 'horizontally flipped share alternate icon', path('mergerequest_show', {id: commit.mergerequest.id })) }}
+                {% else %}
+                    {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', path('project_master', {id: commit.project.id })) }}
+                {% endif %}
+
+                {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
+            </div>
+        </div>
+    </div>
+
+    {% if commit.status == constant('STATUS_NEW', commit) or commit.status == constant('STATUS_RUN', commit) %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon warning message">
+                    <i class="notched circle loading icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Just a moment.. or two... or...
+                        </div>
+                        <p>Processing... refresh the page</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            setTimeout(function () {
+                location.reload();
+            }, 2000);
+        </script>
+    {% elseif commit.status == constant('STATUS_ERROR', commit) %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon error message">
+                    <i class="notched bug icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Sorry about that, chief
+                        </div>
+                        <p>YOU have an ERROR! Ahhh...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elseif commit.issues|length == 0 %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon success message">
+                    <i class="notched child icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Congratulations, Gadget, I dont't know how you did it
+                        </div>
+                        <p>You have no issues!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="column wide sixteen">
+                <div class="ui icon yellow message">
+                    <i class="emergency icon"></i>
+
+                    <div class="content">
+                        <div class="header">
+                            Irregularities were found!
+                        </div>
+                        <p>Please help me...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+
+                    {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                        <a class="item active" data-tab="issues">
+                            <i class="bug icon"></i> Issues
+                        </a>
+                        <a class="item" data-tab="metrics">
+                            <i class="dashboard icon"></i> Metrics
+                        </a>
+                    {% endif %}
+
+                    <a class="item {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                       data-tab="logs">
+                        <i class="file text icon"></i> Logs
+                    </a>
+                </div>
+
+                {% if commit.status == constant('STATUS_SUCCESS', commit) %}
+                    <div class="ui tab active" data-tab="issues">
+                        {% include 'AppBundle:Commit:_issues.html.twig' %}
+                    </div>
+                {% endif %}
+
+                <div class="ui tab"
+                     data-tab="metrics">
+                    {% include 'AppBundle:Commit:metrics.html.twig' %}
+                </div>
+
+                <div class="ui tab {% if commit.status != constant('STATUS_SUCCESS', commit) %}active{% endif %}"
+                     data-tab="logs">
+                    {{ render(controller('AppBundle:Commit:log', {commit: commit})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui steps">
+                {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
+                {{ _.step(project.name, 'Project', 'icon cubes', '') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="eleven wide column">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+                    <a class="item active" data-tab="newsstream">
+                        <i class="rss icon"></i> Newsstream
+                    </a>
+                    {% if merge_requests|length > 0 %}
+                        <a class="item" data-tab="mergerequest">
+                            <i class="horizontally flipped alternate share icon"></i> Merge Request
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="ui tab active" data-tab="newsstream">
+                    {% include 'AppBundle::feed.html.twig' with {commits: project_commits} %}
+                </div>
+
+                <div class="ui tab" data-tab="mergerequest">
+                    {% include 'AppBundle::mergeRequests.html.twig' with {merge_requests: merge_requests} %}
+                </div>
+
+            </div>
+        </div>
+        <div class="five wide column">
+
+            <div class="ui header attached top small">
+                <i class="icon alternate cubes"></i>
+                {{ project.name }}
+            </div>
+
+            {% if master_commit %}
+            <div class="ui segment attached center aligned">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="trophy icon"></i>
+                        {{ score(master_commit).number }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui segment attached">
+                {{ _.levels(master_commit.issues) }}
+            </div>
+
+            <div class="ui segment attached">
+                {{ _.gadgets(master_commit.issues) }}
+            </div>
+
+
+            <div class="ui segment attached">
+                Last master commit
+                <a href="{{ path('commit_show', {'id': master_commit.id}) }}">
+                    {{ master_commit.revision|slice(0, 8) }}
+                </a>
+            </div>
+            {% else %}
+            <div class="ui segment attached">
+                No commits have been pushed to the master after creating this project. After the next push to master, you can see the master's score here.
+            </div>
+            {% endif %}
+
+            <div class="ui segment attached">
+                <a href="{{ path('project_master', {id: project.id}) }}">
+                    <i class="sitemap icon"></i>
+                    See master commits
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

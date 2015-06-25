@@ -1,0 +1,45 @@
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+<div class="ui feed">
+    {% for commit in commits %}
+        <div class="event">
+            <div class="label">
+                <i class="file text icon"></i>
+            </div>
+            <div class="content">
+                <div class="date">{{ commit.createdAt|date('H:i:s d.m.Y') }}</div>
+
+                Project <a href="{{ path('project_show', {id: commit.project.id}) }}">{{ commit.project.name }}</a> has
+
+                {% if commit.status == constant('STATUS_NEW', commit) %}
+                    a new commit
+                {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                    a running commit
+                {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                    a new commit result
+                {% elseif commit.status == constant('STATUS_ERROR', commit) %}
+                    a new broken commit
+                {% endif %}
+
+                <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0, 8) }}</a> in
+                {% if commit.mergeRequest %}
+                    <a href="{{ path('mergerequest_show', {id: commit.mergeRequest.id}) }}">{{ commit.mergeRequest.name }}</a>
+                {% else %}
+                    <a href="{{ path('project_master', {id: commit.project.id}) }}">master</a>
+                {% endif %}
+
+                {% if commit.issues|length > 0 %}
+                    <div class="extra text">
+                        {{ _.levels(commit) }}
+                    </div>
+                    <div class="meta">
+                        {% set groups = group_issues(commit.issues) %}
+                        {% for gadget,issues in groups.gadget %}
+                        <a>{{ gadget }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
