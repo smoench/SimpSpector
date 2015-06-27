@@ -1,11 +1,51 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "13588b9e289b120ae4caf5a4419bd1ba",
+    "hash": "75c1bc3e6677db4bb5ee2faa93de2ab2",
     "packages": [
+        {
+            "name": "davidbadura/git-webhooks",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DavidBadura/git-webhooks.git",
+                "reference": "6163a2be5c28c6b135b684ee111f788f92606f8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DavidBadura/git-webhooks/zipball/6163a2be5c28c6b135b684ee111f788f92606f8c",
+                "reference": "6163a2be5c28c6b135b684ee111f788f92606f8c",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/http-foundation": "^2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7",
+                "symfony/var-dumper": "^2.7"
+            },
+            "type": "lib",
+            "autoload": {
+                "psr-4": {
+                    "DavidBadura\\GitWebhooks\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "DavidBadura",
+                    "email": "d.a.badura@gmail.com"
+                }
+            ],
+            "description": "normalise webhook events for github, gitlab and bitbucket",
+            "time": "2015-06-24 21:12:12"
+        },
         {
             "name": "davidbadura/markdown-builder",
             "version": "1.0.3",
@@ -3824,7 +3864,8 @@
     "stability-flags": {
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "simpspector/analyser": 20
+        "simpspector/analyser": 20,
+        "davidbadura/git-webhooks": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

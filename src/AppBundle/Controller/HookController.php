@@ -9,15 +9,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/hooks")
+ *
+ * @author David Badura <d.a.badura@gmail.com>
  */
 class HookController extends Controller
 {
     /**
+     * @Route("")
      * @Route("/gitlab")
+     *
+     * @param Request $request
+     * @return Response
      */
-    public function gitlabAction(Request $request)
+    public function hookAction(Request $request)
     {
-        $this->get('simpspector.app.gitlab.request_handler')->handle($request);
+        $event = $this->get('simpspector.app.webhook.event_factory')->create($request);
+
+        if (!$event) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->get('simpspector.app.webhook.handler')->handle($event);
 
         return new Response();
     }

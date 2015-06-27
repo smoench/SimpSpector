@@ -1,33 +1,29 @@
 <?php
 
-namespace AppBundle\GitLab;
+namespace AppBundle;
 
-use Doctrine\ORM\EntityManager;
-use Gitlab\Client;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use AppBundle\Entity\Commit;
-use AppBundle\Entity\MergeRequest;
+use AppBundle\Badge\MarkdownGeneratorInterface;
 use AppBundle\Entity\Project;
-use AppBundle\Repository\MergeRequestRepository;
-use AppBundle\Repository\ProjectRepository;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Provider\ProviderInterface;
+use DavidBadura\GitWebhooks\Event\AbstractEvent;
+use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
+use DavidBadura\GitWebhooks\Event\PushEvent;
+use Psr\Log\NullLogger;
 
 /**
- *
  * @author David Badura <d.a.badura@gmail.com>
  */
-class RequestHandler
+class WebhookHandler
 {
     /**
-     * @var Notifier
+     * @var ProviderInterface
      */
-    private $notifier;
+    private $provider;
 
     /**
-     * @var LoggerInterface
+     * @var MarkdownGeneratorInterface
      */
-    private $logger;
+    private $markdownGenerator;
 
     /**
      * @var MergeRequestRepository
@@ -45,9 +41,9 @@ class RequestHandler
     private $em;
 
     /**
-     * @var Client
+     * @var LoggerInterface
      */
-    private $client;
+    private $logger;
 
     /**
      * @param EntityManager          $em
@@ -74,37 +70,25 @@ class RequestHandler
     }
 
     /**
-     * @param Request $request
+     * @param AbstractEvent $event
      *
      * @throws \Exception
      */
-    public function handle(Request $request)
+    public function handle(AbstractEvent $event)
     {
-        $this->logger->info('new request', ['data' => $request->getContent()]);
-
-        $event = json_decode($request->getContent(), true);
-
-        if (! is_array($event)) {
-            throw new \Exception('missing data');
-        }
-
-        if (\igorw\get_in($event, ['object_kind']) === 'merge_request') {
+        if ($event instanceof MergeRequestEvent) {
             $this->handleMergeEvent($event);
-        } else {
+        } elseif ($event instanceof PushEvent) {
             $this->handlePushEvent($event);
         }
     }
 
     /**
-     * @param array $event
+     * @param MergeRequestEvent $event
      */
-    private function handleMergeEvent(array $event)
+    private function handleMergeEvent(MergeRequestEvent $event)
     {
-        $projectId = $event['object_attributes']['source_project_id'];
-        $mergeId   = $event['object_attributes']['id'];
-        $branch    = $event['object_attributes']['source_branch'];
-
-        $mergeRequest = $this->mergeRequestRepository->findMergeRequestByRemote($projectId, $mergeId);
+        $mergeRequest = $this->mergeRequestRepository->findMergeRequestByRemote($event->repository->id, $event->id);
 
         if ($mergeRequest) {
             $this->updateMergeRequest($mergeRequest);
@@ -129,9 +113,9 @@ class RequestHandler
     }
 
     /**
-     * @param array $event
+     * @param PushEvent $event
      */
-    private function handlePushEvent(array $event)
+    private function handlePushEvent(PushEvent $event)
     {
         $branch    = $this->normalizeBranchName($event['ref']);
         $projectId = $event['project_id'];
@@ -209,19 +193,19 @@ class RequestHandler
     }
 
     /**
-     * @param string $remoteProjectId
+     * @param int $remoteProjectId
      *
      * @return Project
      */
     private function createProject($remoteProjectId)
     {
-        $data = $this->client->api('projects')->show($remoteProjectId);
+        $projectInfo = $this->provider->getProjectInformation($remoteProjectId);
 
         $project = new Project();
         $project->setRemoteId($remoteProjectId);
-        $project->setName($data['name_with_namespace']);
-        $project->setRepositoryUrl($data['ssh_url_to_repo']);
-        $project->setWebUrl($data['web_url']);
+        $project->setName($projectInfo->namespace . '/' . $projectInfo->name);
+        $project->setRepositoryUrl($projectInfo->repositoryUrl);
+        $project->setWebUrl($projectInfo->webUrl);
 
         return $project;
     }
@@ -253,7 +237,6 @@ class RequestHandler
      */
     private function normalizeBranchName($ref)
     {
-        /* @todo: only remove it from start of string? */
         return str_replace('refs/heads/', '', $ref);
     }
 }

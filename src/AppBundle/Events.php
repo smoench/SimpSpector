@@ -24,4 +24,9 @@ final class Events
      * @var string
      */
     const EXCEPTION = 'simpspector.exception';
+
+    /**
+     * @var string
+     */
+    const WEBHOOK = 'simpspector.webhook';
 }

@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 namespace AppBundle\Entity;
 
@@ -56,4 +53,4 @@ trait Timestampable
 
         $this->updatedAt = new \DateTime();
     }
-} 
+}
