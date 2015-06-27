@@ -1,9 +1,9 @@
-{% extends 'SimpleThingsAppBundle::layout.html.twig' %}
-{% import 'SimpleThingsAppBundle::macros.html.twig' as _ %}
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
 
 {% block content %}
 
-    {% include 'SimpleThingsAppBundle:Commit:_header.html.twig' with {commit: to} %}
+    {% include 'AppBundle:Commit:_header.html.twig' with {commit: to} %}
 
     <div class="row">
         <div class="column wide sixteen">
@@ -42,11 +42,11 @@
                 </div>
 
                 <div class="ui tab active" data-tab="new-issues">
-                    {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' with {issues: newIssues} %}
+                    {% include 'AppBundle:Commit:_issues.html.twig' with {issues: newIssues} %}
                 </div>
 
                 <div class="ui tab" data-tab="resolved-issues">
-                    {% include 'SimpleThingsAppBundle:Commit:_issues.html.twig' with {issues: resolvedIssues} %}
+                    {% include 'AppBundle:Commit:_issues.html.twig' with {issues: resolvedIssues} %}
                 </div>
 
                 <div class="ui tab"

@@ -8,21 +8,21 @@
     {% endif %}
 
     {% if commit.getMetric('count.warning').value|default(0) %}
-        <span class="ui label yellow tooltip" title="notice">
+        <span class="ui label yellow tooltip" title="warning">
                 <i class="warning icon"></i>
             {{ commit.getMetric('count.warning').value }}
             </span>
     {% endif %}
 
     {% if commit.getMetric('count.error').value|default(0) %}
-        <span class="ui label orange tooltip" title="notice">
+        <span class="ui label orange tooltip" title="error">
                 <i class="bug icon"></i>
             {{ commit.getMetric('count.error').value }}
             </span>
     {% endif %}
 
     {% if commit.getMetric('count.critical').value|default(0) %}
-        <span class="ui label red tooltip" title="notice">
+        <span class="ui label red tooltip" title="critical">
                 <i class="fire icon"></i>
             {{ commit.getMetric('count.critical').value }}
             </span>
