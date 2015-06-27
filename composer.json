@@ -5,6 +5,9 @@
     "autoload": {
         "psr-0": {"": "src/"}
     },
+    "autoload-dev": {
+        "psr-0": {"": "tests/"}
+    },
     "require": {
         "php": ">=5.4",
         "symfony/symfony": "~2.6",

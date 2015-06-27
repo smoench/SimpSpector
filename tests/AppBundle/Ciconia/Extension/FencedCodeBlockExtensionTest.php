@@ -1,10 +1,9 @@
 <?php
 
-namespace AppBundle\Tests\Ciconia\Extension;
+namespace AppBundle\Ciconia\Extension;
 
 use Ciconia\Common\Text;
 use Ciconia\Renderer\HtmlRenderer;
-use AppBundle\Ciconia\Extension\FencedCodeBlockExtension;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
