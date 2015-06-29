@@ -1,0 +1,80 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+
+    {% include 'AppBundle:Commit:_header.html.twig' with {commit: to} %}
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui icon message">
+                <i class="notched columns icon"></i>
+
+                <div class="content">
+                    <div class="header">
+                        compare between
+                        <a href="{{ path('commit_detail', {id: from.id}) }}">{{ from.revision|slice(0, 8) }}</a>
+                        ...
+                        <a href="{{ path('commit_detail', {id: to.id}) }}">{{ to.revision|slice(0, 8) }}</a>
+
+                        <a class="ui button right floated" href="{{ path('commit_detail', {id: to.id}) }}">Detail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column wide sixteen">
+            <div class="ui segment">
+
+                <div class="ui secondary pointing menu">
+
+                    <a class="item active" data-tab="new-issues">
+                        <i class="alarm icon"></i> New issues
+                    </a>
+                    <a class="item" data-tab="resolved-issues">
+                        <i class="checkmark icon"></i> Resolved issues
+                    </a>
+                    <a class="item" data-tab="metrics">
+                        <i class="dashboard icon"></i> Metrics
+                    </a>
+                </div>
+
+                <div class="ui tab active" data-tab="new-issues">
+                    {% include 'AppBundle:Commit:_issues.html.twig' with {issues: newIssues} %}
+                </div>
+
+                <div class="ui tab" data-tab="resolved-issues">
+                    {% include 'AppBundle:Commit:_issues.html.twig' with {issues: resolvedIssues} %}
+                </div>
+
+                <div class="ui tab"
+                     data-tab="metrics">
+                    <table class="ui celled striped table">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Diff</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for metric in diff.metricChanges %}
+                            <tr>
+                                <td>{{ metric.from.title }}</td>
+                                <td>{{ metric.from.value }}</td>
+                                <td>{{ metric.to.value }}</td>
+                                <td>{{ metric.diff }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
