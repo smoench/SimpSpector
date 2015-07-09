@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,9 +16,9 @@ class MergeRequest implements TimestampableInterface
 {
     use Timestampable;
 
-    const STATUS_OPEN   = 'open';
-    const STATUS_CLOSED = 'closed';
-    const STATUS_MERGED = 'merged';
+    const STATUS_OPENED = MergeRequestEvent::STATE_OPENED;
+    const STATUS_CLOSED = MergeRequestEvent::STATE_CLOSED;
+    const STATUS_MERGED = MergeRequestEvent::STATE_MERGED;
 
     /**
      * @var integer
@@ -45,16 +46,23 @@ class MergeRequest implements TimestampableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="remoteId", type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private $remoteId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sourceBranch", type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private $sourceBranch;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $targetBranch;
 
     /**
      * @var Project
@@ -76,7 +84,7 @@ class MergeRequest implements TimestampableInterface
     public function __construct()
     {
         $this->commits = new ArrayCollection();
-        $this->status  = self::STATUS_OPEN;
+        $this->status  = self::STATUS_OPENED;
     }
 
     /**
@@ -162,6 +170,22 @@ class MergeRequest implements TimestampableInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getTargetBranch()
+    {
+        return $this->targetBranch;
+    }
+
+    /**
+     * @param mixed $targetBranch
+     */
+    public function setTargetBranch($targetBranch)
+    {
+        $this->targetBranch = $targetBranch;
+    }
+
+    /**
      * @return Project
      */
     public function getProject()
@@ -178,7 +202,7 @@ class MergeRequest implements TimestampableInterface
     }
 
     /**
-     * @return Commit[]
+     * @return Commit[]|ArrayCollection
      */
     public function getCommits()
     {

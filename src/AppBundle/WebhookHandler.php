@@ -2,13 +2,19 @@
 
 namespace AppBundle;
 
-use AppBundle\Badge\MarkdownGeneratorInterface;
+use AppBundle\Entity\Commit;
+use AppBundle\Entity\MergeRequest;
 use AppBundle\Entity\Project;
-use AppBundle\Provider\ProviderInterface;
 use DavidBadura\GitWebhooks\Event\AbstractEvent;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Event\PushEvent;
+use DavidBadura\GitWebhooks\Struct\Commit as EventCommit;
+use DavidBadura\GitWebhooks\Struct\Repository as EventRepository;
+use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -16,29 +22,14 @@ use Psr\Log\NullLogger;
 class WebhookHandler
 {
     /**
-     * @var ProviderInterface
-     */
-    private $provider;
-
-    /**
-     * @var MarkdownGeneratorInterface
-     */
-    private $markdownGenerator;
-
-    /**
-     * @var MergeRequestRepository
-     */
-    private $mergeRequestRepository;
-
-    /**
-     * @var ProjectRepository
-     */
-    private $projectRepository;
-
-    /**
      * @var EntityManager
      */
     private $em;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
     /**
      * @var LoggerInterface
@@ -46,27 +37,15 @@ class WebhookHandler
     private $logger;
 
     /**
-     * @param EntityManager          $em
-     * @param MergeRequestRepository $mergeRequestRepository
-     * @param ProjectRepository      $projectRepository
-     * @param Client                 $client
-     * @param Notifier               $notifier
-     * @param LoggerInterface        $logger
+     * @param EntityManager $em
+     * @param EventDispatcherInterface $dispatcher
+     * @param LoggerInterface $logger
      */
-    public function __construct(
-        EntityManager $em,
-        MergeRequestRepository $mergeRequestRepository,
-        ProjectRepository $projectRepository,
-        Client $client,
-        Notifier $notifier,
-        LoggerInterface $logger = null
-    ) {
-        $this->notifier               = $notifier;
-        $this->em                     = $em;
-        $this->mergeRequestRepository = $mergeRequestRepository;
-        $this->projectRepository      = $projectRepository;
-        $this->client                 = $client;
-        $this->logger                 = $logger ?: new NullLogger();
+    public function __construct(EntityManager $em, EventDispatcherInterface $dispatcher, LoggerInterface $logger = null)
+    {
+        $this->em         = $em;
+        $this->dispatcher = $dispatcher ?: new EventDispatcher();
+        $this->logger     = $logger ?: new NullLogger();
     }
 
     /**
@@ -79,7 +58,9 @@ class WebhookHandler
         if ($event instanceof MergeRequestEvent) {
             $this->handleMergeEvent($event);
         } elseif ($event instanceof PushEvent) {
-            $this->handlePushEvent($event);
+            if ($event->type == PushEvent::TYPE_BRANCH) {
+                $this->handleBranch($event);
+            }
         }
     }
 
@@ -88,155 +69,103 @@ class WebhookHandler
      */
     private function handleMergeEvent(MergeRequestEvent $event)
     {
-        $mergeRequest = $this->mergeRequestRepository->findMergeRequestByRemote($event->repository->id, $event->id);
+        $project = $this->project($event->repository);
+        $commit  = $this->commit($project, $event->sourceRepository, $event->lastCommit);
 
-        if ($mergeRequest) {
-            $this->updateMergeRequest($mergeRequest);
+        $mergeRequest = $this->em->getRepository('AppBundle:MergeRequest')->findMergeRequestByRemote(
+            $event->repository->id,
+            $event->id
+        );
 
-            return;
+        if (!$mergeRequest) {
+            $mergeRequest = new MergeRequest();
+            $mergeRequest->setRemoteId($event->id);
+            $this->em->persist($mergeRequest);
         }
 
-        $mergeRequest = $this->createMergeRequest($projectId, $mergeId, $branch);
-        $this->updateMergeRequest($mergeRequest);
+        $mergeRequest->setProject($project);
+        $mergeRequest->setName($event->title);
+        $mergeRequest->setStatus($event->state);
 
-        $revision = $this->getLastRevisionFromBranch($projectId, $branch);
+        if (!$mergeRequest->getCommits()->contains($commit)) {
+            $mergeRequest->getCommits()->add($commit);
+            $commit->getMergeRequests()->add($mergeRequest);
+        }
 
-        $commit = new Commit();
-        $commit->setProject($mergeRequest->getProject());
-        $commit->setMergeRequest($mergeRequest);
-        $commit->setRevision($revision);
-
-        $this->em->persist($commit);
         $this->em->flush();
-
-        $this->notifier->notify($commit->getMergeRequest());
     }
 
     /**
      * @param PushEvent $event
      */
-    private function handlePushEvent(PushEvent $event)
+    private function handleBranch(PushEvent $event)
     {
-        $branch    = $this->normalizeBranchName($event['ref']);
-        $projectId = $event['project_id'];
-        $revision  = $event['after'];
+        $project = $this->project($event->repository);
+        $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
 
-        if (! $project = $this->projectRepository->findByRemoteId($projectId)) {
-            $project = $this->createProject($projectId);
+        $mergeRequest = $this->em->getRepository('AppBundle:Branch')->findMergeRequestByRemote(
+            $event->repository->id,
+            $event->id
+        );
+
+        if (!$mergeRequest) {
+            $mergeRequest = new MergeRequest();
+            $mergeRequest->setRemoteId($event->id);
+            $this->em->persist($mergeRequest);
         }
 
-        if ($branch == 'master') {
-            $mergeRequest = null;
-        } elseif (! $mergeRequest = $this->mergeRequestRepository->findLastMergeRequestByBranch($project, $branch)) {
-            return;
+        $mergeRequest->setProject($project);
+        $mergeRequest->setName($event->title);
+        $mergeRequest->setStatus($event->state);
+
+        if (!$mergeRequest->getCommits()->contains($commit)) {
+            $mergeRequest->getCommits()->add($commit);
+            $commit->getMergeRequests()->add($mergeRequest);
         }
 
-        $commit = new Commit();
-        $commit->setProject($project);
-        $commit->setMergeRequest($mergeRequest);
-        $commit->setRevision($revision);
-
-        $this->em->persist($commit);
         $this->em->flush();
     }
 
-
     /**
-     * @param string $projectId
-     * @param string $branch
-     *
-     * @return string
-     */
-    private function getLastRevisionFromBranch($projectId, $branch)
-    {
-        $result = $this->client->api('repositories')->branch($projectId, $branch);
-
-        return $result['commit']['id'];
-    }
-
-    /**
-     * @param $remoteProjectId
-     * @param $mergeRequestId
-     * @param $branch
-     *
-     * @return MergeRequest
-     */
-    private function createMergeRequest($remoteProjectId, $mergeRequestId, $branch)
-    {
-        $mr = new MergeRequest();
-        $mr->setRemoteId($mergeRequestId);
-        $mr->setSourceBranch($branch);
-
-        if (! $project = $this->projectRepository->findByRemoteId($remoteProjectId)) {
-            $project = $this->createProject($remoteProjectId);
-        }
-
-        $mr->setProject($project);
-
-        return $mr;
-    }
-
-    /**
-     * @param MergeRequest $mergeRequest
-     *
-     * @throws \Exception
-     */
-    private function updateMergeRequest(MergeRequest $mergeRequest)
-    {
-        $data = $this->client->api('mr')->show(
-            $mergeRequest->getProject()->getRemoteId(),
-            $mergeRequest->getRemoteId()
-        );
-
-        $mergeRequest->setName($data['title']);
-        $mergeRequest->setStatus($this->getMergeRequestStatus($data['state']));
-    }
-
-    /**
-     * @param int $remoteProjectId
-     *
+     * @param EventRepository $repository
      * @return Project
      */
-    private function createProject($remoteProjectId)
+    private function project(EventRepository $repository)
     {
-        $projectInfo = $this->provider->getProjectInformation($remoteProjectId);
+        if ($project = $this->em->getRepository('AppBundle:Project')->findByRemoteId($repository->id)) {
+            return $project;
+        }
 
         $project = new Project();
-        $project->setRemoteId($remoteProjectId);
-        $project->setName($projectInfo->namespace . '/' . $projectInfo->name);
-        $project->setRepositoryUrl($projectInfo->repositoryUrl);
-        $project->setWebUrl($projectInfo->webUrl);
+        $project->setRemoteId($repository->id);
+        $project->setName($repository->namespace . '/' . $repository->name);
+        $project->setRepositoryUrl($repository->url);
+        $project->setWebUrl($repository->homepage);
+
+        $this->em->persist($project);
 
         return $project;
     }
 
     /**
-     * @param $status
-     *
-     * @return mixed
+     * @param Project $project
+     * @param EventRepository $repository
+     * @param EventCommit $struct
+     * @return Commit
      */
-    private function getMergeRequestStatus($status)
+    private function commit(Project $project, EventRepository $repository, EventCommit $struct)
     {
-        $statuses = [
-            'merged' => MergeRequest::STATUS_MERGED,
-            'opened' => MergeRequest::STATUS_OPEN,
-            'closed' => MergeRequest::STATUS_CLOSED
-        ];
-
-        if (! isset($statuses[$status])) {
-            throw new \RuntimeException('Merge request status is not defined');
+        if ($commit = $this->em->getRepository('AppBundle:Commit')->findCommitByProject($project, $struct->id)) {
+            return $commit;
         }
 
-        return $statuses[$status];
-    }
+        $commit = new Commit();
+        $commit->setGitRepository($repository->url);
+        $commit->setProject($project);
+        $commit->setRevision($struct->id);
 
-    /**
-     * @param string $ref
-     *
-     * @return string
-     */
-    private function normalizeBranchName($ref)
-    {
-        return str_replace('refs/heads/', '', $ref);
+        $this->em->persist($commit);
+
+        return $commit;
     }
 }

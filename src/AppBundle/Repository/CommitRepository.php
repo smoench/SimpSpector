@@ -126,6 +126,25 @@ class CommitRepository extends EntityRepository
 
     /**
      * @param Project $project
+     * @param string $id
+     * @return Commit
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findCommitByProject(Project $project, $id)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.project = :project')
+            ->where('c.revision = :rev')
+            ->setParameter('project', $project)
+            ->setParameter('rev', $id)
+            ->getQuery();
+
+        return $query->getSingleResult();
+    }
+
+    /**
+     * @param Project $project
      * @param int|null $limit
      * @return Commit[]
      */
