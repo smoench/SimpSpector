@@ -2,25 +2,49 @@
 
 namespace AppBundle\Fixture;
 
+use DavidBadura\GitWebhooks\Struct\Repository;
+
 class Helper
 {
     /**
-     * @param string $project
-     *
-     * @return string
+     * @param string $url
+     * @return Repository
      */
-    public static function generateRemoteIdByProjectName($project)
+    public function generateRepositoryByUrl($url)
     {
-        return hash('sha256', $project);
+        $repository = new Repository();
+
+        $repository->id  = $this->generateRemoteIdByUrl($url);
+        $repository->url = $url;
+
+        $info = $this->extractNameAndNamespaceFromUrl($url);
+        if (count($info) === 2) {
+            $repository->namespace = $info[0];
+            $repository->name      = $info[1];
+        } else {
+            $repository->name = $info[0];
+        }
+
+        return $repository;
     }
 
     /**
-     * @param $url
+     * @param string $url
      *
      * @return string
      */
-    public static function generateProjectNameByUrl($url)
+    private function generateRemoteIdByUrl($url)
     {
-        return trim(parse_url($url)['path'], '/');
+        return hash('sha256', $url);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return array
+     */
+    private function extractNameAndNamespaceFromUrl($url)
+    {
+        return explode('/', str_replace('.git', '', trim(parse_url($url)['path'], '/')), 2);
     }
 }

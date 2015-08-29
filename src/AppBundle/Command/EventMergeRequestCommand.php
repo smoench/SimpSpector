@@ -27,30 +27,22 @@ class EventMergeRequestCommand extends AbstractInteractiveCommand
     {
         parent::execute($input, $output);
 
+        $helper = new Fixture\Helper();
+
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
-        $project    = Fixture\Helper::generateProjectNameByUrl($url);
-        $projectId  = Fixture\Helper::generateRemoteIdByProjectName($project);
 
         $event = new MergeRequestEvent();
 
         $event->id               = rand(10000, 99999);
         $event->title            = 'Test Pull-Request ' . rand(10000, 99999);
-        $event->repository       = new Repository();
+        $event->repository       = $helper->generateRepositoryByUrl($url);
         $event->targetBranch     = 'master';
-        $event->sourceRepository = new Repository();
+        $event->sourceRepository = $helper->generateRepositoryByUrl($url);
         $event->sourceBranch     = 'test/pull-request';
         $event->state            = MergeRequestEvent::STATE_OPENED;
         $event->createdAt        = new \DateTime();
         $event->updatedAt        = new \DateTime();
-
-        $event->repository->id   = $projectId;
-        $event->repository->url  = $url;
-        $event->repository->name = $project;
-
-        $event->sourceRepository->id   = $projectId;
-        $event->sourceRepository->url  = $url;
-        $event->sourceRepository->name = $project;
 
         $commit          = new Commit();
         $commit->id      = $commitHash;
