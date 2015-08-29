@@ -2,9 +2,11 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\WebhookHandler;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Struct\Commit;
 use DavidBadura\GitWebhooks\Struct\Repository;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Logger\ConsoleLogger;
@@ -61,7 +63,6 @@ class EventMergeRequestCommand extends AbstractInteractiveCommand
         /** @var WebhookHandler $handler */
         $handler = $this->getContainer()->get('simpspector.app.webhook.handler');
         $handler->setLogger(new ConsoleLogger($output, [LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL]));
-        $handler = $this->getHandler();
         $handler->handle($event);
     }
 }

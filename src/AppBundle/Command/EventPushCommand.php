@@ -61,7 +61,6 @@ class EventPushCommand extends AbstractInteractiveCommand
         /** @var WebhookHandler $handler */
         $handler = $this->getContainer()->get('simpspector.app.webhook.handler');
         $handler->setLogger(new ConsoleLogger($output, [LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL]));
-        $handler = $this->getHandler();
         $handler->handle($event);
     }
 }

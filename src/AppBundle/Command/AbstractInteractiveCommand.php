@@ -2,7 +2,6 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\WebhookHandler;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,16 +30,6 @@ abstract class AbstractInteractiveCommand extends ContainerAwareCommand
         $this->input          = $input;
         $this->output         = $output;
         $this->questionHelper = $this->getHelper('question');
-    }
-
-    /**
-     * @return WebhookHandler
-     */
-    protected function getHandler()
-    {
-        return $this
-            ->getContainer()
-            ->get('simpspector.app.webhook.handler');
     }
 
     /**
