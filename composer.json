@@ -23,7 +23,6 @@
         "doctrine/migrations": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "zeichen32/gitlabapibundle": "~2.0",
-        "igorw/get-in": "~1.0",
         "timetoogo/pinq": "~3.0",
         "simpspector/analyser": "dev-master",
         "davidbadura/markdown-builder": "~1.0",
