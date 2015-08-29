@@ -6,6 +6,7 @@ use AppBundle\Entity\Branch;
 use AppBundle\Entity\Commit;
 use AppBundle\Entity\MergeRequest;
 use AppBundle\Entity\Project;
+use AppBundle\Repository\MergeRequestRepository;
 use DavidBadura\GitWebhooks\Event\AbstractEvent;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Event\PushEvent;
@@ -83,12 +84,11 @@ class WebhookHandler
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->sourceRepository, $event->lastCommit);
 
-        $mergeRequest = $this->em->getRepository('AppBundle:MergeRequest')->findMergeRequestByRemote(
-            $event->repository->id,
-            $event->id
-        );
+        $mergeRequest = $this
+            ->getMergeRequestRepository()
+            ->findMergeRequestByRemote($event->repository->id, $event->id);
 
-        if (!$mergeRequest) {
+        if (! $mergeRequest) {
             $this->logger->info('merge request not found. create...');
 
             $mergeRequest = new MergeRequest();
@@ -101,10 +101,12 @@ class WebhookHandler
         $mergeRequest->setProject($project);
         $mergeRequest->setName($event->title);
         $mergeRequest->setStatus($event->state);
+        $mergeRequest->setRemoteId($event->id);
+        $mergeRequest->setSourceBranch($event->sourceBranch);
+        $mergeRequest->setTargetBranch($event->targetBranch);
 
-        if (!$mergeRequest->getCommits()->contains($commit)) {
+        if (! $mergeRequest->getCommits()->contains($commit)) {
             $this->logger->info('add commit into merge request');
-
             $mergeRequest->getCommits()->add($commit);
             $commit->getMergeRequests()->add($mergeRequest);
         } else {
@@ -129,9 +131,8 @@ class WebhookHandler
             $event->branchName
         );
 
-        if (!$branch) {
+        if (! $branch) {
             $this->logger->info('branch not found. create...');
-
             $branch = new Branch();
             $branch->setName($event->branchName);
             $this->em->persist($branch);
@@ -143,7 +144,7 @@ class WebhookHandler
 
         $branch->setProject($project);
 
-        if (!$branch->getCommits()->contains($commit)) {
+        if (! $branch->getCommits()->contains($commit)) {
 
             $this->logger->info('add commit into branch');
 
@@ -158,6 +159,7 @@ class WebhookHandler
 
     /**
      * @param EventRepository $repository
+     *
      * @return Project
      */
     private function project(EventRepository $repository)
@@ -187,6 +189,7 @@ class WebhookHandler
      * @param Project $project
      * @param EventRepository $repository
      * @param EventCommit $struct
+     *
      * @return Commit
      */
     private function commit(Project $project, EventRepository $repository, EventCommit $struct)
@@ -207,5 +210,13 @@ class WebhookHandler
         $this->em->persist($commit);
 
         return $commit;
+    }
+
+    /**
+     * @return MergeRequestRepository
+     */
+    private function getMergeRequestRepository()
+    {
+        return $this->em->getRepository('AppBundle:MergeRequest');
     }
 }
