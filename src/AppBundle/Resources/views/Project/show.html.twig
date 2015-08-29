@@ -43,37 +43,6 @@
                 {{ project.name }}
             </div>
 
-            {% if master_commit %}
-            <div class="ui segment attached center aligned">
-                <div class="ui statistic">
-                    <div class="value">
-                        <i class="trophy icon"></i>
-                        {{ score(master_commit).number }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui segment attached">
-                {{ _.levels(master_commit.issues) }}
-            </div>
-
-            <div class="ui segment attached">
-                {{ _.gadgets(master_commit.issues) }}
-            </div>
-
-
-            <div class="ui segment attached">
-                Last master commit
-                <a href="{{ path('commit_show', {'id': master_commit.id}) }}">
-                    {{ master_commit.revision|slice(0, 8) }}
-                </a>
-            </div>
-            {% else %}
-            <div class="ui segment attached">
-                No commits have been pushed to the master after creating this project. After the next push to master, you can see the master's score here.
-            </div>
-            {% endif %}
-
             <div class="ui segment attached">
                 <a href="{{ path('project_master', {id: project.id}) }}">
                     <i class="sitemap icon"></i>

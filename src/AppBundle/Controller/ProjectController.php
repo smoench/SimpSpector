@@ -44,16 +44,11 @@ class ProjectController extends Controller
             'id'     => 'DESC'
         ]);
 
-        if (! ($masterCommit = $commitRepository->findLastSuccessInMaster($project))) {
-            $masterCommit = $commitRepository->findLastInMaster($project);
-        }
-
         $projectCommits = $commitRepository->findCommitsByProject($project);
 
         return [
             'project'         => $project,
             'merge_requests'  => $mergeRequests,
-            'master_commit'   => $masterCommit,
             'project_commits' => $projectCommits
         ];
     }

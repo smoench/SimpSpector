@@ -21,12 +21,7 @@
                     a new broken commit
                 {% endif %}
 
-                <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0, 8) }}</a> in
-                {% if commit.mergeRequest %}
-                    <a href="{{ path('mergerequest_show', {id: commit.mergeRequest.id}) }}">{{ commit.mergeRequest.name }}</a>
-                {% else %}
-                    <a href="{{ path('project_master', {id: commit.project.id}) }}">master</a>
-                {% endif %}
+                <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0, 8) }}</a>
 
                 {% if commit.issues|length > 0 %}
                     <div class="extra text">

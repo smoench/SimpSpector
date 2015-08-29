@@ -7,13 +7,6 @@
             <div class="ui steps">
                 {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
                 {{ _.step(commit.project.name, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
-
-                {% if commit.mergerequest %}
-                    {{ _.step(commit.mergerequest.name, 'Merge Request', 'horizontally flipped share alternate icon', path('mergerequest_show', {id: commit.mergerequest.id })) }}
-                {% else %}
-                    {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', path('project_master', {id: commit.project.id })) }}
-                {% endif %}
-
                 {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
             </div>
         </div>
