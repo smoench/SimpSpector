@@ -298,9 +298,9 @@ class WebhookHandler
         } else {
             $this->logger->info(
                 sprintf(
-                    'commit "%s" already exists in tag "%s"',
-                    $commit->getRevision(),
-                    $event->tagName
+                    'tag "%s" already points to commit "%s"',
+                    $event->tagName,
+                    $commit->getRevision()
                 )
             );
         }
