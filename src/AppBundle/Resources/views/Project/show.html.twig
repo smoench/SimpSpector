@@ -6,7 +6,9 @@
         <div class="column wide sixteen">
             <div class="ui steps">
                 <div class="content">
-                    <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
+                    <a href="{{ url('homepage') }}">
+                        <div class="logo logo-breadcrumb"></div>
+                    </a>
                 </div>
                 {{ _.step(project.name, 'Project', 'icon cubes', '') }}
             </div>
@@ -21,11 +23,9 @@
                     <a class="item active" data-tab="newsstream">
                         <i class="rss icon"></i> Newsstream
                     </a>
-                    {% if merge_requests|length > 0 %}
-                        <a class="item" data-tab="mergerequest">
-                            <i class="horizontally flipped alternate share icon"></i> Merge Request
-                        </a>
-                    {% endif %}
+                    <a class="item" data-tab="mergerequest">
+                        <i class="horizontally flipped alternate share icon"></i> Merge Request
+                    </a>
                     <a class="item" data-tab="branches">
                         <i class="fork icon"></i> Branches
                     </a>
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="ui tab" data-tab="branches">
-                        {% include 'AppBundle:Project:showBranches.html.twig' with {merge_requests: merge_requests} %}
+                    {% include 'AppBundle:Project:showBranches.html.twig' with {merge_requests: merge_requests} %}
                 </div>
 
                 <div class="ui tab" data-tab="tags">
