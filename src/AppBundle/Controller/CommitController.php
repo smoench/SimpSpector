@@ -26,18 +26,6 @@ class CommitController extends Controller
      */
     public function showAction(Commit $commit)
     {
-        if ($commit->getStatus() == Commit::STATUS_SUCCESS && $commit->getMergeRequest()) {
-
-            $commitRepository = $this->get('simpspector.app.repository.commit');
-
-            if ($last = $commitRepository->findLastSuccessInMaster($commit->getProject())) {
-                return $this->redirectToRoute('commit_diff', [
-                    'from' => $last->getId(),
-                    'to'   => $commit->getId()
-                ]);
-            }
-        }
-
         return $this->redirectToRoute('commit_detail', [
             'id' => $commit->getId()
         ]);
