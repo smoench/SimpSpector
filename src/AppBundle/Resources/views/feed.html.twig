@@ -31,6 +31,15 @@
 
                 <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0, 8) }}</a>
 
+                on
+                {% if item.type == 'branch' %}
+                    branch <a href="#">{{ item.branch.name }}</a>
+                {% elseif item.type == 'tag' %}
+                    tag <a href="#">{{ item.tag.name }}</a>
+                {% elseif item.type == 'merge_request' %}
+                    merge request <a href="{{ path('mergerequest_show', {id: item.mergeRequest.id }) }}">{{ item.mergeRequest.name }}</a>
+                {% endif %}
+
                 {% if commit.issues|length > 0 %}
                     <div class="extra text">
                         {{ _.levels(commit) }}
