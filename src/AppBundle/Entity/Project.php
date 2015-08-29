@@ -173,6 +173,14 @@ class Project implements TimestampableInterface
     }
 
     /**
+     * @return Branche[]
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
      * @return Commit[]
      */
     public function getCommits()

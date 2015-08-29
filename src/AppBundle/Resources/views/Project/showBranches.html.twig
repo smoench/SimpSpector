@@ -1,0 +1,26 @@
+<table class="ui table">
+
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Issues</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for branch in project.branches %}
+        <tr>
+            <td>
+                <a class="ui animated button" href="{{ path('mergerequest_show', {id: branch.id}) }}">
+                    <div class="hidden content">show</div>
+                    <div class="visible content">
+                        <i class="search icon"></i>
+                    </div>
+                </a>
+            </td>
+            <td>{{ branch.name }}</td>
+            <td>{{ _.levels(branch.commits|first) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

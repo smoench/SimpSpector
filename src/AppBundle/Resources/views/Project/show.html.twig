@@ -26,6 +26,13 @@
                             <i class="horizontally flipped alternate share icon"></i> Merge Request
                         </a>
                     {% endif %}
+                    <a class="item" data-tab="branches">
+                        <i class="horizontally flipped alternate share icon"></i> Branches
+                    </a>
+                    <a class="item" data-tab="tags">
+                        <i class="horizontally flipped alternate share icon"></i> Tags
+                    </a>
+
                 </div>
 
                 <div class="ui tab active" data-tab="newsstream">
@@ -33,7 +40,15 @@
                 </div>
 
                 <div class="ui tab" data-tab="mergerequest">
-                    {% include 'AppBundle::mergeRequests.html.twig' with {merge_requests: merge_requests} %}
+                    {% include 'AppBundle:Project:mergeRequests.html.twig' with {merge_requests: merge_requests} %}
+                </div>
+
+                <div class="ui tab" data-tab="branches">
+                        {% include 'AppBundle:Project:showBranches.html.twig' with {merge_requests: merge_requests} %}
+                </div>
+
+                <div class="ui tab" data-tab="tags">
+                    {% include 'AppBundle:Project:showTags.html.twig' with {merge_requests: merge_requests} %}
                 </div>
 
             </div>
