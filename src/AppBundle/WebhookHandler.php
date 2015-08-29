@@ -2,6 +2,7 @@
 
 namespace AppBundle;
 
+use AppBundle\Entity\Branch;
 use AppBundle\Entity\Commit;
 use AppBundle\Entity\MergeRequest;
 use AppBundle\Entity\Project;
@@ -59,7 +60,7 @@ class WebhookHandler
             $this->handleMergeEvent($event);
         } elseif ($event instanceof PushEvent) {
             if ($event->type == PushEvent::TYPE_BRANCH) {
-                $this->handleBranch($event);
+                $this->handlePushEvent($event);
             }
         }
     }
@@ -98,29 +99,28 @@ class WebhookHandler
     /**
      * @param PushEvent $event
      */
-    private function handleBranch(PushEvent $event)
+    private function handlePushEvent(PushEvent $event)
     {
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
 
-        $mergeRequest = $this->em->getRepository('AppBundle:Branch')->findMergeRequestByRemote(
+
+        $branch = $this->em->getRepository('AppBundle:Branch')->findBranchByRemoteId(
             $event->repository->id,
-            $event->id
+            $event->branchName
         );
 
-        if (!$mergeRequest) {
-            $mergeRequest = new MergeRequest();
-            $mergeRequest->setRemoteId($event->id);
-            $this->em->persist($mergeRequest);
+        if (!$branch) {
+            $branch = new Branch();
+            $branch->setName($event->branchName);
+            $this->em->persist($branch);
         }
 
-        $mergeRequest->setProject($project);
-        $mergeRequest->setName($event->title);
-        $mergeRequest->setStatus($event->state);
+        $branch->setProject($project);
 
-        if (!$mergeRequest->getCommits()->contains($commit)) {
-            $mergeRequest->getCommits()->add($commit);
-            $commit->getMergeRequests()->add($mergeRequest);
+        if (!$branch->getCommits()->contains($commit)) {
+            $branch->getCommits()->add($commit);
+            $commit->getBranches()->add($branch);
         }
 
         $this->em->flush();

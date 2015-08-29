@@ -96,7 +96,7 @@ class Branch implements TimestampableInterface
     }
 
     /**
-     * @return Commit[]
+     * @return Commit[]|ArrayCollection
      */
     public function getCommits()
     {
