@@ -5,6 +5,7 @@ namespace AppBundle;
 use AppBundle\Entity\Branch;
 use AppBundle\Entity\Commit;
 use AppBundle\Entity\MergeRequest;
+use AppBundle\Entity\NewsStreamItem;
 use AppBundle\Entity\Project;
 use AppBundle\Repository\BranchRepository;
 use AppBundle\Repository\CommitRepository;
@@ -124,6 +125,14 @@ class WebhookHandler
             $this->logger->info('commit already exists in merge request');
         }
 
+        $newsStreamItem = new NewsStreamItem();
+        $newsStreamItem->setType(NewsStreamItem::TYPE_MERGE_REQUEST);
+        $newsStreamItem->setCommit($commit);
+        $newsStreamItem->setProject($project);
+        $newsStreamItem->setMergeRequest($mergeRequest);
+
+        $this->em->persist($newsStreamItem);
+
         $this->em->flush();
     }
 
@@ -168,6 +177,14 @@ class WebhookHandler
                 )
             );
         }
+
+        $newsStreamItem = new NewsStreamItem();
+        $newsStreamItem->setType(NewsStreamItem::TYPE_BRANCH);
+        $newsStreamItem->setCommit($commit);
+        $newsStreamItem->setProject($project);
+        $newsStreamItem->setBranch($branch);
+
+        $this->em->persist($newsStreamItem);
 
         $this->em->flush();
     }

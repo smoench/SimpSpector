@@ -16,8 +16,10 @@ class DashboardController extends Controller
      */
     public function indexAction()
     {
-        $commitRepository = $this->get('simpspector.app.repository.commit');
+        $items = $this->getDoctrine()->getManager()->getRepository('AppBundle\Entity\NewsStreamItem')->findBy(array(), array(
+            'createdAt' => 'DESC',
+        ), 10);
 
-        return ['commits' => $commitRepository->findGlobalCommits(10)];
+        return ['items' => $items];
     }
 }

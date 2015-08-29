@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="ui tab active" data-tab="newsstream">
-                    {% include 'AppBundle::feed.html.twig' with {commits: project_commits} %}
+                    {% include 'AppBundle::feed.html.twig' with {commits: project.newsStreamItems} %}
                 </div>
 
                 <div class="ui tab" data-tab="mergerequest">

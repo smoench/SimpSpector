@@ -1,23 +1,25 @@
 {% import 'AppBundle::macros.html.twig' as _ %}
 
 <div class="ui feed">
-    {% for commit in commits %}
+    {% for item in items %}
         <div class="event">
             <div class="label">
                 <i class="file text icon"></i>
             </div>
             <div class="content">
-                <div class="date">{{ commit.createdAt|date('H:i:s d.m.Y') }}</div>
+                <div class="date">{{ item.createdAt|date('H:i:s d.m.Y') }}</div>
 
-                Project <a href="{{ path('project_show', {id: commit.project.id}) }}">{{ commit.project.name }}</a> has
+                Project <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.name }}</a> has
+
+                {% set commit = item.commit %}
 
                 {% if commit.status == constant('STATUS_NEW', commit) %}
                     a new commit
                 {% elseif commit.status == constant('STATUS_RUN', commit) %}
                     a running commit
-                {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                {% elseif item.commit.status == constant('STATUS_SUCCESS', commit) %}
                     a new commit result
-                {% elseif commit.status == constant('STATUS_ERROR', commit) %}
+                {% elseif item.commit.status == constant('STATUS_ERROR', commit) %}
                     a new broken commit
                 {% endif %}
 

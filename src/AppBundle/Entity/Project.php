@@ -81,14 +81,22 @@ class Project implements TimestampableInterface
     private $commits;
 
     /**
+     * @var NewsStreamItem[]
+     *
+     * @ORM\OneToMany(targetEntity="NewsStreamItem", mappedBy="project")
+     */
+    private $newsStreamItems;
+
+    /**
      *
      */
     public function __construct()
     {
-        $this->mergeRequests = new ArrayCollection();
-        $this->branches      = new ArrayCollection();
-        $this->commits       = new ArrayCollection();
-        $this->tags          = new ArrayCollection();
+        $this->mergeRequests   = new ArrayCollection();
+        $this->branches        = new ArrayCollection();
+        $this->commits         = new ArrayCollection();
+        $this->tags            = new ArrayCollection();
+        $this->newsStreamItems = new ArrayCollection();
     }
 
     /**
@@ -173,7 +181,7 @@ class Project implements TimestampableInterface
     }
 
     /**
-     * @return MergeRequest[]
+     * @return MergeRequest[]|ArrayCollection
      */
     public function getMergeRequests()
     {
@@ -181,7 +189,7 @@ class Project implements TimestampableInterface
     }
 
     /**
-     * @return Branch[]
+     * @return Branch[]|ArrayCollection
      */
     public function getBranches()
     {
@@ -189,7 +197,7 @@ class Project implements TimestampableInterface
     }
 
     /**
-     * @return Tag[]
+     * @return Tag[]|ArrayCollection
      */
     public function getTags()
     {
@@ -197,10 +205,18 @@ class Project implements TimestampableInterface
     }
 
     /**
-     * @return Commit[]
+     * @return Commit[]|ArrayCollection
      */
     public function getCommits()
     {
         return $this->commits;
+    }
+
+    /**
+     * @return NewsStreamItem[]|ArrayCollection
+     */
+    public function getNewsStreamItems()
+    {
+        return $this->newsStreamItems;
     }
 }
