@@ -1,0 +1,27 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% import 'AppBundle::macros.html.twig' as _ %}
+
+{% block content %}
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui steps">
+            <div class="content">
+                <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
+            </div>
+            {{ _.step(branch.project.name, 'Project', 'icon cubes', path('project_show', {id: branch.project.id })) }}
+            {{ _.step(branch.name, 'Branch', 'fork icon', '') }}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column wide sixteen">
+        <div class="ui segment">
+            <h3 class="ui header">
+                <i class="icon text file inverted circular"></i> Commits
+            </h3>
+            {% include 'AppBundle::commits.html.twig' %}
+        </div>
+    </div>
+</div>
+{% endblock %}
