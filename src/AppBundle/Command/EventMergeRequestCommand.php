@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Fixture;
 use AppBundle\WebhookHandler;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Struct\Commit;
@@ -18,8 +19,6 @@ class EventMergeRequestCommand extends AbstractInteractiveCommand
     {
         $this
             ->setName('simpspector:event:merge-request')
-            ->addOption('project', null, InputOption::VALUE_OPTIONAL, 'project name', null)
-            ->addOption('project-id', null, InputOption::VALUE_OPTIONAL, 'project id', 'test-1337')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
             ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '');
     }
@@ -30,8 +29,8 @@ class EventMergeRequestCommand extends AbstractInteractiveCommand
 
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
-        $project    = $this->getOption('project', 'project name');
-        $projectId  = $input->getOption('project-id');
+        $project    = Fixture\Helper::generateProjectNameByUrl($url);
+        $projectId  = Fixture\Helper::generateRemoteIdByProjectName($project);
 
         $event = new MergeRequestEvent();
 

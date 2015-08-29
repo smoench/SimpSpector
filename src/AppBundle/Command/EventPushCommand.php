@@ -5,6 +5,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Fixture;
 use AppBundle\WebhookHandler;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,8 +22,6 @@ class EventPushCommand extends AbstractInteractiveCommand
     {
         $this
             ->setName('simpspector:event:push')
-            ->addOption('project', null, InputOption::VALUE_OPTIONAL, 'project name', null)
-            ->addOption('project-id', null, InputOption::VALUE_OPTIONAL, 'project id', 'test-9999')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
             ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '');
     }
@@ -39,8 +38,8 @@ class EventPushCommand extends AbstractInteractiveCommand
 
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
-        $project    = $this->getOption('project', 'project name');
-        $projectId  = $input->getOption('project-id');
+        $project    = Fixture\Helper::generateProjectNameByUrl($url);
+        $projectId  = Fixture\Helper::generateRemoteIdByProjectName($project);
 
         $event             = new PushEvent();
         $event->type       = PushEvent::TYPE_BRANCH;
