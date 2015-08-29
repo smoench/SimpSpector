@@ -6,6 +6,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\WebhookHandler;
+use Psr\Log\LogLevel;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +58,9 @@ class EventPushCommand extends ContainerAwareCommand
         $this->output         = $output;
         $this->questionHelper = $this->getHelper('question');
 
-        $logger = new ConsoleLogger($output);
+        $logger = new ConsoleLogger($output, [
+            LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL
+        ]);
 
         $handler = $this
             ->getContainer()

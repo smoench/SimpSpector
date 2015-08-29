@@ -49,6 +49,9 @@ class WebhookHandler
         $this->logger     = $logger ?: new NullLogger();
     }
 
+    /**
+     * @param LoggerInterface $logger
+     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -75,6 +78,8 @@ class WebhookHandler
      */
     private function handleMergeEvent(MergeRequestEvent $event)
     {
+        $this->logger->info('new merge request');
+
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->sourceRepository, $event->lastCommit);
 
@@ -84,18 +89,26 @@ class WebhookHandler
         );
 
         if (!$mergeRequest) {
+            $this->logger->info('merge request not found. create...');
+
             $mergeRequest = new MergeRequest();
             $mergeRequest->setRemoteId($event->id);
             $this->em->persist($mergeRequest);
         }
+
+        $this->logger->info('update merge request...');
 
         $mergeRequest->setProject($project);
         $mergeRequest->setName($event->title);
         $mergeRequest->setStatus($event->state);
 
         if (!$mergeRequest->getCommits()->contains($commit)) {
+            $this->logger->info('add commit into merge request');
+
             $mergeRequest->getCommits()->add($commit);
             $commit->getMergeRequests()->add($mergeRequest);
+        } else {
+            $this->logger->info('commit exists already in merge request');
         }
 
         $this->em->flush();
@@ -106,9 +119,10 @@ class WebhookHandler
      */
     private function handlePushEventTypeBranch(PushEvent $event)
     {
+        $this->logger->info('new push request (type branch)');
+
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
-
 
         $branch = $this->em->getRepository('AppBundle:Branch')->findBranchByRemoteId(
             $event->repository->id,
@@ -116,16 +130,27 @@ class WebhookHandler
         );
 
         if (!$branch) {
+            $this->logger->info('branch not found. create...');
+
             $branch = new Branch();
             $branch->setName($event->branchName);
             $this->em->persist($branch);
+        } else {
+            $this->logger->info(sprintf('branch with the name "%s" exists already', $event->branchName));
         }
+
+        $this->logger->info('update branch');
 
         $branch->setProject($project);
 
         if (!$branch->getCommits()->contains($commit)) {
+
+            $this->logger->info('add commit into branch');
+
             $branch->getCommits()->add($commit);
             $commit->getBranches()->add($branch);
+        } else {
+            $this->logger->info('commit exists already in branch');
         }
 
         $this->em->flush();
@@ -138,8 +163,13 @@ class WebhookHandler
     private function project(EventRepository $repository)
     {
         if ($project = $this->em->getRepository('AppBundle:Project')->findByRemoteId($repository->id)) {
+
+            $this->logger->info(sprintf('project with the remote id "%s" exists already', $repository->id));
+
             return $project;
         }
+
+        $this->logger->info('create project...');
 
         $project = new Project();
         $project->setRemoteId($repository->id);
@@ -162,8 +192,12 @@ class WebhookHandler
     private function commit(Project $project, EventRepository $repository, EventCommit $struct)
     {
         if ($commit = $this->em->getRepository('AppBundle:Commit')->findCommitByProject($project, $struct->id)) {
+            $this->logger->info(sprintf('commit with the rev "%s" exists already', $struct->id));
+
             return $commit;
         }
+
+        $this->logger->info('create commit...');
 
         $commit = new Commit();
         $commit->setGitRepository($repository->url);
