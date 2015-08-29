@@ -33,7 +33,7 @@
 
                 on
                 {% if item.type == 'branch' %}
-                    branch <a href="#">{{ item.branch.name }}</a>
+                    branch <a href="{{ path('branch_show', {id: item.branch.id }) }}">{{ item.branch.name }}</a>
                 {% elseif item.type == 'tag' %}
                     tag <a href="#">{{ item.tag.name }}</a>
                 {% elseif item.type == 'merge_request' %}
