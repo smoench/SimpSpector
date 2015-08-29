@@ -41,17 +41,9 @@ class Tag implements TimestampableInterface
     /**
      * @var Commit
      *
-     * @ORM\ManyToOne(targetEntity="Commit")
+     * @ORM\ManyToOne(targetEntity="Commit", inversedBy="tags")
      */
     private $commit;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->commits = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -106,7 +98,7 @@ class Tag implements TimestampableInterface
     /**
      * @param Commit $commit
      */
-    public function setCommit($commit)
+    public function setCommit(Commit $commit)
     {
         $this->commit = $commit;
     }

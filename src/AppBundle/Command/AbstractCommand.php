@@ -2,13 +2,17 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\WebhookHandler;
+use DavidBadura\GitWebhooks\Event\AbstractEvent;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractInteractiveCommand extends ContainerAwareCommand
+abstract class AbstractCommand extends ContainerAwareCommand
 {
     /**
      * @var InputInterface
@@ -51,5 +55,16 @@ abstract class AbstractInteractiveCommand extends ContainerAwareCommand
             $this->output,
             new Question($label . ': ', null)
         );
+    }
+
+    /**
+     * @param AbstractEvent $event
+     */
+    protected function handleEvent(AbstractEvent $event)
+    {
+        /** @var WebhookHandler $handler */
+        $handler = $this->getContainer()->get('simpspector.app.webhook.handler');
+        $handler->setLogger(new ConsoleLogger($this->output, [LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL]));
+        $handler->handle($event);
     }
 }

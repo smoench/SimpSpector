@@ -45,18 +45,26 @@ class Commit implements TimestampableInterface
     private $gitRepository;
 
     /**
-     * @var MergeRequest
+     * @var MergeRequest[]
      *
      * @ORM\ManyToMany(targetEntity="MergeRequest", inversedBy="commits", cascade={"all"})
      */
     private $mergeRequests;
 
     /**
-     * @var Branch
+     * @var Branch[]
      *
      * @ORM\ManyToMany(targetEntity="Branch", inversedBy="commits", cascade={"all"})
      */
     private $branches;
+
+
+    /**
+     * @var Tag[]
+     *
+     * @ORM\OneToMany(targetEntity="Tag", mappedBy="commit", cascade={"all"})
+     */
+    private $tags;
 
     /**
      * @var Project
@@ -141,6 +149,14 @@ class Commit implements TimestampableInterface
     public function getMergeRequests()
     {
         return $this->mergeRequests;
+    }
+
+    /**
+     * @return Tag[]|ArrayCollection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 
     /**
