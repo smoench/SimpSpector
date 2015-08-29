@@ -1,24 +1,17 @@
 var gulp        = require('gulp'),
     concat      = require('gulp-concat'),
-    sass        = require('gulp-sass'),
     cssCompress = require('gulp-minify-css'),
     uglify      = require('gulp-uglify')
 ;
 
-gulp.task('sass', function () {
-    return gulp.src('assets/scss/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('web/css/dev/'))
-    ;
-});
 
-gulp.task('styles', ['sass'], function () {
+gulp.task('css', function () {
     var files = [
         'node_modules/prismjs/themes/prism.css',
         'node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css',
         'node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css',
         'node_modules/semantic-ui-css/semantic.css',
-        'web/css/dev/*.css'
+        'assets/css/*.css'
     ];
 
     gulp.src(files)
@@ -56,9 +49,9 @@ gulp.task('js', function () {
     ;
 });
 
-gulp.task('watch', function () {
-    gulp.watch('assets/scss/*.scss', ['styles']);
+gulp.task('watch', ['js', 'css'], function () {
+    gulp.watch('assets/css/*.css', ['css']);
     gulp.watch('assets/js/*.js', ['js']);
 });
 
-gulp.task('default', ['js', 'styles']);
+gulp.task('default', ['js', 'css']);
