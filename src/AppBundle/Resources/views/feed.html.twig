@@ -4,7 +4,13 @@
     {% for item in items %}
         <div class="event">
             <div class="label">
-                <i class="file text icon"></i>
+                {% if item.type == 'branch' %}
+                <i class="fork icon"></i>
+                {% elseif item.type == 'tag' %}
+                <i class="tag icon"></i>
+                {% elseif item.type == 'merge_request' %}
+                <i class="horizontally flipped alternate share icon"></i>
+                {% endif %}
             </div>
             <div class="content">
                 <div class="date">{{ item.createdAt|date('H:i:s d.m.Y') }}</div>
@@ -24,6 +30,15 @@
                 {% endif %}
 
                 <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0, 8) }}</a>
+
+                on
+                {% if item.type == 'branch' %}
+                    branch <a href="#">{{ item.branch.name }}</a>
+                {% elseif item.type == 'tag' %}
+                    tag <a href="#">{{ item.tag.name }}</a>
+                {% elseif item.type == 'merge_request' %}
+                    merge request <a href="{{ path('mergerequest_show', {id: item.mergeRequest.id }) }}">{{ item.mergeRequest.name }}</a>
+                {% endif %}
 
                 {% if commit.issues|length > 0 %}
                     <div class="extra text">
