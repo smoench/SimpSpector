@@ -3,17 +3,13 @@
 namespace AppBundle\Command;
 
 use AppBundle\Fixture;
-use AppBundle\WebhookHandler;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Struct\Commit;
-use DavidBadura\GitWebhooks\Struct\Repository;
-use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class EventMergeRequestCommand extends AbstractInteractiveCommand
+class EventMergeRequestCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -44,16 +40,8 @@ class EventMergeRequestCommand extends AbstractInteractiveCommand
         $event->createdAt        = new \DateTime();
         $event->updatedAt        = new \DateTime();
 
-        $commit          = new Commit();
-        $commit->id      = $commitHash;
-        $commit->message = 'Test-Data for Commit ' . $commitHash;
-        $commit->date    = new \DateTime('-4days');
+        $event->lastCommit = $helper->generateCommit($commitHash);
 
-        $event->lastCommit = $commit;
-
-        /** @var WebhookHandler $handler */
-        $handler = $this->getContainer()->get('simpspector.app.webhook.handler');
-        $handler->setLogger(new ConsoleLogger($output, [LogLevel::INFO => OutputInterface::VERBOSITY_NORMAL]));
-        $handler->handle($event);
+        $this->handleEvent($event);
     }
 }

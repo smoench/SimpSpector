@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class NewsStreamItem implements TimestampableInterface
 {
     const TYPE_MERGE_REQUEST = 'merge_request';
-    const TYPE_BRANCH = 'branch';
-    const TYPE_TAG = 'tag';
+    const TYPE_BRANCH        = 'branch';
+    const TYPE_TAG           = 'tag';
 
     use Timestampable;
 
@@ -61,6 +61,13 @@ class NewsStreamItem implements TimestampableInterface
      * @ORM\ManyToOne(targetEntity="Branch")
      */
     private $branch;
+
+    /**
+     * @var Tag
+     *
+     * @ORM\ManyToOne(targetEntity="Tag")
+     */
+    private $tag;
 
     /**
      * Get id
@@ -150,5 +157,21 @@ class NewsStreamItem implements TimestampableInterface
     public function setBranch(Branch $branch)
     {
         $this->branch = $branch;
+    }
+
+    /**
+     * @return Tag
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
     }
 }

@@ -7,10 +7,12 @@ use AppBundle\Entity\Commit;
 use AppBundle\Entity\MergeRequest;
 use AppBundle\Entity\NewsStreamItem;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\Tag;
 use AppBundle\Repository\BranchRepository;
 use AppBundle\Repository\CommitRepository;
 use AppBundle\Repository\MergeRequestRepository;
 use AppBundle\Repository\ProjectRepository;
+use AppBundle\Repository\TagRepository;
 use DavidBadura\GitWebhooks\Event\AbstractEvent;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Event\PushEvent;
@@ -74,6 +76,8 @@ class WebhookHandler
         } elseif ($event instanceof PushEvent) {
             if ($event->type == PushEvent::TYPE_BRANCH) {
                 $this->handlePushEventTypeBranch($event);
+            } elseif ($event->type == PushEvent::TYPE_TAG) {
+                $this->handlePushEventTypeTag($event);
             }
         }
     }
@@ -183,9 +187,7 @@ class WebhookHandler
         $newsStreamItem->setCommit($commit);
         $newsStreamItem->setProject($project);
         $newsStreamItem->setBranch($branch);
-
         $this->em->persist($newsStreamItem);
-
         $this->em->flush();
     }
 
@@ -259,5 +261,56 @@ class WebhookHandler
     private function getMergeRequestRepository()
     {
         return $this->em->getRepository('AppBundle:MergeRequest');
+    }
+
+    /**
+     * @param PushEvent $event
+     */
+    private function handlePushEventTypeTag(PushEvent $event)
+    {
+        $this->logger->info(sprintf('received push on tag "%s"', $event->tagName));
+
+        $project = $this->project($event->repository);
+        $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
+
+        /** @var TagRepository $tagRepository */
+        $tagRepository = $this->em->getRepository('AppBundle:Tag');
+
+        $tag = $tagRepository->findTagByRemoteId($event->repository->id, $event->tagName);
+        if (! $tag) {
+            $this->logger->info('tag not found. Creating...');
+            $tag = new Tag();
+            $tag->setName($event->tagName);
+            $this->em->persist($tag);
+        } else {
+            $this->logger->info(sprintf('tag with name "%s" already exists', $event->tagName));
+        }
+
+        $this->logger->info('updating tag...');
+
+        $tag->setProject($project);
+
+        if ($tag->getCommit() != $commit) {
+            $this->logger->info(sprintf('adding commit to tag "%s"...', $event->tagName));
+
+            $tag->setCommit($commit);
+            $commit->getTags()->add($tag);
+        } else {
+            $this->logger->info(
+                sprintf(
+                    'commit "%s" already exists in tag "%s"',
+                    $commit->getRevision(),
+                    $event->tagName
+                )
+            );
+        }
+
+        $newsStreamItem = new NewsStreamItem();
+        $newsStreamItem->setType(NewsStreamItem::TYPE_TAG);
+        $newsStreamItem->setCommit($commit);
+        $newsStreamItem->setProject($project);
+        $newsStreamItem->setTag($tag);
+        $this->em->persist($newsStreamItem);
+        $this->em->flush();
     }
 }
