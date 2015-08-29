@@ -22,7 +22,7 @@
             <td>{{ merge_request.name }}</td>
             <td>{{ _.levels(merge_request.commits|first) }}</td>
             <td>
-                {% if merge_request.status == constant('STATUS_OPEN', merge_request) %}
+                {% if merge_request.status == constant('STATUS_OPENED', merge_request) %}
                     <span class="ui green label">Open</span>
                 {% elseif merge_request.status == constant('STATUS_MERGED', merge_request) %}
                     <span class="ui purple label">Merged</span>
