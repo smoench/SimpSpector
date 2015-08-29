@@ -64,9 +64,9 @@ class EventPushCommand extends ContainerAwareCommand
             ->get('simpspector.app.webhook.handler');
         $handler->setLogger($logger);
 
-        $url        = $this->getOption('url', 'repository url', null);
-        $commitHash = $this->getOption('commit', 'commit hash of last commit', null);
-        $project    = $this->getOption('project', 'project name', null);
+        $url        = $this->getOption('url', 'repository url');
+        $commitHash = $this->getOption('commit', 'commit hash of last commit');
+        $project    = $this->getOption('project', 'project name');
         $projectId  = $input->getOption('project-id');
 
         $event             = new PushEvent();
