@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 
 use DavidBadura\GitWebhooks\Event\PushEvent;
 use DavidBadura\GitWebhooks\Struct\Commit;
@@ -55,6 +56,13 @@ class EventPushCommand extends ContainerAwareCommand
         $this->input          = $input;
         $this->output         = $output;
         $this->questionHelper = $this->getHelper('question');
+
+        $logger = new ConsoleLogger($output);
+
+        $handler = $this
+            ->getContainer()
+            ->get('simpspector.app.webhook.handler');
+        $handler->setLogger($logger);
 
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
