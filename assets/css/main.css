@@ -15,3 +15,10 @@
 .line-highlight {
     padding: 0;
 }
+
+.logo {
+    display: block;
+    height: 48px;
+    width: 48px;
+    background-image: url("../img/owl.48x48.png");
+}
