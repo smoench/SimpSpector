@@ -16,7 +16,6 @@ Requirements
 
 * composer
 * npm
-* sass
 
 Installation
 ------------
