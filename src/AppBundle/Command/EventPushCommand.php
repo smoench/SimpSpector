@@ -23,7 +23,8 @@ class EventPushCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('simpspector:event:push')
+        $this
+            ->setName('simpspector:event:push')
             ->addOption('project', null, InputOption::VALUE_OPTIONAL, 'project name', null)
             ->addOption('project-id', null, InputOption::VALUE_OPTIONAL, 'project id', 'test-9999')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
@@ -42,14 +43,16 @@ class EventPushCommand extends ContainerAwareCommand
         $this->output         = $output;
         $this->questionHelper = $this->getHelper('question');
 
-        $handler = $this->getContainer()->get('simpspector.app.webhook.handler');
+        $handler = $this
+            ->getContainer()
+            ->get('simpspector.app.webhook.handler');
 
         $url        = $this->getOption('url', 'repository url', null);
         $commitHash = $this->getOption('commit', 'commit hash of last commit', null);
         $project    = $this->getOption('project', 'project name', null);
         $projectId  = $input->getOption('project-id');
 
-        $event = new PushEvent();
+        $event             = new PushEvent();
         $event->type       = PushEvent::TYPE_BRANCH;
         $event->branchName = 'master';
         $event->repository = new Repository();
@@ -58,10 +61,10 @@ class EventPushCommand extends ContainerAwareCommand
         $event->repository->url  = $url;
         $event->repository->name = $project;
 
-        $commit = new Commit();
-        $commit->id = $commitHash;
+        $commit          = new Commit();
+        $commit->id      = $commitHash;
         $commit->message = "Test-Data for Commit " . $commitHash;
-        $commit->date = new \DateTime(); // todo correct timestamp
+        $commit->date    = new \DateTime(); // todo correct timestamp
 
         $event->commits = [$commit];
 
