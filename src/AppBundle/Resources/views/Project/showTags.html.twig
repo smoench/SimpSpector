@@ -11,7 +11,7 @@
     {% for tag in project.tags %}
         <tr>
             <td>
-                <a class="ui animated button" href="{{ path('mergerequest_show', {id: tag.id}) }}">
+                <a class="ui animated button" href="{{ path('commit_show', {id: tag.commit.id}) }}">
                     <div class="hidden content">show</div>
                     <div class="visible content">
                         <i class="search icon"></i>
