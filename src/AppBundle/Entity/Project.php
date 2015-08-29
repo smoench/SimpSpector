@@ -60,6 +60,13 @@ class Project implements TimestampableInterface
     private $mergeRequests;
 
     /**
+     * @var Branch[]
+     *
+     * @ORM\OneToMany(targetEntity="Branch", mappedBy="project")
+     */
+    private $branches;
+
+    /**
      * @var Commit[]
      *
      * @ORM\OneToMany(targetEntity="Commit", mappedBy="project")
@@ -72,6 +79,7 @@ class Project implements TimestampableInterface
     public function __construct()
     {
         $this->mergeRequests = new ArrayCollection();
+        $this->branches      = new ArrayCollection();
         $this->commits       = new ArrayCollection();
     }
 

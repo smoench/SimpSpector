@@ -34,14 +34,14 @@ class Branch implements TimestampableInterface
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="branches", cascade={"all"})
      */
     private $project;
 
     /**
      * @var Commit[]
      *
-     * @ORM\OneToMany(targetEntity="Commit", mappedBy="mergeRequest")
+     * @ORM\ManyToMany(targetEntity="Commit", mappedBy="branches", cascade={"all"})
      */
     private $commits;
 

@@ -74,7 +74,7 @@ class MergeRequest implements TimestampableInterface
     /**
      * @var Commit[]
      *
-     * @ORM\OneToMany(targetEntity="Commit", mappedBy="mergeRequest")
+     * @ORM\ManyToMany(targetEntity="Commit", mappedBy="mergeRequests", cascade={"all"})
      */
     private $commits;
 

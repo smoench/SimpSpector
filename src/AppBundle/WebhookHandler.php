@@ -49,6 +49,11 @@ class WebhookHandler
         $this->logger     = $logger ?: new NullLogger();
     }
 
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @param AbstractEvent $event
      *
