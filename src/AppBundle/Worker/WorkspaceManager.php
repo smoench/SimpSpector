@@ -47,7 +47,7 @@ class WorkspaceManager
         $this->cleanUp($commit);
 
         $path     = $this->path($commit);
-        $url      = $commit->getProject()->getRepositoryUrl();
+        $url      = $commit->getGitRepository();
         $revision = $commit->getRevision();
 
         $this->gitClone($path, $url, $logger);

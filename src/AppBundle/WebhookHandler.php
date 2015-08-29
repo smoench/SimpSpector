@@ -60,7 +60,7 @@ class WebhookHandler
             $this->handleMergeEvent($event);
         } elseif ($event instanceof PushEvent) {
             if ($event->type == PushEvent::TYPE_BRANCH) {
-                $this->handlePushEvent($event);
+                $this->handlePushEventTypeBranch($event);
             }
         }
     }
@@ -99,7 +99,7 @@ class WebhookHandler
     /**
      * @param PushEvent $event
      */
-    private function handlePushEvent(PushEvent $event)
+    private function handlePushEventTypeBranch(PushEvent $event)
     {
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
