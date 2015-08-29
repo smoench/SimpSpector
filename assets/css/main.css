@@ -22,3 +22,7 @@
     width: 48px;
     background-image: url("../img/owl.48x48.png");
 }
+
+.logo-breadcrumb {
+    margin-top: 3px;
+}

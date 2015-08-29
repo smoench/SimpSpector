@@ -5,7 +5,9 @@
 <div class="row">
     <div class="column wide sixteen">
         <div class="ui steps">
-            {{ _.step('Home', 'where the <i class="icon heart"></i> is', 'icon home', path('homepage')) }}
+            <div class="content">
+                <div class="logo logo-breadcrumb"></div>
+            </div>
             {{ _.step(merge_request.project.name, 'Project', 'icon cubes', path('project_show', {id: merge_request.project.id })) }}
             {{ _.step(merge_request.name, 'Merge Request', 'horizontally flipped share alternate icon', '') }}
         </div>
