@@ -76,6 +76,11 @@ class WorkspaceManager
      */
     private function gitClone($path, $url, AbstractLogger $logger)
     {
+        $fs = new Filesystem();
+        if (! $fs->exists($this->baseDir)) {
+            $fs->mkdir($this->baseDir);
+        }
+
         $processBuilder = new ProcessBuilder([
             'git',
             'clone',

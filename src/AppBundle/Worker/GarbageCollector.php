@@ -28,12 +28,16 @@ class GarbageCollector
      */
     public function run()
     {
+        $fs = new Filesystem();
+
+        if (! $fs->exists($this->baseDir)) {
+            return;
+        }
+
         $finder = (new Finder())
             ->in($this->baseDir)
             ->directories()
             ->depth('== 0');
-
-        $fs = new Filesystem();
 
         foreach ($finder as $dir) {
             $fs->remove($dir->getRealpath());
