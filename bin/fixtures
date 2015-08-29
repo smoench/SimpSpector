@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+php bin/console simpspector:event:push --url https://github.com/silexphp/Silex.git --commit b31d7dbe3a52618f03a4ea40858330835171277c
+php bin/console simpspector:event:merge-request --url https://github.com/silexphp/Silex.git --commit 86dbb455df6d50504a656fd369890b7493823c28
+php bin/console simpspector:job:run

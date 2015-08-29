@@ -6,7 +6,10 @@ use AppBundle\Entity\Branch;
 use AppBundle\Entity\Commit;
 use AppBundle\Entity\MergeRequest;
 use AppBundle\Entity\Project;
+use AppBundle\Repository\BranchRepository;
+use AppBundle\Repository\CommitRepository;
 use AppBundle\Repository\MergeRequestRepository;
+use AppBundle\Repository\ProjectRepository;
 use DavidBadura\GitWebhooks\Event\AbstractEvent;
 use DavidBadura\GitWebhooks\Event\MergeRequestEvent;
 use DavidBadura\GitWebhooks\Event\PushEvent;
@@ -79,7 +82,15 @@ class WebhookHandler
      */
     private function handleMergeEvent(MergeRequestEvent $event)
     {
-        $this->logger->info('new merge request');
+        $this->logger->info(
+            sprintf(
+                'received merge request from "%s" ("%s") -> "%s" ("%s")',
+                $event->sourceBranch,
+                $event->sourceRepository->name,
+                $event->targetBranch,
+                $event->repository->name
+            )
+        );
 
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->sourceRepository, $event->lastCommit);
@@ -89,14 +100,14 @@ class WebhookHandler
             ->findMergeRequestByRemote($event->repository->id, $event->id);
 
         if (! $mergeRequest) {
-            $this->logger->info('merge request not found. create...');
+            $this->logger->info('merge request not found. Creating...');
 
             $mergeRequest = new MergeRequest();
             $mergeRequest->setRemoteId($event->id);
             $this->em->persist($mergeRequest);
         }
 
-        $this->logger->info('update merge request...');
+        $this->logger->info('updating merge request...');
 
         $mergeRequest->setProject($project);
         $mergeRequest->setName($event->title);
@@ -106,11 +117,11 @@ class WebhookHandler
         $mergeRequest->setTargetBranch($event->targetBranch);
 
         if (! $mergeRequest->getCommits()->contains($commit)) {
-            $this->logger->info('add commit into merge request');
+            $this->logger->info('adding commit into merge request...');
             $mergeRequest->getCommits()->add($commit);
             $commit->getMergeRequests()->add($mergeRequest);
         } else {
-            $this->logger->info('commit exists already in merge request');
+            $this->logger->info('commit already exists in merge request');
         }
 
         $this->em->flush();
@@ -121,37 +132,41 @@ class WebhookHandler
      */
     private function handlePushEventTypeBranch(PushEvent $event)
     {
-        $this->logger->info('new push request (type branch)');
+        $this->logger->info(sprintf('received push on branch "%s"', $event->branchName));
 
         $project = $this->project($event->repository);
         $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
 
-        $branch = $this->em->getRepository('AppBundle:Branch')->findBranchByRemoteId(
-            $event->repository->id,
-            $event->branchName
-        );
+        /** @var BranchRepository $branchRepository */
+        $branchRepository = $this->em->getRepository('AppBundle:Branch');
 
+        $branch = $branchRepository->findBranchByRemoteId($event->repository->id, $event->branchName);
         if (! $branch) {
-            $this->logger->info('branch not found. create...');
+            $this->logger->info('branch not found. Creating...');
             $branch = new Branch();
             $branch->setName($event->branchName);
             $this->em->persist($branch);
         } else {
-            $this->logger->info(sprintf('branch with the name "%s" exists already', $event->branchName));
+            $this->logger->info(sprintf('branch with name "%s" already exists', $event->branchName));
         }
 
-        $this->logger->info('update branch');
+        $this->logger->info('updating branch...');
 
         $branch->setProject($project);
 
         if (! $branch->getCommits()->contains($commit)) {
-
-            $this->logger->info('add commit into branch');
+            $this->logger->info(sprintf('adding commit to branch "%s"...', $event->branchName));
 
             $branch->getCommits()->add($commit);
             $commit->getBranches()->add($branch);
         } else {
-            $this->logger->info('commit exists already in branch');
+            $this->logger->info(
+                sprintf(
+                    'commit "%s" already exists in branch "%s"',
+                    $commit->getRevision(),
+                    $event->branchName
+                )
+            );
         }
 
         $this->em->flush();
@@ -164,14 +179,21 @@ class WebhookHandler
      */
     private function project(EventRepository $repository)
     {
-        if ($project = $this->em->getRepository('AppBundle:Project')->findByRemoteId($repository->id)) {
-
-            $this->logger->info(sprintf('project with the remote id "%s" exists already', $repository->id));
+        /** @var ProjectRepository $projectRepository */
+        $projectRepository = $this->em->getRepository('AppBundle:Project');
+        if ($project = $projectRepository->findByRemoteId($repository->id)) {
+            $this->logger->info(sprintf('project with the remote id "%s" already exists', $repository->id));
 
             return $project;
         }
 
-        $this->logger->info('create project...');
+        $this->logger->info(
+            sprintf(
+                'creating project "%s" with remote id "%s"...',
+                $repository->name,
+                $repository->id
+            )
+        );
 
         $project = new Project();
         $project->setRemoteId($repository->id);
@@ -194,13 +216,15 @@ class WebhookHandler
      */
     private function commit(Project $project, EventRepository $repository, EventCommit $struct)
     {
-        if ($commit = $this->em->getRepository('AppBundle:Commit')->findCommitByProject($project, $struct->id)) {
-            $this->logger->info(sprintf('commit with the rev "%s" exists already', $struct->id));
+        /** @var CommitRepository $commitRepository */
+        $commitRepository = $this->em->getRepository('AppBundle:Commit');
+        if ($commit = $commitRepository->findCommitByProject($project, $struct->id)) {
+            $this->logger->info(sprintf('commit "%s" already exists', $struct->id));
 
             return $commit;
         }
 
-        $this->logger->info('create commit...');
+        $this->logger->info(sprintf('creating commit "%s"...', $struct->id));
 
         $commit = new Commit();
         $commit->setGitRepository($repository->url);

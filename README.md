@@ -25,7 +25,8 @@ Development
 -----------
 
 ```bash
-npm start #short cut for: node_modules/.bin/gulp watch
+npm start # short cut for: node_modules/.bin/gulp watch
+bin/fixtures # if you would like to have the database initialized with examples
 ```
 
 phpStorm integration
