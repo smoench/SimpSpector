@@ -25,9 +25,7 @@ class MergeRequestController extends Controller
      */
     public function showAction(MergeRequest $mergeRequest)
     {
-        $commits = $this->getCommitRepository()->findBy(['mergeRequest' => $mergeRequest], ['id' => 'DESC']);
-
-        return ['merge_request' => $mergeRequest, 'commits' => $commits];
+        return ['merge_request' => $mergeRequest, 'commits' => $mergeRequest->getCommits()];
     }
 
     /**
