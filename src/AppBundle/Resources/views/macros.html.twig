@@ -1,29 +1,29 @@
 {% macro levels(commit) %}
 
     {% if commit.getMetric('count.notice').value|default(0) %}
-        <span class="ui label blue tooltip" title="notice">
-                <i class="info icon"></i>
+        <span class="ui" title="notice">
+                <i class="info icon blue "></i>
             {{ commit.getMetric('count.notice').value }}
             </span>
     {% endif %}
 
     {% if commit.getMetric('count.warning').value|default(0) %}
-        <span class="ui label yellow tooltip" title="warning">
-                <i class="warning icon"></i>
+        <span class="ui" title="warning">
+                <i class="warning icon yellow "></i>
             {{ commit.getMetric('count.warning').value }}
             </span>
     {% endif %}
 
     {% if commit.getMetric('count.error').value|default(0) %}
-        <span class="ui label orange tooltip" title="error">
-                <i class="bug icon"></i>
+        <span class="ui" title="error">
+                <i class="bug icon orange "></i>
             {{ commit.getMetric('count.error').value }}
             </span>
     {% endif %}
 
     {% if commit.getMetric('count.critical').value|default(0) %}
-        <span class="ui label red tooltip" title="critical">
-                <i class="fire icon"></i>
+        <span class="ui" title="critical">
+                <i class="fire icon red "></i>
             {{ commit.getMetric('count.critical').value }}
             </span>
     {% endif %}
@@ -36,8 +36,8 @@
 
     {% if groups.level is defined %}
         {% for level,issues in groups.level %}
-            <span class="ui label {{ issues|first|level_color }} tooltip" title="{{ level }}">
-                <i class="{{ issues|first|level_icon }} icon"></i>
+            <span class="ui" title="{{ level }}">
+                <i class="{{ issues|first|level_color }} {{ issues|first|level_icon }} icon"></i>
                 {{ issues|length }}
             </span>
         {% endfor %}
