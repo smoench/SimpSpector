@@ -36,19 +36,15 @@ class EventPushCommand extends AbstractInteractiveCommand
     {
         parent::execute($input, $output);
 
+        $helper = new Fixture\Helper();
+
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
-        $project    = Fixture\Helper::generateProjectNameByUrl($url);
-        $projectId  = Fixture\Helper::generateRemoteIdByProjectName($project);
 
         $event             = new PushEvent();
         $event->type       = PushEvent::TYPE_BRANCH;
         $event->branchName = 'master';
-        $event->repository = new Repository();
-
-        $event->repository->id   = $projectId;
-        $event->repository->url  = $url;
-        $event->repository->name = $project;
+        $event->repository = $helper->generateRepositoryByUrl($url);
 
         $commit          = new Commit();
         $commit->id      = $commitHash;
