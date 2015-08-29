@@ -4,7 +4,13 @@
     {% for item in items %}
         <div class="event">
             <div class="label">
-                <i class="file text icon"></i>
+                {% if item.type == 'branch' %}
+                <i class="fork icon"></i>
+                {% elseif item.type == 'tag' %}
+                <i class="tag icon"></i>
+                {% elseif item.type == 'merge_request' %}
+                <i class="horizontally flipped alternate share icon"></i>
+                {% endif %}
             </div>
             <div class="content">
                 <div class="date">{{ item.createdAt|date('H:i:s d.m.Y') }}</div>
