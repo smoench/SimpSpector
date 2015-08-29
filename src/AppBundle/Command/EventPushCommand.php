@@ -5,6 +5,8 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\WebhookHandler;
+use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,8 +19,19 @@ use DavidBadura\GitWebhooks\Struct\Repository;
 
 class EventPushCommand extends ContainerAwareCommand
 {
+    /**
+     * @var InputInterface
+     */
     private $input;
+
+    /**
+     * @var OutputInterface
+     */
     private $output;
+
+    /**
+     * @var QuestionHelper
+     */
     private $questionHelper;
 
     protected function configure()
@@ -43,13 +56,9 @@ class EventPushCommand extends ContainerAwareCommand
         $this->output         = $output;
         $this->questionHelper = $this->getHelper('question');
 
-        $handler = $this
-            ->getContainer()
-            ->get('simpspector.app.webhook.handler');
-
-        $url        = $this->getOption('url', 'repository url', null);
-        $commitHash = $this->getOption('commit', 'commit hash of last commit', null);
-        $project    = $this->getOption('project', 'project name', null);
+        $url        = $this->getOption('url', 'repository url');
+        $commitHash = $this->getOption('commit', 'commit hash of last commit');
+        $project    = $this->getOption('project', 'project name');
         $projectId  = $input->getOption('project-id');
 
         $event             = new PushEvent();
@@ -63,15 +72,22 @@ class EventPushCommand extends ContainerAwareCommand
 
         $commit          = new Commit();
         $commit->id      = $commitHash;
-        $commit->message = "Test-Data for Commit " . $commitHash;
+        $commit->message = 'Test-Data for Commit ' . $commitHash;
         $commit->date    = new \DateTime(); // todo correct timestamp
 
         $event->commits = [$commit];
 
-        $handler->handle($event);
+        $this->getHandler()
+             ->handle($event);
     }
 
-    private function getOption($key, $label, $description)
+    /**
+     * @param string $key
+     * @param string $label
+     *
+     * @return string
+     */
+    private function getOption($key, $label)
     {
         $option = $this->input->getOption($key);
 
@@ -82,7 +98,17 @@ class EventPushCommand extends ContainerAwareCommand
         return $this->questionHelper->ask(
             $this->input,
             $this->output,
-            new Question("$label: ", null)
+            new Question($label . ': ', null)
         );
+    }
+
+    /**
+     * @return WebhookHandler
+     */
+    protected function getHandler()
+    {
+        return $this
+            ->getContainer()
+            ->get('simpspector.app.webhook.handler');
     }
 }
