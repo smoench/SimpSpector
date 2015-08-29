@@ -2,7 +2,7 @@
     <div class="column wide sixteen">
         <div class="ui steps">
             <div class="content">
-                <div class="logo logo-breadcrumb"></div>
+                <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
             </div>
             {{ _.step(commit.project.name, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
             {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
