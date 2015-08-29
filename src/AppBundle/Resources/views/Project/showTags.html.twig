@@ -1,1 +1,26 @@
-<h2>Tags!</h2>
+<table class="ui table">
+
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Issues</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for tag in project.tags %}
+        <tr>
+            <td>
+                <a class="ui animated button" href="{{ path('mergerequest_show', {id: tag.id}) }}">
+                    <div class="hidden content">show</div>
+                    <div class="visible content">
+                        <i class="search icon"></i>
+                    </div>
+                </a>
+            </td>
+            <td>{{ tag.name }}</td>
+            <td>{{ _.levels(tag.commits|first) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

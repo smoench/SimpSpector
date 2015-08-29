@@ -67,6 +67,13 @@ class Project implements TimestampableInterface
     private $branches;
 
     /**
+     * @var Tag[]
+     *
+     * @ORM\OneToMany(targetEntity="Tag", mappedBy="project")
+     */
+    private $tags;
+
+    /**
      * @var Commit[]
      *
      * @ORM\OneToMany(targetEntity="Commit", mappedBy="project")
@@ -81,6 +88,7 @@ class Project implements TimestampableInterface
         $this->mergeRequests = new ArrayCollection();
         $this->branches      = new ArrayCollection();
         $this->commits       = new ArrayCollection();
+        $this->tags          = new ArrayCollection();
     }
 
     /**
@@ -173,11 +181,19 @@ class Project implements TimestampableInterface
     }
 
     /**
-     * @return Branche[]
+     * @return Branch[]
      */
     public function getBranches()
     {
         return $this->branches;
+    }
+
+    /**
+     * @return Tag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 
     /**
