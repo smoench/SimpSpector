@@ -10,7 +10,9 @@
                 factory-class="DavidBadura\GitWebhooks\EventFactory" factory-method="createDefault"/>
 
         <service id="simpspector.app.webhook.handler" class="AppBundle\WebhookHandler">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="logger"/>
         </service>
 
         <service id="simpspector.app.gitlab.request_handler" class="AppBundle\GitLab\RequestHandler">

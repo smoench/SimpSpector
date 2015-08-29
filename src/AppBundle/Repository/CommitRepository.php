@@ -134,13 +134,13 @@ class CommitRepository extends EntityRepository
     public function findCommitByProject(Project $project, $rev)
     {
         $query = $this->createQueryBuilder('c')
-            ->where('c.project = :project')
-            ->where('c.revision = :rev')
+            ->andWhere('c.project = :project')
+            ->andWhere('c.revision = :rev')
             ->setParameter('project', $project)
             ->setParameter('rev', $rev)
             ->getQuery();
 
-        return $query->getSingleResult();
+        return $query->getOneOrNullResult();
     }
 
     /**

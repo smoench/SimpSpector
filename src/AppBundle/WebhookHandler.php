@@ -143,6 +143,7 @@ class WebhookHandler
         $project->setWebUrl($repository->homepage);
 
         $this->em->persist($project);
+        $this->em->flush($project);
 
         return $project;
     }

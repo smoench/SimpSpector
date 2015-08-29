@@ -15,11 +15,11 @@ use AppBundle\Entity\Project;
 class BranchRepository extends EntityRepository
 {
     /**
-     * @param int $projectId
+     * @param int $remoteId
      * @param string $branchName
      * @return MergeRequest|null
      */
-    public function findBranchByRemote($projectId, $branchName)
+    public function findBranchByRemoteId($remoteId, $branchName)
     {
         $query = $this->createQueryBuilder('b')
             ->join('b.project', 'p')
@@ -28,7 +28,7 @@ class BranchRepository extends EntityRepository
             ->getQuery();
 
         $query->setParameters([
-            'projectId' => $projectId,
+            'projectId' => $remoteId,
             'name'      => $branchName
         ]);
 
