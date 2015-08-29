@@ -1,4 +1,7 @@
 <?php
+/**
+ *
+ */
 
 namespace AppBundle\Repository;
 
@@ -9,24 +12,24 @@ use AppBundle\Entity\Project;
 /**
  * @author David Badura <d.a.badura@gmail.com>
  */
-class MergeRequestRepository extends EntityRepository
+class BranchRepository extends EntityRepository
 {
     /**
      * @param int $projectId
-     * @param int $mergeId
+     * @param string $branchName
      * @return MergeRequest|null
      */
-    public function findMergeRequestByRemote($projectId, $mergeId)
+    public function findBranchByRemote($projectId, $branchName)
     {
-        $query = $this->createQueryBuilder('m')
-            ->join('m.project', 'p')
+        $query = $this->createQueryBuilder('b')
+            ->join('b.project', 'p')
             ->where('p.remoteId = :projectId')
-            ->andWhere('m.remoteId = :mergeId')
+            ->andWhere('b.name = :name')
             ->getQuery();
 
         $query->setParameters([
             'projectId' => $projectId,
-            'mergeId'   => $mergeId
+            'name'      => $branchName
         ]);
 
         $query->setMaxResults(1);

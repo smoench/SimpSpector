@@ -25,7 +25,7 @@ class Commit implements TimestampableInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -34,23 +34,29 @@ class Commit implements TimestampableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="revision", type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private $revision;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(type="json_array", nullable=true)
+     * @var string
+     * @ORM\Column(type="string")
      */
-    private $gadgets;
+    private $gitRepository;
 
     /**
      * @var MergeRequest
      *
-     * @ORM\ManyToOne(targetEntity="MergeRequest", inversedBy="commits", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="MergeRequest", inversedBy="commits", cascade={"all"})
      */
-    private $mergeRequest;
+    private $mergeRequests;
+
+    /**
+     * @var Branch
+     *
+     * @ORM\ManyToMany(targetEntity="Branch", inversedBy="commits", cascade={"all"})
+     */
+    private $branches;
 
     /**
      * @var Project
@@ -78,8 +84,9 @@ class Commit implements TimestampableInterface
      */
     public function __construct()
     {
-        $this->status  = self::STATUS_NEW;
-        $this->gadgets = [];
+        $this->mergeRequests = new ArrayCollection();
+        $this->branches      = new ArrayCollection();
+        $this->status        = self::STATUS_NEW;
     }
 
     /**
@@ -113,35 +120,35 @@ class Commit implements TimestampableInterface
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getGadgets()
+    public function getGitRepository()
     {
-        return $this->gadgets;
+        return $this->gitRepository;
     }
 
     /**
-     * @param array $gadgets
+     * @param string $gitRepository
      */
-    public function setGadgets($gadgets)
+    public function setGitRepository($gitRepository)
     {
-        $this->gadgets = $gadgets;
+        $this->gitRepository = $gitRepository;
     }
 
     /**
-     * @return MergeRequest
+     * @return MergeRequest[]|ArrayCollection
      */
-    public function getMergeRequest()
+    public function getMergeRequests()
     {
-        return $this->mergeRequest;
+        return $this->mergeRequests;
     }
 
     /**
-     * @param MergeRequest $mergeRequest
+     * @return Branch[]|ArrayCollection
      */
-    public function setMergeRequest(MergeRequest $mergeRequest = null)
+    public function getBranches()
     {
-        $this->mergeRequest = $mergeRequest;
+        return $this->branches;
     }
 
     /**
@@ -206,15 +213,6 @@ class Commit implements TimestampableInterface
     public function getMetrics()
     {
         return $this->result->getMetrics();
-    }
-
-    /**
-     * @return Metric[]
-     * @deprecated
-     */
-    public function getIndexedMetrics()
-    {
-        return $this->getMetrics();
     }
 
     /**

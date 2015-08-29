@@ -6,9 +6,11 @@
 
     <services>
 
-        <service id="simpspector.app.gitlab.commit_factory" class="AppBundle\GitLab\CommitFactory">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="gitlab_api"/>
+        <service id="simpspector.app.webhook.event_factory" class="DavidBadura\GitWebhooks\EventFactory"
+                factory-class="DavidBadura\GitWebhooks\EventFactory" factory-method="createDefault"/>
+
+        <service id="simpspector.app.webhook.handler" class="AppBundle\WebhookHandler">
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <service id="simpspector.app.gitlab.request_handler" class="AppBundle\GitLab\RequestHandler">
