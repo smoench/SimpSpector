@@ -11,7 +11,7 @@
     {% for branch in project.branches %}
         <tr>
             <td>
-                <a class="ui animated button" href="{{ path('mergerequest_show', {id: branch.id}) }}">
+                <a class="ui animated button" href="{{ path('branch_show', {id: branch.id}) }}">
                     <div class="hidden content">show</div>
                     <div class="visible content">
                         <i class="search icon"></i>
