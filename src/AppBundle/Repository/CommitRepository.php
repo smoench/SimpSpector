@@ -42,6 +42,8 @@ class CommitRepository extends EntityRepository
     }
 
     /**
+     * @deprecated
+     *
      * @param Project $project
      * @return Commit
      */
@@ -61,6 +63,8 @@ class CommitRepository extends EntityRepository
     }
 
     /**
+     * @deprecated
+     *
      * @param Project $project
      * @return Commit
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -87,6 +91,8 @@ class CommitRepository extends EntityRepository
     }
 
     /**
+     * @deprecated
+     *
      * @param Project $project
      * @param int|null $limit
      * @return Commit[]
