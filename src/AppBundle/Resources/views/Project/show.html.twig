@@ -81,9 +81,9 @@
                 Last 10 commits
             </div>
 
-            {% for commit in project.commits|slice(0,10) %}
+            {% for commit in project_commits|slice(0,10) %}
                 <div class="ui segment attached">
-                    <a href="{{ path('branch_show', {id: project.id}) }}">
+                    <a href="{{ path('commit_show', {id: commit.id}) }}">
                         {{ commit.revision|slice(0,8) }}
                         <div style="float: right">
                             {% if commit.status == constant('STATUS_NEW', commit) %}
