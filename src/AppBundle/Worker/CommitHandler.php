@@ -85,7 +85,8 @@ class CommitHandler
 
             $result = $this->execute($commit, $path, $logger);
 
-            $this->workspaceManager->cleanUp($commit);
+            dump($path);
+            //$this->workspaceManager->cleanUp($commit);
 
             $event = new CommitResultEvent($commit, $logger, $result);
             $this->eventDispatcher->dispatch(Events::RESULT, $event);
@@ -130,8 +131,9 @@ class CommitHandler
     private function updateMergeRequestBaseCommits(Commit $commit, $workspacePath, AbstractLogger $logger)
     {
         foreach ($commit->getMergeRequests() as $mergeRequest) {
-            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $workspacePath, $logger);
+            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $commit, $workspacePath, $logger);
 
+            dump($baseCommit);
             if (empty($baseCommit)) {
                 continue;
             }

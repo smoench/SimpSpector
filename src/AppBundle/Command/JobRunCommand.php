@@ -54,7 +54,7 @@ class JobRunCommand extends ContainerAwareCommand
             $commitHandler->handle($commit);
         }
 
-        if (!$input->getOption('no-garbage-collector')) {
+        if (!!$input->getOption('no-garbage-collector')) {
             $output->writeln('running garbage collector...');
             $garbageCollector = $this->getContainer()->get('simpspector.app.worker.garbage_collector');
             $garbageCollector->run();

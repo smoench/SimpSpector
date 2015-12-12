@@ -45,7 +45,7 @@ class WorkspaceManager
     {
         $logger = $logger ?: new NullLogger();
 
-        $this->cleanUp($commit);
+        //$this->cleanUp($commit);
 
         $path     = $this->path($commit);
         $url      = $commit->getGitRepository();
@@ -76,23 +76,29 @@ class WorkspaceManager
      *
      * @return string hash of base commit from target branch
      */
-    public function getBaseCommit(MergeRequest $mergeRequest, $path, AbstractLogger $logger)
+    public function getBaseCommit(MergeRequest $mergeRequest, Commit $commit, $path, AbstractLogger $logger)
     {
-        $processBuilder = new ProcessBuilder([
+        $processBuilder = new \Symfony\Component\Process\ProcessBuilder([
             'git',
             'merge-base',
-            $mergeRequest->getTargetBranch(),
-            $mergeRequest->getSourceBranch(),
+            'origin/' . $mergeRequest->getTargetBranch(),
+            'origin/' . $mergeRequest->getSourceBranch(),
         ]);
 
         $processBuilder->setWorkingDirectory(dirname($path));
-        $processBuilder->run($logger);
+        $process = $processBuilder->getProcess();
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                $logger->write($buffer);
+            }
+        );
+        //$process->run();
 
-        if (! $processBuilder->getProcess()->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             return;
         }
 
-        return trim($processBuilder->getProcess()->getOutput());
+        return trim($process->getOutput());
     }
 
     /**
