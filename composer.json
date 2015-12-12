@@ -9,8 +9,8 @@
         "psr-0": {"": "tests/"}
     },
     "require": {
-        "php": ">=5.4",
-        "symfony/symfony": "~2.6",
+        "php": "~5.4",
+        "symfony/symfony": "~2.8",
         "doctrine/orm": "~2.5",
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
@@ -20,8 +20,7 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "doctrine/migrations": "dev-master",
-        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "doctrine/doctrine-migrations-bundle": "~1.0",
         "zeichen32/gitlabapibundle": "~2.0",
         "timetoogo/pinq": "~3.0",
         "simpspector/analyser": "dev-master",
@@ -32,7 +31,7 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.8.20"
     },
     "scripts": {
         "post-install-cmd": [
