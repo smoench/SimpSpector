@@ -13,7 +13,7 @@
   },
   "scripts": {
     "postinstall": "node_modules/.bin/gulp",
-    "start  ": "node_modules/.bin/gulp watch"
+    "start": "node_modules/.bin/gulp watch"
   },
   "author": "",
   "license": "MIT"
