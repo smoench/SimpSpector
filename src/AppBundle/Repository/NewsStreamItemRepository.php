@@ -14,4 +14,14 @@ use AppBundle\Entity\Project;
  */
 class NewsStreamItemRepository extends EntityRepository
 {
+    public function findByProject(Project $project)
+    {
+        return $this->createQueryBuilder("n")
+            ->where('n.project = :project')
+            ->orderBy('n.createdAt', 'DESC')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getResult();
+
+    }
 }

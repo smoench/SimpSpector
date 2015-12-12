@@ -37,19 +37,24 @@ class ProjectController extends Controller
     public function showAction(Project $project)
     {
         $mergeRequestRepository = $this->get('simpspector.app.repository.merge_request');
-        $commitRepository       = $this->get('simpspector.app.repository.commit');
+        $commitRepository = $this->get('simpspector.app.repository.commit');
+        $newsStreamItemRepository = $this->get('simpspector.app.repository.news_stream_item');
+
 
         $mergeRequests = $mergeRequestRepository->findBy(['project' => $project], [
             'status' => 'DESC',
-            'id'     => 'DESC'
+            'id' => 'DESC'
         ]);
 
         $projectCommits = $commitRepository->findCommitsByProject($project);
 
+        $newsStreamItems = $newsStreamItemRepository->findByProject($project);
+
         return [
-            'project'         => $project,
-            'merge_requests'  => $mergeRequests,
-            'project_commits' => $projectCommits
+            'project' => $project,
+            'merge_requests' => $mergeRequests,
+            'project_commits' => $projectCommits,
+            'news_stream_items' => $newsStreamItems
         ];
     }
 
@@ -64,9 +69,9 @@ class ProjectController extends Controller
     {
         /** @var CommitRepository */
         $repository = $this->get('simpspector.app.repository.commit');
-        $commit     = $repository->findLastInMaster($project);
+        $commit = $repository->findLastInMaster($project);
 
-        if (! $commit) {
+        if (!$commit) {
             throw new NotFoundHttpException();
         }
 
