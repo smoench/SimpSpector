@@ -70,6 +70,31 @@ class WorkspaceManager
     }
 
     /**
+     * @param MergeRequest $mergeRequest
+     * @param string $path path to git checkout
+     *
+     * @return string hash of base commit from target branch
+     */
+    public function getBaseCommit(MergeRequest $mergeRequest, $path)
+    {
+        $processBuilder = new ProcessBuilder([
+            'git',
+            'merge-base',
+            $mergeRequest->getTargetBranch,
+            $mergeRequest->getSourceBranch,
+        ]);
+
+        $processBuilder->setWorkingDirectory(dirname($path));
+        $processBuilder->run();
+
+        if (! $processBuilder->isSuccessful()) {
+            return;
+        }
+
+        return trim($processBuilder->getOutput());
+    }
+
+    /**
      * @param string $path
      * @param string $url
      * @param AbstractLogger $logger

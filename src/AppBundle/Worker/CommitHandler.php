@@ -81,6 +81,8 @@ class CommitHandler
 
             $path = $this->workspaceManager->create($commit, $logger);
 
+            $this->updateMergeRequestBaseCommits($commit, $path);
+
             $result = $this->execute($commit, $path, $logger);
 
             $this->workspaceManager->cleanUp($commit);
@@ -122,5 +124,19 @@ class CommitHandler
         $commit->setResult(null);
         $commit->setStatus(Commit::STATUS_RUN);
         $this->em->flush($commit);
+    }
+
+    private function updateMergeRequestBaseCommits(Commit $commit, $workspacePath)
+    {
+        foreach ($commit->getMergeRequests() as $mergeRequest) {
+            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $workspacePath);
+
+            if (empty($baseCommit)) {
+                continue;
+            }
+
+            $mergeRequest->setBaseCommit($baseCommit);
+            $this->em->flush($mergeRequest);
+        }
     }
 }
