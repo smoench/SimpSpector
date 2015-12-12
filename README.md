@@ -20,7 +20,7 @@ It's very easy (now) :-)
 ```bash
 composer install
 bin/console do:da:cr
-bin/console do:mi:mi --no-interactive
+bin/console do:mi:mi --no-interaction
 npm install
 ```
 
