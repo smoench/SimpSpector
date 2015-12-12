@@ -26,5 +26,12 @@
             <argument>AppBundle\Entity\Project</argument>
         </service>
 
+        <service id="simpspector.app.repository.news_stream_item"
+                 class="AppBundle\Repository\NewsStreamItemRepository"
+                 factory-service="doctrine"
+                 factory-method="getRepository">
+            <argument>AppBundle\Entity\NewsStreamItem</argument>
+        </service>
+
     </services>
 </container>
