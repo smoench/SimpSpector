@@ -61,11 +61,20 @@
             </div>
 
             <div class="ui segment attached">
-                <a href="{{ path('project_master', {id: project.id}) }}">
+                <a href="{{ project.repositoryUrl }}" target="_blank">
                     <i class="sitemap icon"></i>
-                    See master commits
+                    {{ project.repositoryUrl }}
                 </a>
             </div>
+
+            {% if project.webUrl %}
+                <div class="ui segment attached">
+                    <a href="{{ project.webUrl }}" target="_blank">
+                        <i class="sitemap icon"></i>
+                        {{ project.webUrl }}
+                    </a>
+                </div>
+            {% endif %}
 
             <div class="ui header attached top small">
                 <i class="icon text file"></i>
@@ -73,22 +82,22 @@
             </div>
 
             {% for commit in project.commits|slice(0,10) %}
-            <div class="ui segment attached">
-                <a href="{{ path('project_master', {id: project.id}) }}">
-                    {{ commit.revision|slice(0,8) }}
-                    <div style="float: right">
-                    {% if commit.status == constant('STATUS_NEW', commit) %}
-                        <span class="ui label right">New</span>
-                    {% elseif commit.status == constant('STATUS_RUN', commit) %}
-                        <span class="ui yellow label right">Proccess</span>
-                    {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
-                        <span class="ui green label right">Success</span>
-                    {% else %}
-                        <span class="ui red label right">Error</span>
-                    {% endif %}
-                    </div>
-                </a>
-            </div>
+                <div class="ui segment attached">
+                    <a href="{{ path('branch_show', {id: project.id}) }}">
+                        {{ commit.revision|slice(0,8) }}
+                        <div style="float: right">
+                            {% if commit.status == constant('STATUS_NEW', commit) %}
+                                <span class="ui label right">New</span>
+                            {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                                <span class="ui yellow label right">Proccess</span>
+                            {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                                <span class="ui green label right">Success</span>
+                            {% else %}
+                                <span class="ui red label right">Error</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
             {% endfor %}
         </div>
     </div>
