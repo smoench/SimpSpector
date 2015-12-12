@@ -27,10 +27,8 @@
     margin-top: 3px;
 }
 
-.commit-message-ellipsis {
-    width: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    outline: 1px solid red;
+.commit-gravatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
 }

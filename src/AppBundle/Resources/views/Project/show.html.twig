@@ -84,7 +84,7 @@
             {% for commit in project_commits|slice(0,10) %}
                 <div class="ui segment attached">
                     <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0,8) }}</a>
-                    <div class="commit-message-ellipsis">{{ commit.commitMessage }}</div>
+                    <span class="ellipsis" style="width:3em">{{ commit.commitMessage }}</span>
                     by {{ commit.authorName|default("unknown") }}
                     {% if commit.authorEmail %}&lt;{{ commit.authorEmail }}&gt;{% endif %}
                     <div style="float: right">
