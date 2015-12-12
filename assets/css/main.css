@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.vertical-space {
+    margin-top: 10px !important;
+}
+
 .steps .step {
     max-width: 200px;
 }
@@ -25,8 +29,8 @@
 
 .logo-breadcrumb {
     margin-top: 3px;
+    margin-right: 10px;
 }
-
 .commit-gravatar {
     width: 16px;
     height: 16px;
