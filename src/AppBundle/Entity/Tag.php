@@ -34,7 +34,7 @@ class Tag implements TimestampableInterface
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="mergeRequests", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="tags", cascade={"all"})
      */
     private $project;
 

@@ -30,7 +30,8 @@ class CommitRepository extends EntityRepository
     public function findLastForMergeRequest(MergeRequest $mergeRequest)
     {
         $query = $this->createQueryBuilder('c')
-            ->where('c.mergeRequest = :merge_request')
+            ->join('c.mergeRequests', 'm')
+            ->where('m.id = merge_request')
             ->orderBy('c.id', 'DESC')
             ->getQuery();
 
@@ -47,7 +48,7 @@ class CommitRepository extends EntityRepository
     public function findLastInMaster(Project $project)
     {
         $query = $this->createQueryBuilder('c')
-            ->where('c.mergeRequest IS NULL')
+            ->where('c.mergeRequests IS EMPTY')
             ->andWhere('c.project = :project')
             ->orderBy('c.id', 'DESC')
             ->getQuery();
@@ -67,7 +68,7 @@ class CommitRepository extends EntityRepository
     public function findLastSuccessInMaster(Project $project)
     {
         $query = $this->createQueryBuilder('c')
-            ->where('c.mergeRequest IS NULL')
+            ->where('c.mergeRequests IS EMPTY')
             ->andWhere('c.project = :project')
             ->andWhere('c.status = :status')
             ->orderBy('c.id', 'DESC')
@@ -93,7 +94,7 @@ class CommitRepository extends EntityRepository
     public function findByMaster(Project $project, $limit = null)
     {
         $query = $this->createQueryBuilder('c')
-            ->where('c.mergeRequest IS NULL')
+            ->where('c.mergeRequests IS EMPTY')
             ->andWhere('c.project = :project')
             ->orderBy('c.id', 'DESC')
             ->getQuery();

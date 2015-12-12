@@ -37,7 +37,7 @@ class NewsStreamItem implements TimestampableInterface
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="newsStreamItems")
      */
     private $project;
 
