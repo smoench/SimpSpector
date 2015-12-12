@@ -62,6 +62,13 @@ class MergeRequest implements TimestampableInterface
      *
      * @ORM\Column(type="string")
      */
+    private $baseCommit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $targetBranch;
 
     /**
@@ -183,6 +190,22 @@ class MergeRequest implements TimestampableInterface
     public function setTargetBranch($targetBranch)
     {
         $this->targetBranch = $targetBranch;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseCommit()
+    {
+        return $this->baseCommit;
+    }
+
+    /**
+     * @param string $baseCommit
+     */
+    public function setBaseCommit($baseCommit)
+    {
+        $this->baseCommit = $baseCommit;
     }
 
     /**
