@@ -54,28 +54,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Framework\Route("/{id}/master", name="project_master")
-     * @Framework\Template()
-     *
-     * @param Project $project
-     *
-     * @return array
-     */
-    public function masterAction(Project $project)
-    {
-        $commitRepository = $this->get('simpspector.app.repository.commit');
-        $commits          = $commitRepository->findByMaster($project, 10);
-
-        $markdown = $this->get('simpspector.app.badge.markdown_generator')->generateForProject($project);
-
-        return [
-            'project'  => $project,
-            'commits'  => $commits,
-            'markdown' => $markdown
-        ];
-    }
-
-    /**
      * @Framework\Route("/{id}/last-commit", name="project_lastcommit")
      *
      * @param Project $project
