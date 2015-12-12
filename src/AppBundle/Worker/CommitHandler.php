@@ -81,7 +81,7 @@ class CommitHandler
 
             $path = $this->workspaceManager->create($commit, $logger);
 
-            $this->updateMergeRequestBaseCommits($commit, $path);
+            $this->updateMergeRequestBaseCommits($commit, $path, $logger);
 
             $result = $this->execute($commit, $path, $logger);
 
@@ -90,6 +90,7 @@ class CommitHandler
             $event = new CommitResultEvent($commit, $logger, $result);
             $this->eventDispatcher->dispatch(Events::RESULT, $event);
         } catch (\Exception $e) {
+            dump($e->getMessage());
             $event = new CommitExceptionEvent($commit, $logger, $e);
             $this->eventDispatcher->dispatch(Events::EXCEPTION, $event);
 
@@ -126,10 +127,10 @@ class CommitHandler
         $this->em->flush($commit);
     }
 
-    private function updateMergeRequestBaseCommits(Commit $commit, $workspacePath)
+    private function updateMergeRequestBaseCommits(Commit $commit, $workspacePath, AbstractLogger $logger)
     {
         foreach ($commit->getMergeRequests() as $mergeRequest) {
-            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $workspacePath);
+            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $workspacePath, $logger);
 
             if (empty($baseCommit)) {
                 continue;

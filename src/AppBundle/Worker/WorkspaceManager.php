@@ -3,6 +3,7 @@
 namespace AppBundle\Worker;
 
 use AppBundle\Entity\Commit;
+use AppBundle\Entity\MergeRequest;
 use SimpSpector\Analyser\Logger\AbstractLogger;
 use SimpSpector\Analyser\Logger\NullLogger;
 use SimpSpector\Analyser\Process\ProcessBuilder;
@@ -75,23 +76,23 @@ class WorkspaceManager
      *
      * @return string hash of base commit from target branch
      */
-    public function getBaseCommit(MergeRequest $mergeRequest, $path)
+    public function getBaseCommit(MergeRequest $mergeRequest, $path, AbstractLogger $logger)
     {
         $processBuilder = new ProcessBuilder([
             'git',
             'merge-base',
-            $mergeRequest->getTargetBranch,
-            $mergeRequest->getSourceBranch,
+            $mergeRequest->getTargetBranch(),
+            $mergeRequest->getSourceBranch(),
         ]);
 
         $processBuilder->setWorkingDirectory(dirname($path));
-        $processBuilder->run();
+        $processBuilder->run($logger);
 
-        if (! $processBuilder->isSuccessful()) {
+        if (! $processBuilder->getProcess()->isSuccessful()) {
             return;
         }
 
-        return trim($processBuilder->getOutput());
+        return trim($processBuilder->getProcess()->getOutput());
     }
 
     /**
