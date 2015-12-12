@@ -9,7 +9,7 @@
 }
 
 .vertical-space {
-    margin-top: 10px !important;
+    margin-top: 1em !important;
 }
 
 .steps .step {
@@ -29,9 +29,8 @@
 
 .logo-breadcrumb {
     margin-top: 3px;
-    margin-right: 10px;
-}
-.commit-gravatar {
+    margin-right: 1em;
+}.commit-gravatar {
     width: 16px;
     height: 16px;
     border-radius: 50%;
