@@ -10,7 +10,7 @@ Requirements
 ------------
 
 * composer
-* npm
+* node (~0.12)
 
 Installation
 ------------
@@ -18,7 +18,10 @@ Installation
 It's very easy (now) :-)
 
 ```bash
-bin/update
+composer install
+bin/console do:da:cr
+bin/console do:mi:mi --no-interactive
+npm install
 ```
 
 Development
