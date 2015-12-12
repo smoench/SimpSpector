@@ -83,20 +83,21 @@
 
             {% for commit in project_commits|slice(0,10) %}
                 <div class="ui segment attached">
-                    <a href="{{ path('commit_show', {id: commit.id}) }}">
-                        {{ commit.revision|slice(0,8) }}
-                        <div style="float: right">
-                            {% if commit.status == constant('STATUS_NEW', commit) %}
-                                <span class="ui label right">New</span>
-                            {% elseif commit.status == constant('STATUS_RUN', commit) %}
-                                <span class="ui yellow label right">Proccess</span>
-                            {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
-                                <span class="ui green label right">Success</span>
-                            {% else %}
-                                <span class="ui red label right">Error</span>
-                            {% endif %}
-                        </div>
-                    </a>
+                    <a href="{{ path('commit_show', {id: commit.id}) }}">{{ commit.revision|slice(0,8) }}</a>
+                    <div class="commit-message-ellipsis">{{ commit.commitMessage }}</div>
+                    by {{ commit.authorName|default("unknown") }}
+                    {% if commit.authorEmail %}&lt;{{ commit.authorEmail }}&gt;{% endif %}
+                    <div style="float: right">
+                        {% if commit.status == constant('STATUS_NEW', commit) %}
+                            <span class="ui label right">New</span>
+                        {% elseif commit.status == constant('STATUS_RUN', commit) %}
+                            <span class="ui yellow label right">Proccess</span>
+                        {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+                            <span class="ui green label right">Success</span>
+                        {% else %}
+                            <span class="ui red label right">Error</span>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
