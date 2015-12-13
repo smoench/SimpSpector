@@ -88,6 +88,27 @@ class Commit implements TimestampableInterface
     private $result;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $commitMessage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $authorName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $authorEmail;
+
+    /**
      *
      */
     public function __construct()
@@ -247,6 +268,54 @@ class Commit implements TimestampableInterface
     public function hasMetric($code)
     {
         return $this->result->hasMetric($code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommitMessage()
+    {
+        return $this->commitMessage;
+    }
+
+    /**
+     * @param string $commitMessage
+     */
+    public function setCommitMessage($commitMessage)
+    {
+        $this->commitMessage = $commitMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorEmail()
+    {
+        return $this->authorEmail;
+    }
+
+    /**
+     * @param string $authorEmail
+     */
+    public function setAuthorEmail($authorEmail)
+    {
+        $this->authorEmail = $authorEmail;
     }
 
     /**

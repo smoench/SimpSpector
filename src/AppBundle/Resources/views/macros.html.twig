@@ -62,3 +62,15 @@
         </div>
     </a>
 {% endmacro %}
+
+{% macro commit_status_button(commit) %}
+    {% if commit.status == constant('STATUS_NEW', commit) %}
+        <span class="ui label right">New</span>
+    {% elseif commit.status == constant('STATUS_RUN', commit) %}
+        <span class="ui yellow label right">Running...</span>
+    {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
+        <span class="ui green label right">Success</span>
+    {% else %}
+        <span class="ui red label right">Error</span>
+    {% endif %}
+{% endmacro %}

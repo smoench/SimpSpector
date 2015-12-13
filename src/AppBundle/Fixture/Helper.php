@@ -4,6 +4,7 @@ namespace AppBundle\Fixture;
 
 use DavidBadura\GitWebhooks\Struct\Commit;
 use DavidBadura\GitWebhooks\Struct\Repository;
+use DavidBadura\GitWebhooks\Struct\User;
 
 class Helper
 {
@@ -66,8 +67,12 @@ class Helper
         $commit = new Commit();
 
         $commit->id      = $commitHash;
-        $commit->message = 'Test-Message for Commit ' . $commitHash;
+        $commit->message = 'test message ' . rand(1000, 9999);
         $commit->date    = new \DateTime('-' . rand(2, 6) . 'days'); // todo correct timestamp
+
+        $commit->author        = new User();
+        $commit->author->email = 'fabien@symfony.com';
+        $commit->author->name  = 'fabpot';
 
         return $commit;
     }

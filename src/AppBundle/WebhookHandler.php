@@ -249,6 +249,11 @@ class WebhookHandler
         $commit->setGitRepository($repository->url);
         $commit->setProject($project);
         $commit->setRevision($struct->id);
+        if ($struct->author) {
+            $commit->setAuthorName($struct->author->name);
+            $commit->setAuthorEmail($struct->author->email);
+        }
+        $commit->setCommitMessage($struct->message);
 
         $this->em->persist($commit);
 
