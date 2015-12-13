@@ -51,17 +51,7 @@
                     </a>
                 </div>
             </td>
-            <td class="bottom aligned">
-                {% if commit.status == constant('STATUS_NEW', commit) %}
-                    <div class="ui label right">New</div>
-                {% elseif commit.status == constant('STATUS_RUN', commit) %}
-                    <div class="ui yellow label right">Proccess</div>
-                {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
-                    <div class="ui green label right">Success</div>
-                {% else %}
-                    <div class="ui red label right">Error</div>
-                {% endif %}
-            </td>
+            <td class="bottom aligned">{{ _.commit_status_button(commit) }}</td>
         </tr>
     {% endfor %}
     </tbody>
