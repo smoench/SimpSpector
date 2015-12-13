@@ -3,10 +3,14 @@
     "type": "project",
     "description": "SimpSpector",
     "autoload": {
-        "psr-0": {"": "src/"}
+        "psr-4": {"": "src/"},
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "autoload-dev": {
-        "psr-0": {"": "tests/"}
+        "psr-4": {"": "tests/"}
     },
     "require": {
         "php": "~5.4",
@@ -17,8 +21,8 @@
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~3.0",
-        "sensio/framework-extra-bundle": "~3.0",
+        "sensio/distribution-bundle": "~5.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "zeichen32/gitlabapibundle": "~2.0",
