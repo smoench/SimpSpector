@@ -30,7 +30,9 @@
 .logo-breadcrumb {
     margin-top: 3px;
     margin-right: 1em;
-}.commit-gravatar {
+}
+
+.commit-gravatar {
     width: 16px;
     height: 16px;
     border-radius: 50%;
