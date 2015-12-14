@@ -8,8 +8,8 @@
     width: 100%;
 }
 
-.vertical-space {
-    margin-top: 1em !important;
+body {
+    margin-top: 1em;
 }
 
 .steps .step {
