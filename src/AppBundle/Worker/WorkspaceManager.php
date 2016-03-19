@@ -45,7 +45,7 @@ class WorkspaceManager
     {
         $logger = $logger ?: new NullLogger();
 
-        //$this->cleanUp($commit);
+        $this->cleanUp($commit);
 
         $path     = $this->path($commit);
         $url      = $commit->getGitRepository();
