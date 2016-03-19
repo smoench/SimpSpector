@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DavidBadura/git-webhooks.git",
-                "reference": "3a12a83e489835ee806a4f5079694e30ebb778f3"
+                "reference": "abbb743d7528ddeb38c43ef0fc46ad8fde1e071f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DavidBadura/git-webhooks/zipball/3a12a83e489835ee806a4f5079694e30ebb778f3",
-                "reference": "3a12a83e489835ee806a4f5079694e30ebb778f3",
+                "url": "https://api.github.com/repos/DavidBadura/git-webhooks/zipball/abbb743d7528ddeb38c43ef0fc46ad8fde1e071f",
+                "reference": "abbb743d7528ddeb38c43ef0fc46ad8fde1e071f",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 }
             ],
             "description": "normalise webhook events for github, gitlab and bitbucket",
-            "time": "2016-03-19 14:13:54"
+            "time": "2016-03-19 14:44:44"
         },
         {
             "name": "davidbadura/markdown-builder",
