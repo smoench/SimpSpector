@@ -14,11 +14,6 @@ use GitElephant\Repository as GitRepository;
 
 class EventFactory
 {
-
-    public function __construct()
-    {
-    }
-
     /**
      * @param string $commitHash
      * @param string $gitPath
