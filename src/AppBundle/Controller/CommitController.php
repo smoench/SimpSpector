@@ -70,8 +70,8 @@ class CommitController extends Controller
      * @Framework\Route("/{from}/diff/{to}", name="commit_diff")
      * @Framework\Template()
      *
-     * @param Commit $from
-     * @param Commit $to
+     * @param $from
+     * @param $to
      *
      * @return array
      */

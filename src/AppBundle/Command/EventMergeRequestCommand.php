@@ -17,8 +17,8 @@ class EventMergeRequestCommand extends AbstractCommand
             ->setName('simpspector:event:merge-request')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
             ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '')
-            ->addOption('from-branch', null, InputOption::VALUE_OPTIONAL, '', '')
-            ->addOption('to-branch', null, InputOption::VALUE_OPTIONAL, '', '')
+            ->addOption('from-branch', null, InputOption::VALUE_OPTIONAL, '', 'MR source branch, e.g. feature branch')
+            ->addOption('to-branch', null, InputOption::VALUE_OPTIONAL, 'target of the MR, e.g. master/stable/...', '')
         ;
     }
 
