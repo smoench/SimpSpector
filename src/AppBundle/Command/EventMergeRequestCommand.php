@@ -16,7 +16,10 @@ class EventMergeRequestCommand extends AbstractCommand
         $this
             ->setName('simpspector:event:merge-request')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
-            ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '');
+            ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '')
+            ->addOption('from-branch', null, InputOption::VALUE_OPTIONAL, '', 'MR source branch, e.g. feature branch')
+            ->addOption('to-branch', null, InputOption::VALUE_OPTIONAL, 'target of the MR, e.g. master/stable/...', '')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -27,15 +30,17 @@ class EventMergeRequestCommand extends AbstractCommand
 
         $url        = $this->getOption('url', 'repository url');
         $commitHash = $this->getOption('commit', 'commit hash of last commit');
+        $fromBranch = $this->getOption('from-branch', '');
+        $toBranch   = $this->getOption('to-branch', '');
 
         $event = new MergeRequestEvent();
 
         $event->id               = rand(10000, 99999);
         $event->title            = 'Test Pull-Request ' . rand(10000, 99999);
         $event->repository       = $helper->generateRepositoryByUrl($url);
-        $event->targetBranch     = 'master';
+        $event->targetBranch     = $toBranch;
         $event->sourceRepository = $helper->generateRepositoryByUrl($url);
-        $event->sourceBranch     = 'test/pull-request';
+        $event->sourceBranch     = $fromBranch;
         $event->state            = MergeRequestEvent::STATE_OPENED;
         $event->createdAt        = new \DateTime();
         $event->updatedAt        = new \DateTime();

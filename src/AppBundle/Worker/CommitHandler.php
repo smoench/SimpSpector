@@ -8,8 +8,10 @@ use AppBundle\Entity\Result;
 use AppBundle\Event\CommitEvent;
 use AppBundle\Event\CommitExceptionEvent;
 use AppBundle\Event\CommitResultEvent;
+use AppBundle\WebhookHandler;
 use AppBundle\Events;
 use AppBundle\Logger\LoggerFactory;
+use DavidBadura\GitWebhooks\Event\PushEvent;
 use SimpSpector\Analyser\Analyser;
 use SimpSpector\Analyser\Logger\AbstractLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -50,6 +52,8 @@ class CommitHandler
      * @param WorkspaceManager $workspaceManager
      * @param Analyser $analyser
      * @param LoggerFactory $loggerFactory
+     * @param EventFactory $eventFactory
+     * @param WebhookHandler $webhookHandler
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
@@ -57,6 +61,8 @@ class CommitHandler
         WorkspaceManager $workspaceManager,
         Analyser $analyser,
         LoggerFactory $loggerFactory,
+        EventFactory $eventFactory,
+        WebhookHandler $webhookHandler,
         EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->em               = $em;
@@ -64,6 +70,8 @@ class CommitHandler
         $this->analyser         = $analyser;
         $this->loggerFactory    = $loggerFactory;
         $this->eventDispatcher  = ($eventDispatcher) ?: new EventDispatcher();
+        $this->eventFactory     = $eventFactory;
+        $this->webhookHandler   = $webhookHandler;
     }
 
     /**
@@ -80,6 +88,8 @@ class CommitHandler
             $this->eventDispatcher->dispatch(Events::BEGIN, $event);
 
             $path = $this->workspaceManager->create($commit, $logger);
+
+            $this->updateMergeRequestBaseCommits($commit, $path, $logger);
 
             $result = $this->execute($commit, $path, $logger);
 
@@ -122,5 +132,33 @@ class CommitHandler
         $commit->setResult(null);
         $commit->setStatus(Commit::STATUS_RUN);
         $this->em->flush($commit);
+    }
+
+    private function updateMergeRequestBaseCommits(Commit $commit, $workspacePath, AbstractLogger $logger)
+    {
+        foreach ($commit->getMergeRequests() as $mergeRequest) {
+            $baseCommit = $this->workspaceManager->getBaseCommit($mergeRequest, $commit, $workspacePath, $logger);
+
+            if (empty($baseCommit)) {
+                continue;
+            }
+
+            $mergeRequest->setBaseCommit($baseCommit);
+            $this->em->flush($mergeRequest);
+
+            $commitRepository = $this->em->getRepository(Commit::class);
+            if ($commitRepository->findOneByRevision($baseCommit)) {
+                continue;
+            }
+
+            $event = $this->eventFactory->createPushBranchEvent(
+                $baseCommit,
+                $this->workspaceManager->path($commit),
+                $commit->getProject()
+            );
+
+            dump($event);
+            $this->webhookHandler->handle($event);
+        }
     }
 }

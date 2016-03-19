@@ -25,6 +25,18 @@ class MergeRequestController extends Controller
      */
     public function showAction(MergeRequest $mergeRequest)
     {
+        if ($mergeRequest->getBaseCommit()) {
+            return $this->redirect(
+                $this->generateUrl(
+                    "commit_diff",
+                    [
+                        "from" => $mergeRequest->getBaseCommit(),
+                        "to" => $mergeRequest->getLastCommit()->getRevision()
+                    ]
+                )
+            );
+        }
+
         return ['merge_request' => $mergeRequest, 'commits' => $mergeRequest->getCommits()];
     }
 

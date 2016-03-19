@@ -22,7 +22,9 @@ class EventPushBranchCommand extends AbstractCommand
         $this
             ->setName('simpspector:event:push-branch')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
-            ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '');
+            ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '')
+            ->addOption('name', null, InputOption::VALUE_OPTIONAL, 'branch name', 'master')
+        ;
     }
 
     /**
@@ -37,12 +39,13 @@ class EventPushBranchCommand extends AbstractCommand
 
         $helper = new Fixture\Helper();
 
-        $url        = $this->getOption('url', 'repository url');
-        $commitHash = $this->getOption('commit', 'commit hash of last commit');
+        $url        = $this->getOption('url', '');
+        $commitHash = $this->getOption('commit', '');
+        $branchName = $this->getOption('name', '');
 
         $event             = new PushEvent();
         $event->type       = PushEvent::TYPE_BRANCH;
-        $event->branchName = 'master';
+        $event->branchName = $branchName;
         $event->repository = $helper->generateRepositoryByUrl($url);
 
         $event->commits = [$helper->generateCommit($commitHash)];

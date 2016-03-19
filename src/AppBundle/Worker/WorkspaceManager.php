@@ -3,6 +3,7 @@
 namespace AppBundle\Worker;
 
 use AppBundle\Entity\Commit;
+use AppBundle\Entity\MergeRequest;
 use SimpSpector\Analyser\Logger\AbstractLogger;
 use SimpSpector\Analyser\Logger\NullLogger;
 use SimpSpector\Analyser\Process\ProcessBuilder;
@@ -67,6 +68,41 @@ class WorkspaceManager
         if ($fs->exists($path)) {
             $fs->remove($path);
         }
+    }
+
+    /**
+     * @param MergeRequest $mergeRequest
+     * @param string $path path to git checkout
+     *
+     * @return string hash of base commit from target branch
+     */
+    public function getBaseCommit(MergeRequest $mergeRequest, Commit $commit, $path, AbstractLogger $logger)
+    {
+        if ($mergeRequest->getTargetBranch() === $mergeRequest->getSourceBranch()) {
+            return null;
+        }
+
+        $processBuilder = new \Symfony\Component\Process\ProcessBuilder([
+            'git',
+            'merge-base',
+            'origin/' . $mergeRequest->getTargetBranch(),
+            'origin/' . $mergeRequest->getSourceBranch(),
+        ]);
+
+        $processBuilder->setWorkingDirectory($path);
+        $process = $processBuilder->getProcess();
+        $process->run(
+            function ($type, $buffer) use ($logger) {
+                $logger->write($buffer);
+            }
+        );
+
+        if (! $process->isSuccessful()) {
+            $logger->write("process did not finish sucessfully");
+            return null;
+        }
+
+        return trim($process->getOutput());
     }
 
     /**

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-php bin/console simpspector:event:push-branch --url https://github.com/silexphp/Silex.git --commit b31d7dbe3a52618f03a4ea40858330835171277c
-php bin/console simpspector:event:merge-request --url https://github.com/silexphp/Silex.git --commit 86dbb455df6d50504a656fd369890b7493823c28
-php bin/console simpspector:event:push-tag --url https://github.com/silexphp/Silex.git --commit b31d7dbe3a52618f03a4ea40858330835171277c
-php bin/console simpspector:event:push-tag --url https://github.com/silexphp/Silex.git --commit b31d7dbe3a52618f03a4ea40858330835171277c
-php bin/console simpspector:event:push-tag --url https://github.com/silexphp/Silex.git --commit b31d7dbe3a52618f03a4ea40858330835171277c
+php bin/console simpspector:event:push-branch --url https://github.com/mablae/Silex.git --commit ad5600dbeb4ca82e329c7b051d23a06033ea937b --name doc-mention-controller
+php bin/console simpspector:event:merge-request --url https://github.com/mablae/Silex.git --commit 53878246bbf61c1af0b7d4a6e6fb12f4ad4bf428 --from-branch doc-mention-controller --to-branch master
+
+
 php bin/console simpspector:job:run
+php bin/console simpspector:job:run # currently needed, to run base commit job
