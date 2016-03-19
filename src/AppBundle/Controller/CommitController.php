@@ -75,8 +75,18 @@ class CommitController extends Controller
      *
      * @return array
      */
-    public function diffAction(Commit $from, Commit $to)
+    public function diffAction($from, $to)
     {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $repo = $em->getRepository('AppBundle:Commit');
+
+        $from = $repo->findOneByRevision($from);
+        $to = $repo->findOneByRevision($to);
+
+        if (! $from || ! $to) {
+            $this->createNotFoundException('Commit not found');
+        }
+
         $calculator = new Calculator();
         $diff       = $calculator->diff($from->getResult(), $to->getResult());
 

@@ -31,7 +31,8 @@
         "davidbadura/markdown-builder": "~1.0",
         "gremo/ciconia-bundle": "~1.0.1",
         "ebidtech/compress": "^1.1",
-        "davidbadura/git-webhooks": "dev-master"
+        "davidbadura/git-webhooks": "dev-master",
+        "cypresslab/gitelephant": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

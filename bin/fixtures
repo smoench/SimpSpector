@@ -5,3 +5,4 @@ php bin/console simpspector:event:merge-request --url https://github.com/mablae/
 
 
 php bin/console simpspector:job:run
+php bin/console simpspector:job:run

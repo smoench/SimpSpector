@@ -30,11 +30,16 @@
             <argument type="service" id="simpspector.app.logger.file_locator"/>
         </service>
 
+        <service id="simpspector.app.worker.event_factory" class="AppBundle\Worker\EventFactory">
+        </service>
+
         <service id="simpspector.app.worker.commit_handler" class="AppBundle\Worker\CommitHandler">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument type="service" id="simpspector.app.worker.workspace_manager"/>
             <argument type="service" id="simpspector.analyser"/>
             <argument type="service" id="simpspector.app.logger.factory"/>
+            <argument type="service" id="simpspector.app.worker.event_factory"/>
+            <argument type="service" id="simpspector.app.webhook.handler"/>
             <argument type="service" id="simpspector.analyser.event_dispatcher"/>
         </service>
 
