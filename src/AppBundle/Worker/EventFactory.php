@@ -20,6 +20,10 @@ class EventFactory
     }
 
     /**
+     * @param string $commitHash
+     * @param string $gitPath
+     * @param Project $project
+     *
      * @return PushEvent
      */
     public function createPushBranchEvent($commitHash, $gitPath, Project $project)
