@@ -74,6 +74,12 @@ class WebhookHandler
         if ($event instanceof MergeRequestEvent) {
             $this->handleMergeEvent($event);
         } elseif ($event instanceof PushEvent) {
+
+            // filter out zero-commits
+            if ($event->after === '0000000000000000000000000000000000000000') {
+                return;
+            }
+
             if ($event->type == PushEvent::TYPE_BRANCH) {
                 $this->handlePushEventTypeBranch($event);
             } elseif ($event->type == PushEvent::TYPE_TAG) {
