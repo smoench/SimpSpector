@@ -78,6 +78,10 @@ class WorkspaceManager
      */
     public function getBaseCommit(MergeRequest $mergeRequest, Commit $commit, $path, AbstractLogger $logger)
     {
+        if ($mergeRequest->getTargetBranch() === $mergeRequest->getSourceBranch()) {
+            return null;
+        }
+
         $processBuilder = new \Symfony\Component\Process\ProcessBuilder([
             'git',
             'merge-base',
@@ -85,17 +89,17 @@ class WorkspaceManager
             'origin/' . $mergeRequest->getSourceBranch(),
         ]);
 
-        $processBuilder->setWorkingDirectory(dirname($path));
+        $processBuilder->setWorkingDirectory($path);
         $process = $processBuilder->getProcess();
         $process->run(
             function ($type, $buffer) use ($logger) {
                 $logger->write($buffer);
             }
         );
-        //$process->run();
 
         if (! $process->isSuccessful()) {
-            return;
+            $logger->write("process did not finish sucessfully");
+            return null;
         }
 
         return trim($process->getOutput());
