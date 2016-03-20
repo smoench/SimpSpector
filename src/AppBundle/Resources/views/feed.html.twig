@@ -31,7 +31,7 @@
                 <div class="ui right floated segment">
                     {{ _.commit_status_button(commit) }}
                     {% if commit.issues|length > 0 %}
-                    {{ _.levels(commit) }}<br/>
+                    {{ _.levels(commit) }}
                     {% endif %}
                 </div>
                 <div class="ellipsis">"{{ commit.commitMessage }}"</div>
