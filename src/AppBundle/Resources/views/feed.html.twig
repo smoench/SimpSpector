@@ -1,14 +1,17 @@
 {% import 'AppBundle::macros.html.twig' as _ %}
 
 <table class="ui very basic collapsing celled table">
-    <tbody>
+    {% set last_project = '' %}
     {% for item in items %}
         {% set commit = item.commit %}
         <tr>
-            <td class="top aligned">
+            <td width="20%" class="top aligned">
+                {% if last_project != item.project.name %}
+                {% set last_project = item.project.name %}
                 <div class="ui ribbon label">
                     <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.name }}</a>
                 </div>
+                {% endif %}
                 <div>
                     {% if item.type == 'branch' %}
                         <i class="fork icon"></i>
@@ -25,33 +28,25 @@
                 </div>
             </td>
             <td>
-                <div>
-                    <img class="commit-gravatar" src="{{ gravatar(commit.authorEmail, 16) }}"
-                         alt="{{ commit.authorName }}">
-                    {{ commit.authorName }}
+                <div class="ui right floated segment">
+                    {{ _.commit_status_button(commit) }}
+                    {% if commit.issues|length > 0 %}
+                    {{ _.levels(commit) }}
+                    {% endif %}
                 </div>
-                <div>{{ commit.commitMessage }}</div>
-            </td>
-            <td>
-                {% if commit.issues|length > 0 %}
-                    {{ _.levels(commit) }}<br/>
-
-                    <i class="plug icon"></i>
-                    {% set groups = group_issues(commit.issues) %}
-                    {% for gadget,issues in groups.gadget %}
-                        {{ gadget }}
-                    {% endfor %}
-                {% endif %}
-            </td>
-            <td>
-                <div><i class="calendar icon"></i> {{ item.createdAt|date('H:i Y-m-d') }}</div>
+                <div class="ellipsis">"{{ commit.commitMessage }}"</div>
                 <div>
                     <a href="{{ path('commit_show', {id: commit.id}) }}">
                         <i class="github icon"></i>&nbsp;{{ commit.revision|slice(0, 8) }}
                     </a>
+                    <i class="calendar icon"></i> {{ item.createdAt|date('H:i Y-m-d') }}
+                    <img class="commit-gravatar" src="{{ gravatar(commit.authorEmail, 16) }}"
+                         alt="{{ commit.authorName }}">
+                    {{ commit.authorName }}
+                </div>
+                <div>
                 </div>
             </td>
-            <td class="bottom aligned">{{ _.commit_status_button(commit) }}</td>
         </tr>
     {% endfor %}
     </tbody>
