@@ -51,9 +51,9 @@ class WebhookHandler
      */
     public function __construct(EntityManager $em, EventDispatcherInterface $dispatcher, LoggerInterface $logger = null)
     {
-        $this->em         = $em;
+        $this->em = $em;
         $this->dispatcher = $dispatcher ?: new EventDispatcher();
-        $this->logger     = $logger ?: new NullLogger();
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -104,13 +104,13 @@ class WebhookHandler
         );
 
         $project = $this->project($event->repository);
-        $commit  = $this->commit($project, $event->sourceRepository, $event->lastCommit);
+        $commit = $this->commit($project, $event->sourceRepository, $event->lastCommit);
 
         $mergeRequest = $this
             ->getMergeRequestRepository()
             ->findMergeRequestByRemote($event->repository->id, $event->id);
 
-        if (! $mergeRequest) {
+        if (!$mergeRequest) {
             $this->logger->info('merge request not found. Creating...');
 
             $mergeRequest = new MergeRequest();
@@ -127,7 +127,7 @@ class WebhookHandler
         $mergeRequest->setSourceBranch($event->sourceBranch);
         $mergeRequest->setTargetBranch($event->targetBranch);
 
-        if (! $mergeRequest->getCommits()->contains($commit)) {
+        if (!$mergeRequest->getCommits()->contains($commit)) {
             $this->logger->info('adding commit into merge request...');
             $mergeRequest->getCommits()->add($commit);
             $commit->getMergeRequests()->add($mergeRequest);
@@ -154,13 +154,13 @@ class WebhookHandler
         $this->logger->info(sprintf('received push on branch "%s"', $event->branchName));
 
         $project = $this->project($event->repository);
-        $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
+        $commit = $this->commit($project, $event->repository, array_pop($event->commits));
 
         /** @var BranchRepository $branchRepository */
         $branchRepository = $this->em->getRepository('AppBundle:Branch');
 
         $branch = $branchRepository->findBranchByRemoteId($event->repository->id, $event->branchName);
-        if (! $branch) {
+        if (!$branch) {
             $this->logger->info('branch not found. Creating...');
             $branch = new Branch();
             $branch->setName($event->branchName);
@@ -173,7 +173,7 @@ class WebhookHandler
 
         $branch->setProject($project);
 
-        if (! $branch->getCommits()->contains($commit)) {
+        if (!$branch->getCommits()->contains($commit)) {
             $this->logger->info(sprintf('adding commit to branch "%s"...', $event->branchName));
 
             $branch->getCommits()->add($commit);
@@ -208,8 +208,9 @@ class WebhookHandler
         $projectRepository = $this->em->getRepository('AppBundle:Project');
         if ($project = $projectRepository->findByRemoteId($repository->id)) {
             $this->logger->info(sprintf('project with the remote id "%s" already exists', $repository->id));
-
-            return $project;
+        } else {
+            $project = new Project();
+            $project->setRemoteId($repository->id);
         }
 
         $this->logger->info(
@@ -220,8 +221,6 @@ class WebhookHandler
             )
         );
 
-        $project = new Project();
-        $project->setRemoteId($repository->id);
         $project->setName($repository->namespace . '/' . $repository->name);
         $project->setRepositoryUrl($repository->url);
         $project->setWebUrl($repository->homepage);
@@ -282,13 +281,14 @@ class WebhookHandler
         $this->logger->info(sprintf('received push on tag "%s"', $event->tagName));
 
         $project = $this->project($event->repository);
-        $commit  = $this->commit($project, $event->repository, array_pop($event->commits));
+        $commit = $this->commit($project, $event->repository, array_pop($event->commits));
 
         /** @var TagRepository $tagRepository */
         $tagRepository = $this->em->getRepository('AppBundle:Tag');
 
         $tag = $tagRepository->findTagByRemoteId($event->repository->id, $event->tagName);
-        if (! $tag) {
+        
+        if (!$tag) {
             $this->logger->info('tag not found. Creating...');
             $tag = new Tag();
             $tag->setName($event->tagName);
@@ -321,6 +321,7 @@ class WebhookHandler
         $newsStreamItem->setCommit($commit);
         $newsStreamItem->setProject($project);
         $newsStreamItem->setTag($tag);
+
         $this->em->persist($newsStreamItem);
         $this->em->flush();
     }
