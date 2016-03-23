@@ -1,53 +1,51 @@
 {% import 'AppBundle::macros.html.twig' as _ %}
 
-<table class="ui very basic collapsing celled table">
-    {% set last_project = '' %}
-    {% for item in items %}
-        {% set commit = item.commit %}
-        <tr>
-            <td width="20%" class="top aligned">
-                {% if last_project != item.project.name %}
-                {% set last_project = item.project.name %}
-                <div class="ui ribbon label">
-                    <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.name }}</a>
-                </div>
-                {% endif %}
-                <div>
-                    {% if item.type == 'branch' %}
-                        <i class="fork icon"></i>
-                        <a href="{{ path('branch_show', {id: item.branch.id }) }}">branch {{ item.branch.name }}</a>
-                    {% elseif item.type == 'tag' %}
-                        <i class="tag icon"></i>
-                        <a href="{{ path('commit_show', {id: commit.id}) }}">tag {{ item.tag.name }}</a>
-                    {% elseif item.type == 'merge_request' %}
-                        <i class="horizontally flipped alternate share icon"></i>
-                        <a href="{{ path('mergerequest_show', {id: item.mergeRequest.id }) }}">
-                            merge request {{ item.mergeRequest.name }}
-                        </a>
-                    {% endif %}
-                </div>
-            </td>
-            <td>
-                <div class="ui right floated segment">
-                    {{ _.commit_status_button(commit) }}
-                    {% if commit.issues|length > 0 %}
-                    {{ _.levels(commit) }}
-                    {% endif %}
-                </div>
-                <div class="ellipsis">"{{ commit.commitMessage }}"</div>
-                <div>
-                    <a href="{{ path('commit_show', {id: commit.id}) }}">
-                        <i class="github icon"></i>&nbsp;{{ commit.revision|slice(0, 8) }}
-                    </a>
-                    <i class="calendar icon"></i> {{ item.createdAt|date('H:i Y-m-d') }}
-                    <img class="commit-gravatar" src="{{ gravatar(commit.authorEmail, 16) }}"
-                         alt="{{ commit.authorName }}">
-                    {{ commit.authorName }}
-                </div>
-                <div>
-                </div>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{% set last_project = '' %}
+{% for item in items %}
+    {% set commit = item.commit %}
+    {% if last_project != item.project.name %}
+    {% set last_project = item.project.name %}
+    <div class="ui ribbon label">
+        <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.name }}</a>
+    </div>
+    {% endif %}
+    <div class="ui segment">
+        <p class="ui right floated column">
+            <i class="clock icon"></i> {{ item.createdAt|date('H:i Y-m-d') }}
+        </p>
+        <p>
+            {{ _.commit_status_button(commit) }}
+            {% if item.type == 'branch' %}
+                <i class="fork icon"></i>
+                <a href="{{ path('branch_show', {id: item.branch.id }) }}" title="branch">
+                    {{ item.branch.name }}
+                </a>
+            {% elseif item.type == 'tag' %}
+                <i class="tag icon"></i>
+                <a href="{{ path('commit_show', {id: commit.id}) }}" title="tag ">
+                    {{ item.tag.name }}
+                </a>
+            {% elseif item.type == 'merge_request' %}
+                <i class="horizontally flipped alternate share icon"></i>
+                <a href="{{ path('mergerequest_show', {id: item.mergeRequest.id }) }}" title="merge request">
+                    {{ item.mergeRequest.name }}
+                </a>
+            {% endif %}
+            <i class="github icon"></i>
+            <a href="{{ path('commit_show', {id: commit.id}) }}">
+                #{{ commit.revision|slice(0, 8) }}
+            </a>
+        </p>
+        <div class="ellipsis"><i>{{ commit.commitMessage }}</i></div>
+        <div class="ui right floated column" style="clear:right;">
+            {% if commit.issues|length > 0 %}
+            {{ _.levels(commit) }}
+            {% endif %}
+        </div>
+        <p>
+            <img class="commit-gravatar" src="{{ gravatar(commit.authorEmail, 16) }}"
+                 alt="{{ commit.authorName }}">
+            {{ commit.authorName }}
+        </p>
+    </div>
+{% endfor %}
