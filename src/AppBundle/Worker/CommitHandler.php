@@ -157,7 +157,6 @@ class CommitHandler
                 $commit->getProject()
             );
 
-            dump($event);
             $this->webhookHandler->handle($event);
         }
     }
