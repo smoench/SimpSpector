@@ -64,13 +64,14 @@
 {% endmacro %}
 
 {% macro commit_status_button(commit) %}
+    {% set url = path('commit_show', {id: commit.id}) %}
     {% if commit.status == constant('STATUS_NEW', commit) %}
-        <span class="ui label right">New</span>
+        <a class="ui label right" href="{{ url }}">New</a>
     {% elseif commit.status == constant('STATUS_RUN', commit) %}
-        <span class="ui yellow label right">Running...</span>
+        <a class="ui yellow label right" href="{{ url }}">Running...</a>
     {% elseif commit.status == constant('STATUS_SUCCESS', commit) %}
-        <span class="ui green label right">Success</span>
+        <a class="ui green label right" href="{{ url }}">Success</a>
     {% else %}
-        <span class="ui red label right">Error</span>
+        <a class="ui red label right" href="{{ url }}">Error</a>
     {% endif %}
 {% endmacro %}
