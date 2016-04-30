@@ -16,6 +16,7 @@ class EventMergeRequestCommand extends AbstractCommand
         $this
             ->setName('simpspector:event:merge-request')
             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'repository url', null)
+            ->addOption('id', null, InputOption::VALUE_OPTIONAL, 'merge request id', rand(10000, 99999))
             ->addOption('commit', null, InputOption::VALUE_OPTIONAL, 'commit-hash of last commit', '')
             ->addOption('from-branch', null, InputOption::VALUE_OPTIONAL, '', 'MR source branch, e.g. feature branch')
             ->addOption('to-branch', null, InputOption::VALUE_OPTIONAL, 'target of the MR, e.g. master/stable/...', '')
@@ -35,8 +36,8 @@ class EventMergeRequestCommand extends AbstractCommand
 
         $event = new MergeRequestEvent();
 
-        $event->id               = rand(10000, 99999);
-        $event->title            = 'Test Pull-Request ' . rand(10000, 99999);
+        $event->id               = $this->getOption('id', '');
+        $event->title            = 'Test Pull-Request ' . $this->getOption('id', '');
         $event->repository       = $helper->generateRepositoryByUrl($url);
         $event->targetBranch     = $toBranch;
         $event->sourceRepository = $helper->generateRepositoryByUrl($url);

@@ -2,8 +2,7 @@
 
 namespace AppBundle\Provider;
 
-use AppBundle\Provider\Struct\MergeRequest;
-use AppBundle\Provider\Struct\Project;
+use AppBundle\Entity\MergeRequest;
 
 /**
  * @author David Badura <d.a.badura@gmail.com>
@@ -11,23 +10,14 @@ use AppBundle\Provider\Struct\Project;
 interface ProviderInterface
 {
     /**
-     * @param int $projectId
-     * @return Project
+     * @param string $url
+     * @param string $token
      */
-    public function getProjectInformation($projectId);
+    public function __construct($url, $token);
 
     /**
-     * @param int $projectId
-     * @param int $mergeRequestId
-     * @return MergeRequest
-     */
-    public function getMergeRequestInformation($projectId, $mergeRequestId);
-
-    /**
-     * @param int $projectId
-     * @param int $mergeRequestId
+     * @param MergeRequest $mergeRequest
      * @param string $comment
-     * @return
      */
-    public function addMergeRequestComment($projectId, $mergeRequestId, $comment);
+    public function addMergeRequestComment(MergeRequest $mergeRequest, $comment);
 }

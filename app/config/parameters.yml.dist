@@ -16,8 +16,9 @@ parameters:
 
     locale:            en
 
-    gitlab_token: ~
-    gitlab_url: ~
+    provider_type: gitlab
+    provider_url: ~
+    provider_token: ~
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt

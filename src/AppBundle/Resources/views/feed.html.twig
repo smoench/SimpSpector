@@ -3,10 +3,10 @@
 {% set last_project = '' %}
 {% for item in items %}
     {% set commit = item.commit %}
-    {% if last_project != item.project.name %}
-    {% set last_project = item.project.name %}
+    {% if last_project != item.project.fullName %}
+    {% set last_project = item.project.fullName %}
     <div class="ui ribbon label">
-        <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.name }}</a>
+        <a href="{{ path('project_show', {id: item.project.id}) }}">{{ item.project.fullName }}</a>
     </div>
     {% endif %}
     <div class="ui segment">

@@ -8,7 +8,7 @@
             <div class="content">
                 <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
             </div>
-            {{ _.step(merge_request.project.name, 'Project', 'icon cubes', path('project_show', {id: merge_request.project.id })) }}
+            {{ _.step(merge_request.project.fullName, 'Project', 'icon cubes', path('project_show', {id: merge_request.project.id })) }}
             {{ _.step(merge_request.name, 'Merge Request', 'horizontally flipped share alternate icon', '') }}
         </div>
     </div>

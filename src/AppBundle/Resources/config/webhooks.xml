@@ -15,20 +15,10 @@
             <argument type="service" id="logger"/>
         </service>
 
-        <service id="simpspector.app.gitlab.request_handler" class="AppBundle\GitLab\RequestHandler">
-            <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument type="service" id="simpspector.app.repository.merge_request"/>
-            <argument type="service" id="simpspector.app.repository.project"/>
-            <argument type="service" id="gitlab_api"/>
-            <argument type="service" id="simpspector.app.gitlab.notifier"/>
-            <argument type="service" id="logger"/>
-        </service>
-
-        <service id="simpspector.app.gitlab.notifier" class="AppBundle\GitLab\Notifier">
-            <argument type="service" id="gitlab_api"/>
+        <service id="simpspector.app.badge_subscriber" class="AppBundle\Event\Subscriber\BadgeSubscriber">
+            <argument type="service" id="simpspector.provider"/>
             <argument type="service" id="simpspector.app.badge.markdown_generator"/>
-            <argument type="service" id="logger"/>
+            <tag name="kernel.event_subscriber"/>
         </service>
-
     </services>
 </container>
