@@ -1,16 +1,20 @@
 {
-    "name": "simplethings/simpspector",
+    "name": "simpspector/simpspector",
     "type": "project",
     "description": "SimpSpector",
     "autoload": {
-        "psr-4": {"": "src/"},
+        "psr-4": {
+            "AppBundle\\": "src/AppBundle"
+        },
         "classmap": [
             "app/AppKernel.php",
             "app/AppCache.php"
         ]
     },
     "autoload-dev": {
-        "psr-4": {"": "tests/"}
+        "psr-4": {
+            "AppBundle\\Tests\\": "tests/AppBundle"
+        }
     },
     "require": {
         "php": "~5.5",
@@ -28,11 +32,11 @@
         "timetoogo/pinq": "~3.0",
         "simpspector/analyser": "dev-master",
         "davidbadura/markdown-builder": "~1.0",
-        "gremo/ciconia-bundle": "~1.0.1",
         "ebidtech/compress": "^1.1",
-        "davidbadura/git-webhooks": "dev-master",
+        "davidbadura/git-webhooks": "~1.0",
         "cypresslab/gitelephant": "^1.1",
-        "m4tthumphrey/php-gitlab-api": "^7.13"
+        "m4tthumphrey/php-gitlab-api": "^7.13",
+        "league/commonmark": "^0.13.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
