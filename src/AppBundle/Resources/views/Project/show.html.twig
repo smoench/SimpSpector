@@ -10,7 +10,7 @@
                         <div class="logo logo-breadcrumb"></div>
                     </a>
                 </div>
-                {{ _.step(project.name, 'Project', 'icon cubes', '') }}
+                {{ _.step(project.fullName, 'Project', 'icon cubes', '') }}
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
 
             <div class="ui header attached top small">
                 <i class="icon alternate cubes"></i>
-                {{ project.name }}
+                {{ project.fullName }}
             </div>
 
             <div class="ui segment attached">

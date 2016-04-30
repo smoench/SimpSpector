@@ -242,4 +242,12 @@ class Project implements TimestampableInterface
     {
         return $this->newsStreamItems;
     }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->namespace . '/' . $this->name;
+    }
 }

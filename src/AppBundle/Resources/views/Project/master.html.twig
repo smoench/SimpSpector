@@ -8,7 +8,7 @@
                 <div class="content">
                     <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
                 </div>
-                {{ _.step(project.name, 'Project', 'icon cubes', path('project_show', {id: project.id })) }}
+                {{ _.step(project.fullName, 'Project', 'icon cubes', path('project_show', {id: project.id })) }}
                 {{ _.step('Master Branch', 'Branch', 'sitemap alternate icon', '') }}
             </div>
         </div>

@@ -8,7 +8,7 @@
             <div class="content">
                 <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
             </div>
-            {{ _.step(branch.project.name, 'Project', 'icon cubes', path('project_show', {id: branch.project.id })) }}
+            {{ _.step(branch.project.fullName, 'Project', 'icon cubes', path('project_show', {id: branch.project.id })) }}
             {{ _.step(branch.name, 'Branch', 'fork icon', '') }}
         </div>
     </div>

@@ -4,7 +4,7 @@
             <div class="content">
                 <a href="{{ url('homepage') }}"><div class="logo logo-breadcrumb"></div></a>
             </div>
-            {{ _.step(commit.project.name, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
+            {{ _.step(commit.project.fullName, 'Project', 'icon cubes', path('project_show', {id: commit.project.id })) }}
             {{ _.step('rev ' ~ commit.revision|slice(0, 8), 'Commit Report', 'icon file text', '') }}
         </div>
     </div>
