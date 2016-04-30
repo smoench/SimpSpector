@@ -248,6 +248,11 @@ class Project implements TimestampableInterface
      */
     public function getFullName()
     {
+        /* todo remove */
+        if (!$this->namespace) {
+            return $this->name;
+        }
+
         return $this->namespace . '/' . $this->name;
     }
 }
