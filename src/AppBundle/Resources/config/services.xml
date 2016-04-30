@@ -49,7 +49,17 @@
             <argument type="string">%git_repository_tmp_dir%</argument>
         </service>
 
+        <service id="simpspector.app.commonmark_converter" class="League\CommonMark\Converter">
+            <factory class="AppBundle\CommonMark\CommonMarkFactory" method="create"/>
+        </service>
+
         <!-- TWIG -->
+        <service id="simpspector.app.twig.extension.common_mark"
+                 class="AppBundle\Twig\CommonMarkExtension">
+            <argument type="service" id="simpspector.app.commonmark_converter"/>
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="simpspector.app.twig.extension.util" class="AppBundle\Twig\UtilExtension">
             <argument type="service" id="simpspector.app.score.calculator"/>
             <tag name="twig.extension"/>
@@ -59,12 +69,6 @@
                  class="AppBundle\Twig\GravatarExtension"
                  public="false">
             <tag name="twig.extension"/>
-        </service>
-
-        <!-- Markdown -->
-        <service id="simpspector.ciconia.extension.fenced_code_block"
-                 class="AppBundle\Ciconia\Extension\FencedCodeBlockExtension" public="false">
-            <tag name="ciconia.extension"/>
         </service>
 
         <!-- Events -->
