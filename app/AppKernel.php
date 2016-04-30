@@ -16,7 +16,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
-            new Zeichen32\GitLabApiBundle\Zeichen32GitLabApiBundle(),
             new Gremo\CiconiaBundle\GremoCiconiaBundle(),
             new AppBundle\AppBundle(),
         );

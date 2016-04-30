@@ -31,7 +31,7 @@ class CommitRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('c')
             ->join('c.mergeRequests', 'm')
-            ->where('m.id = merge_request')
+            ->where('m.id = :merge_request')
             ->orderBy('c.id', 'DESC')
             ->getQuery();
 

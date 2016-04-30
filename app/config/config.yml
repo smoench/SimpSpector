@@ -59,10 +59,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-zeichen32_git_lab_api:
-    clients:
-        main:
-            token: %gitlab_token%
-            url: %gitlab_url%
-            auth_method: url_token

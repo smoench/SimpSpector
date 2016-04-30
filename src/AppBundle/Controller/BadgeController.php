@@ -53,6 +53,7 @@ class BadgeController extends Controller
 
         $response = new Response($this->renderView("AppBundle:Badge:badge.xml.twig", [
             'score' => $score,
+            'color' => 'ff0000'
         ]), 200, [
             'Content-Type'        => 'image/svg+xml',
             'Content-Disposition' => 'inline; filename="status.svg"'

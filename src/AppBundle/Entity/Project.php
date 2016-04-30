@@ -29,6 +29,13 @@ class Project implements TimestampableInterface
      *
      * @ORM\Column(type="string")
      */
+    private $namespace;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $name;
 
     /**
@@ -107,6 +114,22 @@ class Project implements TimestampableInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param string $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
     }
 
     /**

@@ -29,4 +29,9 @@ final class Events
      * @var string
      */
     const WEBHOOK = 'simpspector.webhook';
+
+    /**
+     * 
+     */
+    const NEW_MERGE_REQUEST = 'simpspector.new_merge_request';
 }

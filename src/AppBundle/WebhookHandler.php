@@ -110,12 +110,16 @@ class WebhookHandler
             ->getMergeRequestRepository()
             ->findMergeRequestByRemote($event->repository->id, $event->id);
 
+        $new = false;
+
         if (!$mergeRequest) {
             $this->logger->info('merge request not found. Creating...');
 
             $mergeRequest = new MergeRequest();
             $mergeRequest->setRemoteId($event->id);
             $this->em->persist($mergeRequest);
+
+            $new = true;
         }
 
         $this->logger->info('updating merge request...');
@@ -144,6 +148,11 @@ class WebhookHandler
         $this->em->persist($newsStreamItem);
 
         $this->em->flush();
+
+        if ($new) {
+            $event = new \AppBundle\Event\MergeRequestEvent($mergeRequest);
+            $this->dispatcher->dispatch(Events::NEW_MERGE_REQUEST, $event);
+        }
     }
 
     /**
@@ -193,6 +202,7 @@ class WebhookHandler
         $newsStreamItem->setCommit($commit);
         $newsStreamItem->setProject($project);
         $newsStreamItem->setBranch($branch);
+
         $this->em->persist($newsStreamItem);
         $this->em->flush();
     }
@@ -221,7 +231,8 @@ class WebhookHandler
             )
         );
 
-        $project->setName($repository->namespace . '/' . $repository->name);
+        $project->setNamespace($repository->namespace);
+        $project->setName($repository->name);
         $project->setRepositoryUrl($repository->url);
         $project->setWebUrl($repository->homepage);
 
