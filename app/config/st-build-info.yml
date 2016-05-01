@@ -1,3 +1,0 @@
-parameters:
-    st.build.number: dev
-    st.build.date: now
