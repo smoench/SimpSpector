@@ -6,8 +6,10 @@
 
     <services>
 
-        <service id="simpspector.app.webhook.event_factory" class="DavidBadura\GitWebhooks\EventFactory"
-                factory-class="DavidBadura\GitWebhooks\EventFactory" factory-method="createDefault"/>
+        <service id="simpspector.app.webhook.event_factory"
+                 class="DavidBadura\GitWebhooks\EventFactory">
+            <factory class="DavidBadura\GitWebhooks\EventFactory" method="createDefault"/>
+        </service>
 
         <service id="simpspector.app.webhook.handler" class="AppBundle\WebhookHandler">
             <argument type="service" id="doctrine.orm.entity_manager"/>
