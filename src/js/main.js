@@ -7,8 +7,8 @@ import "./filter";
 
 $(document).ready(function () {
   $(document).bind('click', 'a.phpstorm', function (e) {
-    e.preventDefault();
-    $.getJSON($(this).attr("href"));
+    //e.preventDefault();
+    //$.getJSON($(this).attr("href"));
   });
 
   $('.ui.secondary.pointing.menu .item').tab();

@@ -13,6 +13,7 @@ export default class Issue extends React.Component {
           <h4 className="attached" style={{marginTop: 0}}> {/* use other css framework... */}
             <i className={`icon ${iconLevel(this.props.issue.level)}`} />
             {this.props.issue.gadget}
+            &nbsp;
             {this.props.issue.level}
           </h4>
 
