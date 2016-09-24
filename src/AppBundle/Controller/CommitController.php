@@ -2,14 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Commit;
 use Pinq\Traversable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Framework;
-use AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Diff\Calculator;
 use SimpSpector\Analyser\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Framework\Route("/commit")
@@ -57,13 +57,13 @@ class CommitController extends Controller
     public function logAction(Commit $commit)
     {
         $reader = $this->get('simpspector.app.logger.reader');
-        $log    = $reader->getContent($commit);
+        $log = $reader->getContent($commit);
 
         return $this->render(
             'AppBundle:Commit:log.html.twig',
             [
                 'commit' => $commit,
-                'log'    => $log
+                'log' => $log
             ]
         );
     }
@@ -85,18 +85,18 @@ class CommitController extends Controller
         $from = $repo->findOneByRevision($from);
         $to = $repo->findOneByRevision($to);
 
-        if (! $from || ! $to) {
+        if (!$from || !$to) {
             $this->createNotFoundException('Commit not found');
         }
 
         $calculator = new Calculator();
-        $diff       = $calculator->diff($from->getResult(), $to->getResult());
+        $diff = $calculator->diff($from->getResult(), $to->getResult());
 
         return [
-            'from'           => $from,
-            'to'             => $to,
-            'diff'           => $diff,
-            'newIssues'      => $this->groupIssues($diff->newIssues),
+            'from' => $from,
+            'to' => $to,
+            'diff' => $diff,
+            'newIssues' => $this->groupIssues($diff->newIssues),
             'resolvedIssues' => $this->groupIssues($diff->resolvedIssues)
         ];
     }
@@ -110,7 +110,10 @@ class CommitController extends Controller
      */
     public function apiAction(Commit $commit)
     {
-        $json = $this->get('serializer')->serialize($commit, 'json', ['groups' => ['commit_full']]);
+        /** @var Serializer $serializer */
+        $serializer = $this->get('serializer');
+
+        $json = $serializer->serialize($commit, 'json', ['groups' => ['commit_full']]);
 
         return new Response($json, 200, [
             'Content-Type' => 'application/json'

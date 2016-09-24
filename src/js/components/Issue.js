@@ -20,7 +20,7 @@ export default class Issue extends React.Component {
         </div>
 
         <div className="ui attached segment">
-          <Markdown>{this.props.issue.description}</Markdown>
+          <Markdown>{this.props.issue.description_html}</Markdown>
         </div>
       </div>
     );

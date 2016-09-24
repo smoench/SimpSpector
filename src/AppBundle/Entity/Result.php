@@ -54,7 +54,7 @@ class Result extends BaseResult
     public function getIssues()
     {
         if ($this->issues === null) {
-            $this->issues = $this->deserialize($this->serializedIssues, 'AppBundle\Entity\Issue');
+            $this->issues = $this->deserialize($this->serializedIssues, Issue::class);
         }
 
         return $this->issues;
@@ -66,7 +66,7 @@ class Result extends BaseResult
     public function getMetrics()
     {
         if ($this->metrics === null) {
-            $this->metrics = $this->deserialize($this->serializedMetrics, 'SimpSpector\Analyser\Metric');
+            $this->metrics = $this->deserialize($this->serializedMetrics, Metric::class);
         }
 
         return $this->metrics;

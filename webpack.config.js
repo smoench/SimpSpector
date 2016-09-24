@@ -23,7 +23,8 @@ module.exports = {
     new ExtractTextPlugin('style.css', {allChunks: true}),
     new webpack.ProvidePlugin({
       $: 'jquery',
-      jQuery: 'jquery'
+      jQuery: 'jquery',
+      Prism: 'prismjs'
     })
   ],
 
