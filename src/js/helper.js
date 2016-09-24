@@ -3,8 +3,8 @@ export const LEVEL_WARNING = 'warning';
 export const LEVEL_ERROR = 'error';
 export const LEVEL_CRITICAL = 'critical';
 
-export function colorLevel(issue) {
-  switch (issue.level) {
+export function colorLevel(level) {
+  switch (level) {
     case LEVEL_NOTICE:
       return 'blue';
     case LEVEL_WARNING:
@@ -16,8 +16,8 @@ export function colorLevel(issue) {
   }
 }
 
-export function iconLevel(issue) {
-  switch (issue.level) {
+export function iconLevel(level) {
+  switch (level) {
     case LEVEL_NOTICE:
       return 'info';
     case LEVEL_WARNING:

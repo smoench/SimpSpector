@@ -1,5 +1,6 @@
 import React from "react";
 import Issue from "./Issue";
+import {iconLevel, colorLevel} from '../helper';
 
 export default class IssueGroup extends React.Component {
   constructor(props) {
@@ -36,21 +37,30 @@ export default class IssueGroup extends React.Component {
   }
 
   renderBar() {
+    var levels = new Map();
+    levels.set('notice', 0);
+    levels.set('warning', 0);
+    levels.set('error', 0);
+    levels.set('critical', 0);
+
+    for (let issue of this.props.issues) {
+      levels.set(issue.level, levels.get(issue.level)+1);
+    }
+
     return (
       <div style={{float: "right"}}>
-                        <span className="ui" title="notice">
-                <i className="blue info icon"/>
-                2
-            </span>
-        <span className="ui" title="warning">
-                <i className="yellow warning icon"/>
-                1
-            </span>
-        <span className="ui" title="error">
-                <i className="orange bug icon"/>
-                1
-            </span>
+        {[...levels.entries()].map(([level, count]) => {
+          if (count == 0) {
+            return;
+          }
 
+          return (
+            <span className="ui" key={level} title={level}>
+              <i className={`${colorLevel(level)} ${iconLevel(level)} icon`}/>
+              {count}
+            </span>
+          );
+        })}
       </div>
     );
   }

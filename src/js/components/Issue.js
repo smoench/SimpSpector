@@ -7,11 +7,11 @@ export default class Issue extends React.Component {
   render() {
     return (
       <div>
-        <div className={`ui top attached message ${colorLevel(this.props.issue)}`}>
+        <div className={`ui top attached message ${colorLevel(this.props.issue.level)}`}>
           {this.renderLabel()}
 
           <h4 className="attached" style={{marginTop: 0}}> {/* use other css framework... */}
-            <i className={`icon ${iconLevel(this.props.issue)}`} />
+            <i className={`icon ${iconLevel(this.props.issue.level)}`} />
             {this.props.issue.gadget}
             {this.props.issue.level}
           </h4>
