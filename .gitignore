@@ -6,7 +6,7 @@
 /bin/*
 !bin/console
 !bin/update
+!bin/fixtures
 /node_modules
-/web/css
-/web/js
+/web/build
 /web/bundles/
