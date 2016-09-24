@@ -36,7 +36,8 @@
         "davidbadura/git-webhooks": "^1.1",
         "cypresslab/gitelephant": "^1.1",
         "m4tthumphrey/php-gitlab-api": "^7.13",
-        "league/commonmark": "^0.13.2"
+        "league/commonmark": "^0.13.2",
+        "knplabs/github-api": "^1.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

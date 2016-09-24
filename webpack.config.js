@@ -36,8 +36,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?importLoaders=1!postcss-loader'),
+        include: path.join(__dirname, 'src/css')
+      },
+      {
+        test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'),
-        include: path.join(__dirname, 'src')
+        include: path.join(__dirname, 'src/js')
       },
       {
         test: /\.css$/,

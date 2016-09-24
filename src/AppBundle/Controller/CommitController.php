@@ -8,6 +8,8 @@ use AppBundle\Entity\Commit;
 use SimpSpector\Analyser\Diff\Calculator;
 use SimpSpector\Analyser\Issue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Framework\Route("/commit")
@@ -97,6 +99,22 @@ class CommitController extends Controller
             'newIssues'      => $this->groupIssues($diff->newIssues),
             'resolvedIssues' => $this->groupIssues($diff->resolvedIssues)
         ];
+    }
+
+    /**
+     * @Framework\Route("/{id}")
+     *
+     * @param Commit $commit
+     *
+     * @return Response
+     */
+    public function apiAction(Commit $commit)
+    {
+        $json = $this->get('serializer')->serialize($commit, 'json', ['groups' => ['commit_full']]);
+
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json'
+        ]);
     }
 
     /**

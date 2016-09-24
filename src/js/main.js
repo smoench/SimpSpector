@@ -1,15 +1,12 @@
+import "babel-polyfill";
 import $ from "jquery";
 import "prismjs";
 import "semantic-ui-css/semantic";
 import "semantic-ui-css/semantic.css";
 import "../css/main.css";
+import "./filter";
 
 $(document).ready(function () {
-
-  $('.ui.accordion').accordion({
-    exclusive: false
-  });
-
   $('a.phpstorm').click(function (e) {
     e.preventDefault();
     $.getJSON($(this).attr("href"));
