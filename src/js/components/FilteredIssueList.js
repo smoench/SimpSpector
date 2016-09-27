@@ -23,8 +23,6 @@ export default class FilteredIssueList extends React.Component {
   }
 
   filter(key, value) {
-    console.log(key, value);
-
     this.setState({
       ['filter_' + key]: value
     })
@@ -32,7 +30,7 @@ export default class FilteredIssueList extends React.Component {
 
   render() {
     if (this.state.data === null) {
-      return <span>'loading...'</span>;
+      return <span>loading...</span>;
     }
 
     const filter = {

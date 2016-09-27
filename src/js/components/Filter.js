@@ -2,8 +2,6 @@ import React from "react";
 
 export default class Filter extends React.Component {
   render() {
-    console.log(this.props.choices);
-
     return (
       <div style={{marginBottom: 25}}>
         <div className="ui vertical menu">
