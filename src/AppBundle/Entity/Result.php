@@ -9,6 +9,7 @@ use JMS\Serializer\SerializerBuilder;
 use SimpSpector\Analyser\Issue;
 use SimpSpector\Analyser\Metric;
 use SimpSpector\Analyser\Result as BaseResult;
+use Symfony\Component\Serializer\Annotation as JSON;
 
 /**
  * @ORM\Embeddable()
@@ -47,11 +48,13 @@ class Result extends BaseResult
 
     /**
      * @return Issue[]
+     *
+     * @JSON\Groups({"commit_full"})
      */
     public function getIssues()
     {
         if ($this->issues === null) {
-            $this->issues = $this->deserialize($this->serializedIssues, 'SimpSpector\Analyser\Issue');
+            $this->issues = $this->deserialize($this->serializedIssues, Issue::class);
         }
 
         return $this->issues;
@@ -63,7 +66,7 @@ class Result extends BaseResult
     public function getMetrics()
     {
         if ($this->metrics === null) {
-            $this->metrics = $this->deserialize($this->serializedMetrics, 'SimpSpector\Analyser\Metric');
+            $this->metrics = $this->deserialize($this->serializedMetrics, Metric::class);
         }
 
         return $this->metrics;

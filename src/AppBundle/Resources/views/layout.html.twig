@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('build/style.css') }}" />
 
 </head>
-<body>
+<body data-base="{{ path('homepage') }}">
     <main class="ui page grid">
         {% block content %}{% endblock %}
     </main>

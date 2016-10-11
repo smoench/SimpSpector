@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use SimpSpector\Analyser\Issue;
 use SimpSpector\Analyser\Metric;
+use Symfony\Component\Serializer\Annotation as JSON;
 
 /**
  *
@@ -28,6 +29,8 @@ class Commit implements TimestampableInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JSON\Groups({"commit_full"})
      */
     private $id;
 
@@ -84,6 +87,8 @@ class Commit implements TimestampableInterface
      * @var Result
      *
      * @ORM\Embedded(class="AppBundle\Entity\Result", columnPrefix="result_")
+     *
+     * @JSON\Groups({"commit_full"})
      */
     private $result;
 
