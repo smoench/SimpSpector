@@ -16,6 +16,8 @@ parameters:
 
     locale:            en
 
+    public_path: /
+
     provider_type: gitlab
     provider_url: ~
     provider_token: ~

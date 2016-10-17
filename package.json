@@ -40,7 +40,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/webpack --progress -p --config webpack.config.js",
+    "postinstall": "npm run build",
+    "build": "./node_modules/.bin/webpack --progress -p --config webpack.prod.config.js",
     "start": "node server.js"
   }
 }
